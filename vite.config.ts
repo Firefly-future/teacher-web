@@ -9,13 +9,13 @@ export default defineConfig({
       '@': '/src',
     },
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://10.55.5.77:3001',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://10.55.5.77:3001',
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/api/, ''),
+  //     },
+  //   },
+  // },
 })
