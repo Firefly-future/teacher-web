@@ -2,7 +2,7 @@ import React from 'react'
 
 const RoleList = () => {
   return (
-    <div>RoleList</div>
+    <div>角色管理</div>
   )
 }
 

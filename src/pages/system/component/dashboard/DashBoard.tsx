@@ -2,7 +2,7 @@ import React from 'react'
 
 const DashBoard = () => {
   return (
-    <div>DashBoard</div>
+    <div>仪表盘</div>
   )
 }
 
