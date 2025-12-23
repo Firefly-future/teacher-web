@@ -28,6 +28,7 @@ const Login = () => {
   }
 
   const onFinish = async (values: LoginParams) => {
+    console.log(values)
     try {
       const res = await getLogin(values)
       console.log(res.data)
@@ -42,6 +43,8 @@ const Login = () => {
       }
     } catch (e) {
       console.log(e)
+    }finally{
+      
     }
   }
   useEffect(() => {
@@ -73,7 +76,7 @@ const Login = () => {
           <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
         </Form.Item>
         <Form.Item
-          name="captcha"
+          name="code"
           rules={[{ required: true, message: "请输出验证码" }]}
         >
           <Flex>
