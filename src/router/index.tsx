@@ -9,12 +9,20 @@ import NotFound from "@/pages/404/NotFound"
 import Auth from "./Auth"
 
 const router = [
-  { path: "/", element: <Auth> <Home /> </Auth>, children: [
-    { path: "/dashboard", element: <DashBoard /> },
-    { path: "/roles", element: <RoleList /> },
-    { path: "/users", element: <UserList /> },
-    { path: "/permission", element: <Permission /> },
-  ] },
+  {
+    path: "/",
+    element: (
+      // <Auth>
+      <Home />
+      // </Auth>
+    ),
+    children: [
+      { path: "/dashboard", element: <DashBoard /> },
+      { path: "/roles", element: <RoleList /> },
+      { path: "/users", element: <UserList /> },
+      { path: "/permission", element: <Permission /> },
+    ],
+  },
   {
     path: "/login",
     element: <Login />,

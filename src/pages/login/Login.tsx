@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react"
 import style from "./login.module.scss"
 import { LockOutlined, UserOutlined } from "@ant-design/icons"
-import { Button, Checkbox, Flex, Form, Input, message } from "antd"
+import { Button, Flex, Form, Input, message } from "antd"
 import { useNavigate } from "react-router-dom"
 import type { LoginParams } from "@/services/types"
 import { API_CODE } from "@/constants/Constants"
 import { setToken } from "@/utils"
 import { getCaptchaCode, getLogin } from "@/services"
+import userStore from "@/store/userStore"
 const Login = () => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const [captcha, setCaptcha] = useState("")
-
+  const getUserInfo = userStore((state) => state.getUserInfo)
   const getCaptcha = async () => {
     try {
       const res = await getCaptchaCode()
@@ -33,6 +34,7 @@ const Login = () => {
       if (res.data.code === API_CODE.SUCCESS) {
         message.success("登录成功")
         setToken(res.data.data.token)
+        getUserInfo()
         navigate("/")
       } else if (res.data.code === API_CODE.EXPIRED_CAPTCHA) {
         message.error(res.data.msg)
@@ -75,12 +77,9 @@ const Login = () => {
           rules={[{ required: true, message: "请输出验证码" }]}
         >
           <Flex>
-            <Input
-              prefix={<LockOutlined />}
-              placeholder="验证码"
-            />
+            <Input placeholder="验证码" />
             <img
-              src={captcha}
+              src={captcha || undefined}
               onClick={getCaptcha}
               style={{
                 width: 100,
@@ -93,14 +92,6 @@ const Login = () => {
             />
           </Flex>
         </Form.Item>
-        <Form.Item>
-          <Flex justify="space-between" align="center">
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>记住我</Checkbox>
-            </Form.Item>
-          </Flex>
-        </Form.Item>
-
         <Form.Item>
           <Button block type="primary" htmlType="submit">
             登录
