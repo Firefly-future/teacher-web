@@ -45,7 +45,7 @@ const Login = () => {
       }
     } catch (e) {
       console.log(e)
-    }finally{
+    } finally {
       setLoading(false)
     }
   }
@@ -59,7 +59,13 @@ const Login = () => {
         form={form}
         name="login"
         initialValues={{ remember: true }}
-        style={{ width: 360 }}
+        style={{
+          width: 360,
+          border: '1px solid #ccc',
+          padding: 20,
+          backgroundColor: '#f5f5f5',
+          borderRadius: 20,
+        }}
         onFinish={onFinish}
       >
         <Form.Item style={{ textAlign: 'center' }}>
@@ -91,7 +97,7 @@ const Login = () => {
                 height: 32,
                 flexShrink: 0,
                 borderRadius: 6,
-                background: '#ddd',
+                background: '#FFFDF7',
                 marginLeft: 10,
               }}
             />

@@ -197,12 +197,8 @@ import { IconEnum } from '@/constants/Icon'
 
 /* ===== 1. 引入所有可能用到的组件（与注释里保持一致） ===== */
 import {
-  CrownOutlined,
-  FileUnknownOutlined,
-  FormOutlined,
+  PieChartOutlined,
   SmileOutlined,
-  SnippetsOutlined,
-  TeamOutlined,
 } from '@ant-design/icons'
 import Welcome from '../welcome/Welcome'
 
@@ -232,18 +228,8 @@ import DelClass from '@/pages/class/conponent/delClass/DelClass'
 import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
 import StudentList from '@/pages/class/conponent/studentList/StudentList'
 
-/* ===== 2. 图标映射（与注释保持一致） ===== */
-const iconMap: Record<string, React.ReactNode> = {
-  SmileOutlined: <SmileOutlined />,
-  CrownOutlined: <CrownOutlined />,
-  FileUnknownOutlined: <FileUnknownOutlined />,
-  FormOutlined: <FormOutlined />,
-  SnippetsOutlined: <SnippetsOutlined />,
-  TeamOutlined: <TeamOutlined />,
-}
-
-/* ===== 3. 递归转换函数 ===== */
-const componentMap: Record<string, React.ReactNode> = {
+/* ===== 2. 路径 → 组件 的映射表，用于自动补全 element ===== */
+const routeElementMap: Record<string, React.ReactNode> = {
   '/': <Welcome />,
   '/dashboard': <DashBoard />,
   '/userManage': <System />,
@@ -281,8 +267,14 @@ const buildRoutes = (list: MenuListItem[]) => {
       route.icon = IconEnum[item.icon]
     }
 
-    // 组件 - 从映射表中获取
-    route.element = componentMap[item.path]
+    // 组件
+    route.element = item.component
+      ? (() => {
+        /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
+        /* 示例直接取 map 里的，也可以自己扩展 */
+        return routeElementMap[item.path]
+      })()
+      : routeElementMap[item.path]
 
     // 子路由
     if (item.children && item.children.length) {
@@ -293,28 +285,25 @@ const buildRoutes = (list: MenuListItem[]) => {
   })
 }
 
-/* ===== 6. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
+/* ===== 5. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
 const formatMenuList = (list: MenuListItem[]) => {
   const routes = buildRoutes(list)
-
-  // 确保欢迎页和Dashboard在默认情况下可访问
   const defaultRoutes = [
-    // 欢迎页作为默认根路由
     {
       path: '/',
-      element: componentMap['/'],
+      name: '欢迎',
+      icon: <SmileOutlined />,
+      element: <Welcome />,
+      exact: true,
     },
-    // Dashboard页
     {
       path: '/dashboard',
-      element: componentMap['/dashboard'],
+      name: '仪表盘',
+      icon: <PieChartOutlined />,
+      element: <DashBoard />,
     },
-    // 其他路由
-    ...routes.filter(
-      (route) => route.path !== '/' && route.path !== '/dashboard'
-    ),
+    ...routes, // 将后端返回的路由放在后面
   ]
-
   return {
     route: {
       path: '/',
