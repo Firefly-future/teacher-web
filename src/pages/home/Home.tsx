@@ -8,9 +8,10 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons"
 import type { MenuProps } from "antd"
-import { Button, Dropdown, Space } from "antd"
+import { Button, Dropdown, Space, Spin } from "antd"
 import userStore from "@/store/userStore"
 import style from "./Home.module.scss"
+import { useEffect } from "react"
 const Home = () => {
   const settings: ProSettings | undefined = {
     fixSiderbar: true,
@@ -48,11 +49,19 @@ const Home = () => {
       ),
     },
   ]
-
+  const getUserInfo = userStore((state) => state.getUserInfo)
   const userInfo = userStore((state) => state.userInfo)
-  const menuList = userStore((state) => state.menuList)
-  console.log(userInfo, menuList)
+  const userMenuList = userStore((state) => state.menuList)
+  console.log(userMenuList)
+  console.log(getUserInfo)
+
+  useEffect(() => {
+    getUserInfo()
+  }, [])
   const location = useLocation()
+  if (!userMenuList || userMenuList.length === 0) {
+    return <Spin>加载中</Spin>
+  }
   return (
     <div
       id="test-pro-layout"
@@ -61,7 +70,7 @@ const Home = () => {
       }}
     >
       <ProLayout
-        {...formatMenuList( menuList!)}
+        {...formatMenuList(userMenuList)}
         location={location}
         menu={{
           type: "group",
