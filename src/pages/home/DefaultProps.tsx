@@ -53,7 +53,7 @@ export default {
         element: <System />,
         routes: [
           {
-            path: "/system/dashboard",
+            path: "/system",
             name: "仪表盘",
             element: <DashBoard />,
           },
@@ -86,7 +86,7 @@ export default {
         element: <Exercise />,
         routes: [
           {
-            path: "/exercise/bank",
+            path: "/exercise",
             name: "试卷库",
             element: <ExerciseBank />,
           },
@@ -104,7 +104,7 @@ export default {
         element: <Test />,
         routes: [
           {
-            path: "/test/create",
+            path: "/test",
             name: "创建考试",
             element: <CreateTest />,
           },
@@ -122,7 +122,7 @@ export default {
         element: <Question />,
         routes: [
           {
-            path: "/question/add",
+            path: "/question",
             name: "添加试题",
             element: <AddQuestion />,
           },
@@ -145,7 +145,7 @@ export default {
         element: <Class />,
         routes: [
           {
-            path: "/class/list",
+            path: "/class",
             name: "班级列表",
             element: <ClassList />,
           },
