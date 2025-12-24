@@ -1,5 +1,5 @@
-import { Navigate } from "react-router-dom"
-import { getToken } from "@/utils"
+import { Navigate } from 'react-router-dom'
+import { getToken } from '@/utils'
 
 
 const Auth = ({ children }: { children: React.ReactNode }) => {

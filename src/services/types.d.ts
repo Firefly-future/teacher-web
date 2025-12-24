@@ -1,4 +1,4 @@
-import { API_CODE } from "@/constants/Constants"
+import { API_CODE } from '@/constants/Constants'
 
 // 通用response
 export type BaseResponse<T=never> = {

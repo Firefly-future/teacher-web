@@ -1,4 +1,4 @@
-import request from "./request"
+import request from './request'
 import type {
   LoginParams,
   CaptchaCode,
@@ -6,23 +6,23 @@ import type {
   UserInfo,
   MenuListItem,
   BaseResponse
-} from "./types"
+} from './types'
 
 // 获取图形验证码
 export const getCaptchaCode = () => {
-  return request.get<CaptchaCode>("/login/captcha")
+  return request.get<CaptchaCode>('/login/captcha')
 }
 
 // 获取登录
 export const getLogin = (params: LoginParams) => {
-  return request.post<LoginResponse>("/login", params)
+  return request.post<LoginResponse>('/login', params)
 }
 
 // 用户信息
 export const getUserInfo = () => {
-  return request.get<UserInfo>("/user/info")
+  return request.get<UserInfo>('/user/info')
 }
 // 获取用户菜单
 export const getUserMenuList = () => {
-  return request.get<BaseResponse<{list: MenuListItem[]}>>("/user/menulist")
+  return request.get<BaseResponse<{list: MenuListItem[]}>>('/user/menulist')
 }

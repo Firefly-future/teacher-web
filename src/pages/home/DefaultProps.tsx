@@ -192,7 +192,7 @@
 
 // }
 
-import type { MenuListItem } from "@/services/types"
+import type { MenuListItem } from '@/services/types'
 
 /* ===== 1. 引入所有可能用到的组件（与注释里保持一致） ===== */
 import {
@@ -202,59 +202,60 @@ import {
   SmileOutlined,
   SnippetsOutlined,
   TeamOutlined,
-} from "@ant-design/icons"
-import Welcome from "../welcome/Welcome"
+} from '@ant-design/icons'
+import Welcome from '../welcome/Welcome'
 
-import System from "../system/System"
-import Question from "../question/Question"
-import Exercise from "../exercise/Exercise"
-import Test from "../test/Test"
-import Class from "../class/Class"
-import UserInfo from "../system/component/user/UserInfo"
-import Permission from "../system/component/permission/Permission"
-import DashBoard from "../system/component/dashboard/DashBoard"
-import RoleList from "../system/component/role/RoleList"
-import UserList from "../system/component/users/UserList"
+import System from '../system/System'
+import Question from '../question/Question'
+import Exercise from '../exercise/Exercise'
+import Test from '../test/Test'
+import Class from '../class/Class'
+import UserInfo from '../system/component/user/UserInfo'
+import Permission from '../system/component/permission/Permission'
+import DashBoard from '../system/component/dashboard/DashBoard'
+import RoleList from '../system/component/role/RoleList'
+import UserList from '../system/component/users/UserList'
 
-import ExerciseBank from "@/pages/exercise/component/bankExercise/ExerciseBank"
-import CreateExercise from "@/pages/exercise/component/createExercise/CreateExercise"
+import ExerciseBank from '@/pages/exercise/component/bankExercise/ExerciseBank'
+import CreateExercise from '@/pages/exercise/component/createExercise/CreateExercise'
 
-import CreateTest from "@/pages/test/component/createTest/CreateTest"
-import HistoryTest from "@/pages/test/component/historyTest/HistoryTest"
+import CreateTest from '@/pages/test/component/createTest/CreateTest'
+import HistoryTest from '@/pages/test/component/historyTest/HistoryTest'
 
-import AddQuestion from "@/pages/question/component/addQuestion/AddQuestion"
-import BankQuestion from "@/pages/question/component/bankQuestion/BankQuestion"
-import CreateCourse from "@/pages/question/component/courseCreate/Creatcourse"
+import AddQuestion from '@/pages/question/component/addQuestion/AddQuestion'
+import BankQuestion from '@/pages/question/component/bankQuestion/BankQuestion'
+import CreateCourse from '@/pages/question/component/courseCreate/Creatcourse'
 
-import ClassList from "@/pages/class/conponent/classList/ClassList"
-import DelClass from "@/pages/class/conponent/delClass/DelClass"
-import EditStudent from "@/pages/class/conponent/editStudent/EditStudent"
-import StudentList from "@/pages/class/conponent/studentList/StudentList"
+import ClassList from '@/pages/class/conponent/classList/ClassList'
+import DelClass from '@/pages/class/conponent/delClass/DelClass'
+import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
+import StudentList from '@/pages/class/conponent/studentList/StudentList'
+import type { ReactNode } from 'react'
 
 /* ===== 2. 路径 → 组件 的映射表，用于自动补全 element ===== */
 const routeElementMap: Record<string, React.ReactNode> = {
-  "/": <Welcome />,
-  "/dashboard": <DashBoard />,
-  "/userManage": <System />,
-  "/userManage/role": <RoleList />,
-  "/userManage/users": <UserList />,
-  "/userManage/userinfo": <UserInfo />,
-  "/userManage/permission": <Permission />,
-  "/paper": <Exercise />,
-  "/paper/bank": <ExerciseBank />,
-  "/paper/create": <CreateExercise />,
-  "/test": <Test />,
-  "/test/create": <CreateTest />,
-  "/test/history": <HistoryTest />,
-  "/question": <Question />,
-  "/question/add": <AddQuestion />,
-  "/question/bank": <BankQuestion />,
-  "/question/create": <CreateCourse />,
-  "/class": <Class />,
-  "/class/list": <ClassList />,
-  "/class/student": <StudentList />,
-  "/class/edit": <EditStudent />,
-  "/class/del": <DelClass />,
+  '/': <Welcome />,
+  '/dashboard': <DashBoard />,
+  '/userManage': <System />,
+  '/userManage/role': <RoleList />,
+  '/userManage/users': <UserList />,
+  '/userManage/userinfo': <UserInfo />,
+  '/userManage/permission': <Permission />,
+  '/paper': <Exercise />,
+  '/paper/bank': <ExerciseBank />,
+  '/paper/create': <CreateExercise />,
+  '/test': <Test />,
+  '/test/create': <CreateTest />,
+  '/test/history': <HistoryTest />,
+  '/question': <Question />,
+  '/question/add': <AddQuestion />,
+  '/question/bank': <BankQuestion />,
+  '/question/create': <CreateCourse />,
+  '/class': <Class />,
+  '/class/list': <ClassList />,
+  '/class/student': <StudentList />,
+  '/class/edit': <EditStudent />,
+  '/class/del': <DelClass />,
 }
 
 /* ===== 3. 图标映射（与注释保持一致） ===== */
@@ -270,7 +271,7 @@ const iconMap: Record<string, React.ReactNode> = {
 /* ===== 4. 递归转换函数 ===== */
 const buildRoutes = (list: MenuListItem[]) => {
   return list.map((item) => {
-    const route: any = {
+    const route : any  = {
       path: item.path,
       name: item.name,
     }
@@ -283,10 +284,10 @@ const buildRoutes = (list: MenuListItem[]) => {
     // 组件
     route.element = item.component
       ? (() => {
-          /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
-          /* 示例直接取 map 里的，也可以自己扩展 */
-          return routeElementMap[item.path]
-        })()
+        /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
+        /* 示例直接取 map 里的，也可以自己扩展 */
+        return routeElementMap[item.path]
+      })()
       : routeElementMap[item.path]
 
     // 子路由
@@ -304,12 +305,12 @@ const formatMenuList = (list: MenuListItem[]) => {
 
   return {
     route: {
-      path: "/",
+      path: '/',
       exact: true,
       routes,
     },
     location: {
-      pathname: "/",
+      pathname: '/',
     },
   }
 }
