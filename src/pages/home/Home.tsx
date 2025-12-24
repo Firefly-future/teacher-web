@@ -54,7 +54,6 @@ const Home = () => {
   const getUserInfo = userStore((state) => state.getUserInfo)
   const userInfo = userStore((state) => state.userInfo)
   const userMenuList = userStore((state) => state.menuList)
-  const [loading, setLoading] = useState(false)
   console.log(userMenuList)
   console.log(getUserInfo)
 
@@ -63,7 +62,13 @@ const Home = () => {
   }, [])
   const location = useLocation()
   if (!userMenuList || userMenuList.length === 0) {
-    // return <Spin spinning={loading} />
+    return (
+      <Spin
+        spinning={true}
+        tip="加载中..."
+        style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      />
+    )
   }
   return (
     <div
