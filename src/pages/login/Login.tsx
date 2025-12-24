@@ -27,6 +27,7 @@ const Login = () => {
   }
 
   const onFinish = async (values: LoginParams) => {
+    console.log(values)
     try {
       const res = await getLogin(values)
       console.log(res.data)
@@ -71,7 +72,7 @@ const Login = () => {
           <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
         </Form.Item>
         <Form.Item
-          name="captcha"
+          name="code"
           rules={[{ required: true, message: "请输出验证码" }]}
         >
           <Flex>
@@ -93,13 +94,13 @@ const Login = () => {
             />
           </Flex>
         </Form.Item>
-        <Form.Item>
+        {/* <Form.Item>
           <Flex justify="space-between" align="center">
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>记住我</Checkbox>
             </Form.Item>
           </Flex>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item>
           <Button block type="primary" htmlType="submit">
