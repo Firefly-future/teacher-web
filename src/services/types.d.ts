@@ -21,3 +21,30 @@ export type CaptchaCode = BaseResponse<{
 export type LoginResponse = BaseResponse<{
   token: string
 }>
+
+// 用户信息
+export type UserInfo = {
+  _id: string
+  username: string
+  sex: string
+  avator: string
+  email: string
+  age: number
+  role: string[]
+  permission: PermissionItem[]
+}
+
+// 用户列表参数
+export type UserListParams = {
+  page: number
+  pagesize: number
+}
+
+// 用户列表信息
+export type UserListItem = Omit<UserInfo, 'permission'> & {
+  lastOnlineTime: number
+  creator: string
+  password: string
+  sex: '男' | '女'
+  status: 0 | 1
+}

@@ -2,6 +2,7 @@ import type { ProSettings } from "@ant-design/pro-components"
 import { PageContainer, ProCard, ProLayout } from "@ant-design/pro-components"
 import defaultProps from "./DefaultProps"
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
+import style from './Home.module.scss'
 
 const Home = () => {
   const settings: ProSettings | undefined = {

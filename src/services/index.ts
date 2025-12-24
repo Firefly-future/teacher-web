@@ -1,5 +1,13 @@
 import axios from "axios"
-import type { LoginParams, CaptchaCode, LoginResponse,BaseResponse } from "./types"
+import type { 
+  LoginParams, 
+  CaptchaCode, 
+  LoginResponse,
+  BaseResponse,
+  UserInfo,
+  UserListParams,
+  UserListItem
+} from "./types"
 import { getToken } from "@/utils"
 axios.defaults.baseURL = "/api"
 

@@ -1,0 +1,23 @@
+:global(.ant-pro-page-container .ant-pro-page-container-warp-page-header .ant-page-header-breadcrumb) {
+  padding: 0;
+}
+
+:global(.ant-pro-page-container .ant-pro-page-container-warp-page-header){
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #fff;
+}
+
+:global(.ant-pro-page-container .ant-pro-page-container-warp-page-header .ant-page-header-heading){
+  padding: 0;
+  margin: 0;
+}
+
+:global(.ant-pro-page-container-children-container){
+  padding: 0;
+  margin: 10px 10px 0 10px;
+}
+
+:global(.ant-pro-card .ant-pro-card-body){
+  padding: 10px 20px;
+}
