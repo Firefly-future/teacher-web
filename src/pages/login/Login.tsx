@@ -11,6 +11,7 @@ import userStore from "@/store/userStore"
 const Login = () => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [captcha, setCaptcha] = useState("")
   const getUserInfo = userStore((state) => state.getUserInfo)
   const getCaptcha = async () => {
@@ -30,6 +31,7 @@ const Login = () => {
   const onFinish = async (values: LoginParams) => {
     console.log(values)
     try {
+      setLoading(true)
       const res = await getLogin(values)
       console.log(res.data)
       if (res.data.code === API_CODE.SUCCESS) {
@@ -44,7 +46,7 @@ const Login = () => {
     } catch (e) {
       console.log(e)
     }finally{
-      
+      setLoading(false)
     }
   }
   useEffect(() => {
@@ -96,7 +98,7 @@ const Login = () => {
           </Flex>
         </Form.Item>
         <Form.Item>
-          <Button block type="primary" htmlType="submit">
+          <Button block type="primary" htmlType="submit" loading={loading}>
             登录
           </Button>
         </Form.Item>
