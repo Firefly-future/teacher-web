@@ -1,8 +1,11 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const Class = () => {
   return (
-    <div>班级管理</div>
+    <div>
+      <Outlet />
+    </div>
   )
 }
 

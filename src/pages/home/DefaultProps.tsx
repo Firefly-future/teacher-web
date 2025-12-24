@@ -1,5 +1,4 @@
 import {
-  CrownFilled,
   CrownOutlined,
   FileUnknownOutlined,
   FormOutlined,
@@ -34,6 +33,7 @@ import ClassList from "@/pages/class/conponent/classList/ClassList"
 import DelClass from "@/pages/class/conponent/delClass/DelClass"
 import EditStudent from "@/pages/class/conponent/editStudent/EditStudent"
 import StudentList from "@/pages/class/conponent/studentList/StudentList"
+import { Outlet } from "react-router-dom"
 
 export default {
   route: {
@@ -147,18 +147,22 @@ export default {
           {
             path: "/class/list",
             name: "班级列表",
+            element: <ClassList />,
           },
           {
             path: "/class/student",
             name: "学生列表",
+            element: <StudentList />,
           },
           {
             path: "/class/edit",
             name: "学生编辑",
+            element: <EditStudent />,
           },
           {
             path: "/class/del",
             name: "删除班级",
+            element: <DelClass />,
           },
         ],
       },
