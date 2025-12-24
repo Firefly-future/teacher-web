@@ -1,8 +1,11 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const Exercise = () => {
   return (
-    <div>试卷管理</div>
+    <div>
+      <Outlet />
+    </div>
   )
 }
 

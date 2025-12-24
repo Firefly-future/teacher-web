@@ -1,8 +1,11 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const System = () => {
   return (
-    <div>系统管理</div>
+    <div>
+      <Outlet />
+    </div>
   )
 }
 

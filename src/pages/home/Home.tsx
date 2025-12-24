@@ -35,12 +35,11 @@ const Home = () => {
         <PageContainer>
           <ProCard
             style={{
-              height: "auto",
+              height: "100vh",
               width: "100%",
             }}
           >
             <Outlet />
-            <div />
           </ProCard>
         </PageContainer>
       </ProLayout>
