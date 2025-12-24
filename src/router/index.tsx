@@ -47,21 +47,21 @@ const router = [
         element: <DashBoard />,
       },
       {
-        path: "/system",
+        path: "/userManage",
         element: <System />,
         children: [
-          { path: "/system/role", element: <RoleList /> },
-          { path: "/system/users", element: <UserList /> },
-          { path: "/system/userinfo", element: <UserInfo /> },
-          { path: "/system/permission", element: <Permission /> },
+          { path: "/userManage/role", element: <RoleList /> },
+          { path: "/userManage/users", element: <UserList /> },
+          { path: "/userManage/userinfo", element: <UserInfo /> },
+          { path: "/userManage/permission", element: <Permission /> },
         ],
       },
       {
-        path: "/exercise",
+        path: "/paper",
         element: <Exercise />,
         children: [
-          { path: "/exercise/bank", element: <ExerciseBank /> },
-          { path: "/exercise/create", element: <CreateExercise /> },
+          { path: "/paper/bank", element: <ExerciseBank /> },
+          { path: "/paper/create", element: <CreateExercise /> },
         ],
       },
       {

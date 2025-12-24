@@ -192,11 +192,17 @@
 
 // }
 
-import userStore from "@/store/userStore";
-import type { MenuListItem } from "@/services/types";
+import type { MenuListItem } from "@/services/types"
 
 /* ===== 1. 引入所有可能用到的组件（与注释里保持一致） ===== */
-import { CrownOutlined, FileUnknownOutlined, FormOutlined, SmileOutlined, SnippetsOutlined, TeamOutlined } from "@ant-design/icons";
+import {
+  CrownOutlined,
+  FileUnknownOutlined,
+  FormOutlined,
+  SmileOutlined,
+  SnippetsOutlined,
+  TeamOutlined,
+} from "@ant-design/icons"
 import Welcome from "../welcome/Welcome"
 
 import System from "../system/System"
@@ -229,14 +235,14 @@ import StudentList from "@/pages/class/conponent/studentList/StudentList"
 const routeElementMap: Record<string, React.ReactNode> = {
   "/": <Welcome />,
   "/dashboard": <DashBoard />,
-  "/system": <System />,
-  "/system/role": <RoleList />,
-  "/system/users": <UserList />,
-  "/system/userinfo": <UserInfo />,
-  "/system/permission": <Permission />,
-  "/exercise": <Exercise />,
-  "/exercise/bank": <ExerciseBank />,
-  "/exercise/create": <CreateExercise />,
+  "/userManage": <System />,
+  "/userManage/role": <RoleList />,
+  "/userManage/users": <UserList />,
+  "/userManage/userinfo": <UserInfo />,
+  "/userManage/permission": <Permission />,
+  "/paper": <Exercise />,
+  "/paper/bank": <ExerciseBank />,
+  "/paper/create": <CreateExercise />,
   "/test": <Test />,
   "/test/create": <CreateTest />,
   "/test/history": <HistoryTest />,
@@ -249,7 +255,7 @@ const routeElementMap: Record<string, React.ReactNode> = {
   "/class/student": <StudentList />,
   "/class/edit": <EditStudent />,
   "/class/del": <DelClass />,
-};
+}
 
 /* ===== 3. 图标映射（与注释保持一致） ===== */
 const iconMap: Record<string, React.ReactNode> = {
@@ -259,7 +265,7 @@ const iconMap: Record<string, React.ReactNode> = {
   FormOutlined: <FormOutlined />,
   SnippetsOutlined: <SnippetsOutlined />,
   TeamOutlined: <TeamOutlined />,
-};
+}
 
 /* ===== 4. 递归转换函数 ===== */
 const buildRoutes = (list: MenuListItem[]) => {
@@ -267,11 +273,11 @@ const buildRoutes = (list: MenuListItem[]) => {
     const route: any = {
       path: item.path,
       name: item.name,
-    };
+    }
 
     // 图标
     if (item.icon && iconMap[item.icon]) {
-      route.icon = iconMap[item.icon];
+      route.icon = iconMap[item.icon]
     }
 
     // 组件
@@ -279,22 +285,22 @@ const buildRoutes = (list: MenuListItem[]) => {
       ? (() => {
           /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
           /* 示例直接取 map 里的，也可以自己扩展 */
-          return routeElementMap[item.path];
+          return routeElementMap[item.path]
         })()
-      : routeElementMap[item.path];
+      : routeElementMap[item.path]
 
     // 子路由
     if (item.children && item.children.length) {
-      route.routes = buildRoutes(item.children);
+      route.routes = buildRoutes(item.children)
     }
 
-    return route;
-  });
-};
+    return route
+  })
+}
 
 /* ===== 5. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
 const formatMenuList = (list: MenuListItem[]) => {
-  const routes = buildRoutes(list);
+  const routes = buildRoutes(list)
 
   return {
     route: {
@@ -303,9 +309,9 @@ const formatMenuList = (list: MenuListItem[]) => {
       routes,
     },
     location: {
-      pathname: "/", // 也可以直接写 "/"
+      pathname: "/",
     },
-  };
-};
+  }
+}
 
-export default formatMenuList;
+export default formatMenuList

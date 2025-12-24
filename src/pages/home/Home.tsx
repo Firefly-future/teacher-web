@@ -11,7 +11,7 @@ import type { MenuProps } from "antd"
 import { Button, Dropdown, Space, Spin } from "antd"
 import userStore from "@/store/userStore"
 import style from "./Home.module.scss"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 const Home = () => {
   const settings: ProSettings | undefined = {
     fixSiderbar: true,
@@ -52,6 +52,7 @@ const Home = () => {
   const getUserInfo = userStore((state) => state.getUserInfo)
   const userInfo = userStore((state) => state.userInfo)
   const userMenuList = userStore((state) => state.menuList)
+  const [loading, setLoading] = useState(false)
   console.log(userMenuList)
   console.log(getUserInfo)
 
@@ -60,7 +61,7 @@ const Home = () => {
   }, [])
   const location = useLocation()
   if (!userMenuList || userMenuList.length === 0) {
-    return <Spin>加载中</Spin>
+    // return <Spin spinning={loading} />
   }
   return (
     <div
