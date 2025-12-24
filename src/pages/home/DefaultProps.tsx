@@ -193,12 +193,15 @@
 // }
 
 import type { MenuListItem } from '@/services/types'
-import { IconEnum } from '@/constants/Icon'
 
 /* ===== 1. 引入所有可能用到的组件（与注释里保持一致） ===== */
 import {
-  PieChartOutlined,
+  CrownOutlined,
+  FileUnknownOutlined,
+  FormOutlined,
   SmileOutlined,
+  SnippetsOutlined,
+  TeamOutlined,
 } from '@ant-design/icons'
 import Welcome from '../welcome/Welcome'
 
@@ -238,33 +241,43 @@ const routeElementMap: Record<string, React.ReactNode> = {
   '/userManage/userinfo': <UserInfo />,
   '/userManage/permission': <Permission />,
   '/paper': <Exercise />,
-  '/paper/bank': <ExerciseBank />,
-  '/paper/create': <CreateExercise />,
-  '/test': <Test />,
-  '/test/create': <CreateTest />,
-  '/test/history': <HistoryTest />,
+  '/paper/paper-bank': <ExerciseBank />,
+  '/paper/create-paper': <CreateExercise />,
+  '/exam': <Test />,
+  '/exam/create': <CreateTest />,
+  '/exam/record': <HistoryTest />,
   '/question': <Question />,
-  '/question/add': <AddQuestion />,
-  '/question/bank': <BankQuestion />,
-  '/question/create': <CreateCourse />,
-  '/class': <Class />,
-  '/class/list': <ClassList />,
-  '/class/student': <StudentList />,
-  '/class/edit': <EditStudent />,
-  '/class/del': <DelClass />,
+  '/question/create-item': <AddQuestion />,
+  '/question/item-bank': <BankQuestion />,
+  '/question/create-subject': <CreateCourse />,
+  '/manage-group': <Class />,
+  '/manage-group/group-list': <ClassList />,
+  '/manage-group/group-students': <StudentList />,
+  '/manage-group/del-group': <DelClass />,
+  '/manage-group/edit-group': <EditStudent />,
+}
+
+/* ===== 3. 图标映射（与注释保持一致） ===== */
+const iconMap: Record<string, React.ReactNode> = {
+  SmileOutlined: <SmileOutlined />,
+  CrownOutlined: <CrownOutlined />,
+  FileUnknownOutlined: <FileUnknownOutlined />,
+  FormOutlined: <FormOutlined />,
+  SnippetsOutlined: <SnippetsOutlined />,
+  TeamOutlined: <TeamOutlined />,
 }
 
 /* ===== 4. 递归转换函数 ===== */
 const buildRoutes = (list: MenuListItem[]) => {
   return list.map((item) => {
-    const route: any = {
+    const route : any  = {
       path: item.path,
       name: item.name,
     }
 
     // 图标
-    if (item.icon && IconEnum[item.icon]) {
-      route.icon = IconEnum[item.icon]
+    if (item.icon && iconMap[item.icon]) {
+      route.icon = iconMap[item.icon]
     }
 
     // 组件
@@ -288,26 +301,12 @@ const buildRoutes = (list: MenuListItem[]) => {
 /* ===== 5. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
 const formatMenuList = (list: MenuListItem[]) => {
   const routes = buildRoutes(list)
-  const defaultRoutes = [
-    {
-      path: '/',
-      name: '欢迎',
-      icon: <SmileOutlined />,
-      element: <Welcome />,
-      exact: true,
-    },
-    {
-      path: '/dashboard',
-      name: '仪表盘',
-      icon: <PieChartOutlined />,
-      element: <DashBoard />,
-    },
-    ...routes, // 将后端返回的路由放在后面
-  ]
+
   return {
     route: {
       path: '/',
-      routes: defaultRoutes,
+      exact: true,
+      routes,
     },
     location: {
       pathname: '/',

@@ -65,7 +65,6 @@ const Home = () => {
     return (
       <Spin
         spinning={true}
-        tip="加载中..."
         style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       />
     )
