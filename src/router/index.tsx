@@ -36,17 +36,20 @@ const router = [
   {
     path: "/",
     element: (
-      // <Auth>
-      <Home />
-      // </Auth>
+      <Auth>
+        <Home />
+      </Auth>
     ),
     children: [
       { path: "/", element: <Welcome /> },
       {
+        path: "/dashboard",
+        element: <DashBoard />,
+      },
+      {
         path: "/system",
         element: <System />,
         children: [
-          { path: "/system", element: <DashBoard /> },
           { path: "/system/role", element: <RoleList /> },
           { path: "/system/users", element: <UserList /> },
           { path: "/system/userinfo", element: <UserInfo /> },
@@ -57,7 +60,7 @@ const router = [
         path: "/exercise",
         element: <Exercise />,
         children: [
-          { path: "/exercise", element: <ExerciseBank /> },
+          { path: "/exercise/bank", element: <ExerciseBank /> },
           { path: "/exercise/create", element: <CreateExercise /> },
         ],
       },
@@ -65,7 +68,7 @@ const router = [
         path: "/test",
         element: <Test />,
         children: [
-          { path: "/test", element: <CreateTest /> },
+          { path: "/test/create", element: <CreateTest /> },
           { path: "/test/history", element: <HistoryTest /> },
         ],
       },
@@ -73,7 +76,7 @@ const router = [
         path: "/question",
         element: <Question />,
         children: [
-          { path: "/question", element: <AddQuestion /> },
+          { path: "/question/add", element: <AddQuestion /> },
           { path: "/question/bank", element: <BankQuestion /> },
           { path: "/question/create", element: <CreateCourse /> },
         ],
@@ -82,7 +85,7 @@ const router = [
         path: "/class",
         element: <Class />,
         children: [
-          { path: "/class", element: <ClassList /> },
+          { path: "/class/list", element: <ClassList /> },
           { path: "/class/student", element: <StudentList /> },
           { path: "/class/del", element: <DelClass /> },
           { path: "/class/edit", element: <EditStudent /> },
