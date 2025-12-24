@@ -2,7 +2,7 @@ import React from 'react'
 
 const Permission = () => {
   return (
-    <div>Permission</div>
+    <div>权限管理</div>
   )
 }
 

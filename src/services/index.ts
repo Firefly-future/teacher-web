@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { LoginParams, CaptchaCode, LoginResponse } from "./types"
+import type { LoginParams, CaptchaCode, LoginResponse,BaseResponse } from "./types"
 import { getToken } from "@/utils"
 axios.defaults.baseURL = "/api"
 
@@ -15,7 +15,7 @@ export const getLogin = (params: LoginParams) => {
 
 // 用户信息
 export const getUserInfo = () =>{
-  return axios.get<LoginResponse>('/user/info',{
+  return axios.get<BaseResponse>('/user/info',{
     headers:{
       authorization:"Bearer " + getToken()
     }

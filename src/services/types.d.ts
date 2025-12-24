@@ -1,6 +1,6 @@
 import { API_CODE } from "@/constants/Constants"
 
-export type BaseResponse<T> = {
+export type BaseResponse<T=never> = {
   code: API_CODE
   msg: string
   data: T
