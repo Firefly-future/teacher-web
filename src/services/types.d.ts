@@ -1,7 +1,8 @@
 import { API_CODE } from '@/constants/Constants'
+import { type IconEnumKeys } from '@/constants/Icon'
 
 // 通用response
-export type BaseResponse<T=never> = {
+export type BaseResponse<T = never> = {
   code: API_CODE
   msg: string
   data: T
@@ -22,35 +23,35 @@ export type LoginResponse = BaseResponse<{
 }>
 // 权限
 export type PermissionItem = {
-  name:string
-  path:string
+  name: string
+  path: string
 }
 
 // 用户信息
 export type UserInfo = BaseResponse<{
-  _id:string
-  username:string
-  sex:string
-  avator:string
-  email:string
-  age:number
-  role:string[]
-  permission:PermissionItem[]
+  _id: string
+  username: string
+  sex: string
+  avator: string
+  email: string
+  age: number
+  role: string[]
+  permission: PermissionItem[]
 }>
 
 // 左侧菜单
 export type MenuListItem = {
-  component:string
-  createTime:number
-  createdAt:string
-  creator:string
-  disabled:string
-  icon:string
-  isBtn:boolean
-  name:string
-  path:string
-  pid:string
-  updatedAt:string
-  _id:string
-  children?:MenuListItem[]
+  component: string
+  createTime: number
+  createdAt: string
+  creator: string
+  disabled: string
+  icon: IconEnumKeys
+  isBtn: boolean
+  name: string
+  path: string
+  pid: string
+  updatedAt: string
+  _id: string
+  children?: MenuListItem[]
 }

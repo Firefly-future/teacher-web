@@ -1,7 +1,7 @@
-const TOKEN_KEY = "token"
+const TOKEN_KEY = 'token'
 
 export const setToken = (token: string) => {
-  if(!token) throw new Error("token错误！")
+  if(!token) throw new Error('token错误！')
   localStorage.setItem(TOKEN_KEY, token)
 }
 
