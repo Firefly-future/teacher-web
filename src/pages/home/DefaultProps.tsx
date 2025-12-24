@@ -232,8 +232,18 @@ import DelClass from '@/pages/class/conponent/delClass/DelClass'
 import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
 import StudentList from '@/pages/class/conponent/studentList/StudentList'
 
-/* ===== 2. 路径 → 组件 的映射表，用于自动补全 element ===== */
-const routeElementMap: Record<string, React.ReactNode> = {
+/* ===== 2. 图标映射（与注释保持一致） ===== */
+const iconMap: Record<string, React.ReactNode> = {
+  SmileOutlined: <SmileOutlined />,
+  CrownOutlined: <CrownOutlined />,
+  FileUnknownOutlined: <FileUnknownOutlined />,
+  FormOutlined: <FormOutlined />,
+  SnippetsOutlined: <SnippetsOutlined />,
+  TeamOutlined: <TeamOutlined />,
+}
+
+/* ===== 3. 递归转换函数 ===== */
+const componentMap: Record<string, React.ReactNode> = {
   '/': <Welcome />,
   '/dashboard': <DashBoard />,
   '/userManage': <System />,
@@ -258,37 +268,21 @@ const routeElementMap: Record<string, React.ReactNode> = {
   '/class/del': <DelClass />,
 }
 
-/* ===== 3. 图标映射（与注释保持一致） ===== */
-const iconMap: Record<string, React.ReactNode> = {
-  SmileOutlined: <SmileOutlined />,
-  CrownOutlined: <CrownOutlined />,
-  FileUnknownOutlined: <FileUnknownOutlined />,
-  FormOutlined: <FormOutlined />,
-  SnippetsOutlined: <SnippetsOutlined />,
-  TeamOutlined: <TeamOutlined />,
-}
-
 /* ===== 4. 递归转换函数 ===== */
 const buildRoutes = (list: MenuListItem[]) => {
   return list.map((item) => {
-    const route : any  = {
+    const route: any = {
       path: item.path,
       name: item.name,
     }
 
     // 图标
-    if (item.icon && iconMap[item.icon]) {
-      route.icon = iconMap[item.icon]
+    if (item.icon && IconEnum[item.icon]) {
+      route.icon = IconEnum[item.icon]
     }
 
-    // 组件
-    route.element = item.component
-      ? (() => {
-        /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
-        /* 示例直接取 map 里的，也可以自己扩展 */
-        return routeElementMap[item.path]
-      })()
-      : routeElementMap[item.path]
+    // 组件 - 从映射表中获取
+    route.element = componentMap[item.path]
 
     // 子路由
     if (item.children && item.children.length) {
@@ -299,15 +293,32 @@ const buildRoutes = (list: MenuListItem[]) => {
   })
 }
 
-/* ===== 5. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
+/* ===== 6. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
 const formatMenuList = (list: MenuListItem[]) => {
   const routes = buildRoutes(list)
+
+  // 确保欢迎页和Dashboard在默认情况下可访问
+  const defaultRoutes = [
+    // 欢迎页作为默认根路由
+    {
+      path: '/',
+      element: componentMap['/'],
+    },
+    // Dashboard页
+    {
+      path: '/dashboard',
+      element: componentMap['/dashboard'],
+    },
+    // 其他路由
+    ...routes.filter(
+      (route) => route.path !== '/' && route.path !== '/dashboard'
+    ),
+  ]
 
   return {
     route: {
       path: '/',
-      exact: true,
-      routes,
+      routes: defaultRoutes,
     },
     location: {
       pathname: '/',
