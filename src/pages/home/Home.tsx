@@ -12,6 +12,7 @@ import { Button, Dropdown, Space, Spin } from "antd"
 import userStore from "@/store/userStore"
 import style from "./Home.module.scss"
 import { useEffect, useState } from "react"
+import { removeToken } from "@/utils"
 const Home = () => {
   const settings: ProSettings | undefined = {
     fixSiderbar: true,
@@ -41,6 +42,7 @@ const Home = () => {
           type="link"
           onClick={() => {
             navigate("/login")
+            removeToken()
           }}
         >
           <PoweroffOutlined style={{ marginRight: 10 }} />
