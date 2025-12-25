@@ -54,3 +54,4 @@ export const updateUser = (params: UpdateUserParams) => {
 export const getRoleList = () => {
   return get<BaseResponse<RoleItemRes[]>>('/role/list')
 }
+

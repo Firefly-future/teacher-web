@@ -20,7 +20,7 @@ export type CaptchaCode = {
 // 登录返回值
 export type LoginResponse = {
   token: string
-}>
+}
 
 // 用户信息
 export type UserInfo = {
@@ -161,5 +161,5 @@ export type CreateMenuParams = Pick<MenuListItem, 'name' | 'path' | 'isBtn' | 's
 // 更新菜单参数
 export type UpdateMenuParams = Partial<MenuListItem> & {
   id: string
-  status: 0 | 1
+  status?: 0 | 1
 }
