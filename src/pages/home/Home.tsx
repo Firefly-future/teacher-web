@@ -1,6 +1,6 @@
 import type { ProSettings } from '@ant-design/pro-components'
 import { PageContainer, ProCard, ProLayout } from '@ant-design/pro-components'
-import formatMenuList from './DefaultProps'
+import FormatMenuList from './FormatMenuList'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   DownOutlined,
@@ -77,7 +77,7 @@ const Home = () => {
       }}
     >
       <ProLayout
-        {...formatMenuList(userMenuList)}
+        {...FormatMenuList(userMenuList)}
         location={location}
         menu={{
           type: 'group',

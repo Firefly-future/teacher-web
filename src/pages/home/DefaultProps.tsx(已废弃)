@@ -204,69 +204,69 @@ import {
   SnippetsOutlined,
   TeamOutlined,
 } from '@ant-design/icons'
-import Welcome from '../welcome/Welcome'
+// import Welcome from '../welcome/Welcome'
 
-import System from '../system/System'
-import Question from '../question/Question'
-import Exercise from '../exercise/Exercise'
-import Test from '../test/Test'
-import Class from '../class/Class'
-import UserInfo from '../system/component/user/UserInfo'
-import Permission from '../system/component/permission/Permission'
-import DashBoard from '@/pages/dashboard/DashBoard'
-import RoleList from '../system/component/role/RoleList'
-import UserList from '../system/component/users/UserList'
+// import System from '../system/System'
+// import Question from '../question/Question'
+// import Exercise from '../exercise/Exercise'
+// import Test from '../test/Test'
+// import Class from '../class/Class'
+// import UserInfo from '../system/component/user/UserInfo'
+// import Permission from '../system/component/permission/Permission'
+// import DashBoard from '@/pages/dashboard/DashBoard'
+// import RoleList from '../system/component/role/RoleList'
+// import UserList from '../system/component/users/UserList'
 
-import ExerciseBank from '@/pages/exercise/component/bankExercise/ExerciseBank'
-import CreateExercise from '@/pages/exercise/component/createExercise/CreateExercise'
+// import ExerciseBank from '@/pages/exercise/component/bankExercise/ExerciseBank'
+// import CreateExercise from '@/pages/exercise/component/createExercise/CreateExercise'
 
-import CreateTest from '@/pages/test/component/createTest/CreateTest'
-import HistoryTest from '@/pages/test/component/historyTest/HistoryTest'
+// import CreateTest from '@/pages/test/component/createTest/CreateTest'
+// import HistoryTest from '@/pages/test/component/historyTest/HistoryTest'
 
-import AddQuestion from '@/pages/question/component/addQuestion/AddQuestion'
-import BankQuestion from '@/pages/question/component/bankQuestion/BankQuestion'
-import CreateCourse from '@/pages/question/component/courseCreate/Creatcourse'
+// import AddQuestion from '@/pages/question/component/addQuestion/AddQuestion'
+// import BankQuestion from '@/pages/question/component/bankQuestion/BankQuestion'
+// import CreateCourse from '@/pages/question/component/courseCreate/Creatcourse'
 
-import ClassList from '@/pages/class/conponent/classList/ClassList'
-import DelClass from '@/pages/class/conponent/delClass/DelClass'
-import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
-import StudentList from '@/pages/class/conponent/studentList/StudentList'
+// import ClassList from '@/pages/class/conponent/classList/ClassList'
+// import DelClass from '@/pages/class/conponent/delClass/DelClass'
+// import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
+// import StudentList from '@/pages/class/conponent/studentList/StudentList'
 
 /* ===== 2. 路径 → 组件 的映射表，用于自动补全 element ===== */
-const routeElementMap: Record<string, React.ReactNode> = {
-  '/': <Welcome />,
-  '/dashboard': <DashBoard />,
-  '/userManage': <System />,
-  '/userManage/role': <RoleList />,
-  '/userManage/users': <UserList />,
-  '/userManage/userinfo': <UserInfo />,
-  '/userManage/permission': <Permission />,
-  '/paper': <Exercise />,
-  '/paper/paper-bank': <ExerciseBank />,
-  '/paper/create-paper': <CreateExercise />,
-  '/exam': <Test />,
-  '/exam/create': <CreateTest />,
-  '/exam/record': <HistoryTest />,
-  '/question': <Question />,
-  '/question/create-item': <AddQuestion />,
-  '/question/item-bank': <BankQuestion />,
-  '/question/create-subject': <CreateCourse />,
-  '/manage-group': <Class />,
-  '/manage-group/group-list': <ClassList />,
-  '/manage-group/group-students': <StudentList />,
-  '/manage-group/del-group': <DelClass />,
-  '/manage-group/edit-group': <EditStudent />,
-}
+// const routeElementMap: Record<string, React.ReactNode> = {
+//   '/': <Welcome />,
+//   '/dashboard': <DashBoard />,
+//   '/userManage': <System />,
+//   '/userManage/role': <RoleList />,
+//   '/userManage/users': <UserList />,
+//   '/userManage/userinfo': <UserInfo />,
+//   '/userManage/permission': <Permission />,
+//   '/paper': <Exercise />,
+//   '/paper/paper-bank': <ExerciseBank />,
+//   '/paper/create-paper': <CreateExercise />,
+//   '/exam': <Test />,
+//   '/exam/create': <CreateTest />,
+//   '/exam/record': <HistoryTest />,
+//   '/question': <Question />,
+//   '/question/create-item': <AddQuestion />,
+//   '/question/item-bank': <BankQuestion />,
+//   '/question/create-subject': <CreateCourse />,
+//   '/manage-group': <Class />,
+//   '/manage-group/group-list': <ClassList />,
+//   '/manage-group/group-students': <StudentList />,
+//   '/manage-group/del-group': <DelClass />,
+//   '/manage-group/edit-group': <EditStudent />,
+// }
 
 /* ===== 3. 图标映射（与注释保持一致） ===== */
-const iconMap: Record<string, React.ReactNode> = {
-  SmileOutlined: <SmileOutlined />,
-  CrownOutlined: <CrownOutlined />,
-  FileUnknownOutlined: <FileUnknownOutlined />,
-  FormOutlined: <FormOutlined />,
-  SnippetsOutlined: <SnippetsOutlined />,
-  TeamOutlined: <TeamOutlined />,
-}
+// const iconMap: Record<string, React.ReactNode> = {
+//   SmileOutlined: <SmileOutlined />,
+//   CrownOutlined: <CrownOutlined />,
+//   FileUnknownOutlined: <FileUnknownOutlined />,
+//   FormOutlined: <FormOutlined />,
+//   SnippetsOutlined: <SnippetsOutlined />,
+//   TeamOutlined: <TeamOutlined />,
+// }
 
 /* ===== 4. 递归转换函数 ===== */
 const buildRoutes = (list: MenuListItem[]) => {
@@ -283,13 +283,13 @@ const buildRoutes = (list: MenuListItem[]) => {
     }
 
     // 组件
-    route.element = item.component
-      ? (() => {
-        /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
-        /* 示例直接取 map 里的，也可以自己扩展 */
-        return routeElementMap[item.path]
-      })()
-      : routeElementMap[item.path]
+    // route.element = item.component
+    //   ? (() => {
+    //     /* 如果后端给了 component 字段，这里用动态 import 或 eval 处理 */
+    //     /* 示例直接取 map 里的，也可以自己扩展 */
+    //     return routeElementMap[item.path]
+    //   })()
+    //   : routeElementMap[item.path]
 
     // 子路由
     if (item.children && item.children.length) {
@@ -308,7 +308,7 @@ const formatMenuList = (list: MenuListItem[]) => {
       path: '/dashboard',
       name: '仪表盘',
       icon: <PieChartOutlined />,
-      element: <DashBoard />,
+      // element: <DashBoard />,
     },
     ...routes
   ]
