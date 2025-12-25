@@ -1,10 +1,10 @@
 import Login from '../pages/login/Login'
 import Home from '@/pages/home/Home'
 import DashBoard from '@/pages/dashboard/DashBoard'
-import RoleList from '@/pages/system/component/role/RoleList'
-import UserList from '@/pages/system/component/users/UserList'
-import UserInfo from '@/pages/system/component/user/UserInfo'
-import Permission from '@/pages/system/component/permission/Permission'
+import RoleList from '@/pages/system/components/role/RoleList'
+import UserList from '@/pages/system/components/users/UserList'
+import UserInfo from '@/pages/system/components/personal/UserInfo'
+import Permission from '@/pages/system/components/permission/Permission'
 
 import NotFound from '@/pages/404/NotFound'
 
@@ -15,20 +15,20 @@ import Question from '@/pages/question/Question'
 import System from '@/pages/system/System'
 import Test from '@/pages/test/Test'
 
-import ExerciseBank from '@/pages/exercise/component/bankExercise/ExerciseBank'
-import CreateExercise from '@/pages/exercise/component/createExercise/CreateExercise'
+import ExerciseBank from '@/pages/exercise/components/bankExercise/ExerciseBank'
+import CreateExercise from '@/pages/exercise/components/createExercise/CreateExercise'
 
-import CreateTest from '@/pages/test/component/createTest/CreateTest'
-import HistoryTest from '@/pages/test/component/historyTest/HistoryTest'
+import CreateTest from '@/pages/test/components/createTest/CreateTest'
+import HistoryTest from '@/pages/test/components/historyTest/HistoryTest'
 
-import AddQuestion from '@/pages/question/component/addQuestion/AddQuestion'
-import BankQuestion from '@/pages/question/component/bankQuestion/BankQuestion'
-import CreateCourse from '@/pages/question/component/courseCreate/Creatcourse'
+import AddQuestion from '@/pages/question/components/addQuestion/AddQuestion'
+import BankQuestion from '@/pages/question/components/bankQuestion/BankQuestion'
+import CreateCourse from '@/pages/question/components/courseCreate/Creatcourse'
 
-import ClassList from '@/pages/class/conponent/classList/ClassList'
-import DelClass from '@/pages/class/conponent/delClass/DelClass'
-import EditStudent from '@/pages/class/conponent/editStudent/EditStudent'
-import StudentList from '@/pages/class/conponent/studentList/StudentList'
+import ClassList from '@/pages/class/conponents/classList/ClassList'
+import DelClass from '@/pages/class/conponents/delClass/DelClass'
+import EditStudent from '@/pages/class/conponents/editStudent/EditStudent'
+import StudentList from '@/pages/class/conponents/studentList/StudentList'
 
 import Auth from './Auth'
 
