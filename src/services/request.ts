@@ -27,7 +27,7 @@ request.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   if (error.response.status === 401) {
     message.error('用户登录信息失效，请重新登陆')
-    location.replace('/user/login')
+    location.replace('/login')
   }
   return Promise.reject(error)
 })

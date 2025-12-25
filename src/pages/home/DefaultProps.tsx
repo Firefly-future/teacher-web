@@ -193,7 +193,7 @@
 // }
 
 import type { MenuListItem } from '@/services/types'
-
+import { IconEnum, type IconEnumKeys } from '@/constants/Icon'
 /* ===== 1. 引入所有可能用到的组件（与注释里保持一致） ===== */
 import {
   CrownOutlined,
@@ -276,8 +276,9 @@ const buildRoutes = (list: MenuListItem[]) => {
     }
 
     // 图标
-    if (item.icon && iconMap[item.icon]) {
-      route.icon = iconMap[item.icon]
+    if (item.icon && IconEnum[item.icon as IconEnumKeys]) {
+      const IconComponent = IconEnum[item.icon as keyof typeof IconEnum]
+      route.icon = <IconComponent />
     }
 
     // 组件
