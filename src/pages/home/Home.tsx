@@ -56,8 +56,8 @@ const Home = () => {
   const getUserInfo = userStore((state) => state.getUserInfo)
   const userInfo = userStore((state) => state.userInfo)
   const userMenuList = userStore((state) => state.menuList)
-  console.log(userMenuList)
-  console.log(getUserInfo)
+  // console.log(userMenuList)
+  // console.log(getUserInfo)
 
   useEffect(() => {
     getUserInfo()

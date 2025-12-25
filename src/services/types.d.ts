@@ -25,6 +25,7 @@ export type LoginResponse = {
 export type PermissionItem = {
   name: string
   path: string
+  isBtn: boolean
 }
 
 // 用户信息
@@ -110,5 +111,14 @@ export type UpdateRoleParams = Partial<Omit<RoleItem, '_id'>> & {
 
 // 权限列表
 export type PermissionListRes = {
-  list:MenuListItem[]
+  list: MenuListItem[]
+}
+
+// 创建菜单参数
+export type CreateMenuParams = Pick<MenuListItem, 'name' | 'path' | 'isBtn' | 'status'>
+
+// 更新菜单参数
+export type UpdateMenuParams = Partial<MenuListItem> & {
+  id: string
+  status: 0 | 1
 }

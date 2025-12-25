@@ -12,7 +12,8 @@ import type {
   UpdateUserParams,
   RoleItemRes,
   UpdateRoleParams,
-  PermissionListRes
+  PermissionListRes,
+  CreateMenuParams
 } from './types'
 
 // 获取图形验证码
@@ -62,4 +63,17 @@ export const updateRole = (params: UpdateRoleParams) =>{
 // 获取权限列表
 export const getPermissionList = () =>{
   return get<BaseResponse<PermissionListRes>>('/permission/list')
+}
+
+// 创建菜单
+export const createMenu = (params: CreateMenuParams) =>{
+  return post<BaseResponse>('/permission/create', params)
+}
+// 删除菜单
+export const deleteMenu = (id: string) =>{
+  return post<BaseResponse>('/permission/remove', {id})
+}
+// 更新菜单
+export const updateMenu = (id:string) =>{
+  return post<BaseResponse>('/permission/update', {id})
 }

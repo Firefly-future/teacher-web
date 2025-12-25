@@ -8,7 +8,7 @@ const WHITE_LIST = ['/','/dashboard']
 const Auth = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
   const permission = userStore((state) => state.userInfo?.permission)
-  console.log(permission, location.pathname)
+  // console.log(permission, location.pathname)
   const token = getToken()
   if (!token) {
     return <Navigate to="/login" replace />
