@@ -26,11 +26,6 @@ const FormatMenuList = (list: MenuListItem[]) => {
   const routes = buildRoutes(list)
   const defaultRoute = [
     {
-      path: '/',
-      name: '欢迎页',
-      icon: <SmileTwoTone />,
-    },
-    {
       path: '/dashboard',
       name: '仪表盘',
       icon: <PieChartOutlined />,
