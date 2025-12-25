@@ -1,6 +1,6 @@
 import type { ProSettings } from '@ant-design/pro-components'
 import { PageContainer, ProCard, ProLayout } from '@ant-design/pro-components'
-import FormatMenuList from './FormatMenuList'
+import FormatMenuList from './FormatMenuList.tsx'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   DownOutlined,
@@ -91,10 +91,10 @@ const Home = () => {
         }}
         avatarProps={{
           src:
-            userInfo?.data.avator ||
+            userInfo?.avator ||
             'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
           size: 'small',
-          title: userInfo?.data.username || '用户',
+          title: userInfo?.username || '用户',
           render: (_, dom) => {
             return (
               <Dropdown menu={{ items }}>

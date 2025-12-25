@@ -14,13 +14,13 @@ export type LoginParams = {
   code: string
 }
 // 获取图形验证码参数
-export type CaptchaCode = BaseResponse<{
+export type CaptchaCode = {
   code: string
-}>
+}
 // 登录返回值
-export type LoginResponse = BaseResponse<{
+export type LoginResponse = {
   token: string
-}>
+}
 // 权限
 export type PermissionItem = {
   name: string
@@ -28,16 +28,16 @@ export type PermissionItem = {
 }
 
 // 用户信息
-export type UserInfo = BaseResponse<{
+export type UserInfo = {
   _id: string
   username: string
-  sex: string
+  sex: 1 | 0
   avator: string
   email: string
   age: number
   role: string[]
   permission: PermissionItem[]
-}>
+}
 
 // 左侧菜单
 export type MenuListItem = {
@@ -54,4 +54,61 @@ export type MenuListItem = {
   updatedAt: string
   _id: string
   children?: MenuListItem[]
+}
+
+// 用户列表参数
+export type UserListParams = {
+  page: number
+  pagesize: number
+}
+
+// 用户列表信息
+export type UserListItem = Omit<UserInfo, 'permission'> & {
+  lastOnlineTime: number
+  creator: string
+  password: string
+  status: 0 | 1
+}
+
+// 用户列表返回值
+export type UserListResponse = {
+  total: number
+  list: UserListItem[]
+  totalPage: number
+}
+
+// 创建用户参数
+export type CreateUserParams = Pick<
+  UserListItem,
+  'username' | 'sex' | 'password' | 'email' | 'age' | 'role'
+>
+
+// 更新用户参数
+export type UpdateUserParams = Partial<
+  Pick<UserListItem, 'username' | 'sex' | 'password' | 'email' | 'age' | 'role'>
+> & {
+  id: string
+}
+
+// 角色列表
+export type RoleItem = {
+  name: string
+  value: string
+  _id: string
+  permission: string[]
+}
+
+// 角色列表返回值
+export type RoleItemRes = {
+  list: RoleItem[]
+}
+
+// 编辑角色参数
+export type UpdateRoleParams = Partial<Omit<RoleItem, '_id'>> & {
+  id: string
+}
+
+// 权限列表
+export type PermissionListRes = {
+  list:MenuListItem[]
 }

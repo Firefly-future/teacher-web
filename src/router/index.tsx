@@ -6,6 +6,7 @@ import UserList from '@/pages/userManage/components/users/UserList'
 import UserInfo from '@/pages/userManage/components/personal/UserInfo'
 import Permission from '@/pages/userManage/components/permission/Permission'
 
+import Forbidden from '@/pages/403/Forbidden'
 import NotFound from '@/pages/404/NotFound'
 
 import Welcome from '@/pages/welcome/Welcome'
@@ -25,10 +26,10 @@ import AddQuestion from '@/pages/question/components/addQuestion/AddQuestion'
 import BankQuestion from '@/pages/question/components/bankQuestion/BankQuestion'
 import CreateCourse from '@/pages/question/components/courseCreate/Creatcourse'
 
-import ClassList from '@/pages/class/conponents/classList/ClassList'
-import DelClass from '@/pages/class/conponents/delClass/DelClass'
-import EditStudent from '@/pages/class/conponents/editStudent/EditStudent'
-import StudentList from '@/pages/class/conponents/studentList/StudentList'
+import ClassList from '@/pages/class/components/classList/ClassList'
+import DelClass from '@/pages/class/components/delClass/DelClass'
+import EditStudent from '@/pages/class/components/editStudent/EditStudent'
+import StudentList from '@/pages/class/components/studentList/StudentList'
 
 import Auth from './Auth'
 
@@ -96,6 +97,10 @@ const router = [
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/403',
+    element: <Forbidden />,
   },
   {
     path: '*',
