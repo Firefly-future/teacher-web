@@ -199,6 +199,7 @@ import {
   CrownOutlined,
   FileUnknownOutlined,
   FormOutlined,
+  PieChartOutlined,
   SmileOutlined,
   SnippetsOutlined,
   TeamOutlined,
@@ -212,7 +213,7 @@ import Test from '../test/Test'
 import Class from '../class/Class'
 import UserInfo from '../system/component/user/UserInfo'
 import Permission from '../system/component/permission/Permission'
-import DashBoard from '../system/component/dashboard/DashBoard'
+import DashBoard from '@/pages/dashboard/DashBoard'
 import RoleList from '../system/component/role/RoleList'
 import UserList from '../system/component/users/UserList'
 
@@ -302,12 +303,21 @@ const buildRoutes = (list: MenuListItem[]) => {
 /* ===== 5. 主函数：把后端菜单树转成前端需要的数据结构 ===== */
 const formatMenuList = (list: MenuListItem[]) => {
   const routes = buildRoutes(list)
+  const defaultRoute = [
+    {
+      path: '/dashboard',
+      name: '仪表盘',
+      icon: <PieChartOutlined />,
+      element: <DashBoard />,
+    },
+    ...routes
+  ]
 
   return {
     route: {
       path: '/',
       exact: true,
-      routes,
+      routes: defaultRoute,
     },
     location: {
       pathname: '/',

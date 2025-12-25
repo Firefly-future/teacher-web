@@ -1,6 +1,6 @@
 import Login from '../pages/login/Login'
 import Home from '@/pages/home/Home'
-import DashBoard from '@/pages/system/component/dashboard/DashBoard'
+import DashBoard from '@/pages/dashboard/DashBoard'
 import RoleList from '@/pages/system/component/role/RoleList'
 import UserList from '@/pages/system/component/users/UserList'
 import UserInfo from '@/pages/system/component/user/UserInfo'
