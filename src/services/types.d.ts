@@ -26,7 +26,7 @@ export type LoginResponse = BaseResponse<{
 export type UserInfo = {
   _id: string
   username: string
-  sex: string
+  sex: 0 | 1
   avator: string
   email: string
   age: number
@@ -45,7 +45,6 @@ export type UserListItem = Omit<UserInfo, 'permission'> & {
   lastOnlineTime: number
   creator: string
   password: string
-  sex: '男' | '女'
   status: 0 | 1
 }
 // 权限
@@ -88,3 +87,13 @@ export type UserInfo = BaseResponse<{
   permission: PermissionItem[]
 }>
 
+// 创建和用户参数
+export type CreateUserParams = Pick<UserListItem, 'age' | 'email' | 'password' | 'sex' | 'username' | 'role'>
+// 更新用户参数
+export type UpdateUserParams = Partial<Pick<UserListItem, 'age' | 'email' | 'password' | 'role' | 'sex' | 'status' | 'username'>> & {
+  id: string
+}
+
+export type RoleRes = {
+  list: RoleItem[]
+}

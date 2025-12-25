@@ -17,11 +17,11 @@ const Login = () => {
   const getCaptcha = async () => {
     try {
       const res = await getCaptchaCode()
-      console.log(res.data)
-      if (res.data.code === API_CODE.SUCCESS) {
-        setCaptcha(res.data.data.code)
+      console.log(res)
+      if (res.code === API_CODE.SUCCESS) {
+        setCaptcha(res.data.code)
       } else {
-        message.error(res.data.msg)
+        message.error(res.msg)
       }
     } catch (e) {
       console.log(e)
@@ -34,13 +34,13 @@ const Login = () => {
       setLoading(true)
       const res = await getLogin(values)
       console.log(res.data)
-      if (res.data.code === API_CODE.SUCCESS) {
+      if (res.code === API_CODE.SUCCESS) {
         message.success('登录成功')
-        setToken(res.data.data.token)
+        setToken(res.data.token)
         getUserInfo()
         navigate('/')
-      } else if (res.data.code === API_CODE.EXPIRED_CAPTCHA) {
-        message.error(res.data.msg)
+      } else if (res.code === API_CODE.EXPIRED_CAPTCHA) {
+        message.error(res.msg)
         getCaptcha()
       }
     } catch (e) {

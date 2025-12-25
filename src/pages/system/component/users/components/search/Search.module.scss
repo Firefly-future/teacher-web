@@ -1,0 +1,29 @@
+.filterList{
+  margin-bottom: 15px;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+}
+
+.formItem{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 40px;
+}
+
+.btns{
+  margin-bottom: 10px;
+  padding-left: 40px;
+}
+
+// .select{
+//   width: 225px;
+// }
+
+:global(.ant-form-item){
+  margin-bottom: 10px!important;
+  width: 30%;
+}

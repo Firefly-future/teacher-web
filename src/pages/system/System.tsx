@@ -1,9 +1,11 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 const System = () => {
+  const location = useLocation()
   return (
     <div>
+      {location.pathname === '/userManage' && <h1>此处为系统管理</h1>}
       <Outlet />
     </div>
   )

@@ -45,8 +45,10 @@ const Home = () => {
             removeToken()
           }}
         >
-          <PoweroffOutlined style={{ marginRight: 10 }} />
-          退出登录
+          <span style={{ color: 'red' }}>
+            <PoweroffOutlined style={{ marginRight: 10 }} />
+            退出登录
+          </span>
         </a>
       ),
     },
@@ -55,7 +57,7 @@ const Home = () => {
   const userInfo = userStore((state) => state.userInfo)
   const userMenuList = userStore((state) => state.menuList)
   console.log(userMenuList)
-  console.log(getUserInfo)
+  // console.log(getUserInfo)
 
   useEffect(() => {
     getUserInfo()
@@ -65,7 +67,12 @@ const Home = () => {
     return (
       <Spin
         spinning={true}
-        style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       />
     )
   }
