@@ -45,8 +45,10 @@ const Home = () => {
             removeToken()
           }}
         >
-          <PoweroffOutlined style={{ marginRight: 10 }} />
-          退出登录
+          <span style={{ color: 'red' }}>
+            <PoweroffOutlined style={{ marginRight: 10 }} />
+            退出登录
+          </span>
         </a>
       ),
     },
@@ -65,7 +67,12 @@ const Home = () => {
     return (
       <Spin
         spinning={true}
-        style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       />
     )
   }
