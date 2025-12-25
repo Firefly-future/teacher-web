@@ -1,31 +1,33 @@
-import type { ProSettings } from "@ant-design/pro-components"
-import { PageContainer, ProCard, ProLayout } from "@ant-design/pro-components"
-import defaultProps from "./DefaultProps"
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
+import type { ProSettings } from '@ant-design/pro-components'
+import { PageContainer, ProCard, ProLayout } from '@ant-design/pro-components'
+import FormatMenuList from './FormatMenuList'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   DownOutlined,
   PoweroffOutlined,
   QuestionCircleOutlined,
-} from "@ant-design/icons"
-import type { MenuProps } from "antd"
-import { Button, Dropdown, Space } from "antd"
-import userStore from "@/store/userStore"
-import style from "./Home.module.scss"
+} from '@ant-design/icons'
+import type { MenuProps } from 'antd'
+import { Dropdown, Space, Spin } from 'antd'
+import userStore from '@/store/userStore'
+import style from './Home.module.scss'
+import { useEffect, useState } from 'react'
+import { removeToken } from '@/utils'
 const Home = () => {
   const settings: ProSettings | undefined = {
     fixSiderbar: true,
-    layout: "mix",
+    layout: 'mix',
     splitMenus: true,
   }
   const navigate = useNavigate()
-  const items: MenuProps["items"] = [
+  const items: MenuProps['items'] = [
     {
-      key: "1",
+      key: '1',
       label: (
         <a
           type="link"
           onClick={() => {
-            console.log("帮助")
+            console.log('帮助')
           }}
         >
           <QuestionCircleOutlined style={{ marginRight: 10 }} />
@@ -34,12 +36,13 @@ const Home = () => {
       ),
     },
     {
-      key: "2",
+      key: '2',
       label: (
         <a
           type="link"
           onClick={() => {
-            navigate("/login")
+            navigate('/login')
+            removeToken()
           }}
         >
           <PoweroffOutlined style={{ marginRight: 10 }} />
@@ -48,30 +51,43 @@ const Home = () => {
       ),
     },
   ]
-
+  const getUserInfo = userStore((state) => state.getUserInfo)
   const userInfo = userStore((state) => state.userInfo)
-  const menuList = userStore((state) => state.menuList)
-  console.log(userInfo, menuList)
+  const userMenuList = userStore((state) => state.menuList)
+  console.log(userMenuList)
+  console.log(getUserInfo)
+
+  useEffect(() => {
+    getUserInfo()
+  }, [])
   const location = useLocation()
+  if (!userMenuList || userMenuList.length === 0) {
+    return (
+      <Spin
+        spinning={true}
+        style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      />
+    )
+  }
   return (
     <div
       id="test-pro-layout"
       style={{
-        height: "100vh",
+        height: '100vh',
       }}
     >
       <ProLayout
-        {...defaultProps}
+        {...FormatMenuList(userMenuList)}
         location={location}
         menu={{
-          type: "group",
+          type: 'group',
         }}
         avatarProps={{
           src:
             userInfo?.avator ||
-            "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
-          size: "small",
-          title: userInfo?.username || "用户",
+            'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+          size: 'small',
+          title: userInfo?.username || '用户',
           render: (_, dom) => {
             return (
               <Dropdown menu={{ items }}>
@@ -85,14 +101,14 @@ const Home = () => {
             )
           },
         }}
-        menuItemRender={(item, dom) => <Link to={item.path || "/"}>{dom}</Link>}
+        menuItemRender={(item, dom) => <Link to={item.path || '/'}>{dom}</Link>}
         {...settings}
       >
         <PageContainer>
           <ProCard
             style={{
-              height: "100vh",
-              width: "100%",
+              height: '100vh',
+              width: '100%',
             }}
           >
             <Outlet />

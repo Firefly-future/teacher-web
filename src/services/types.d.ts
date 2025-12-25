@@ -1,7 +1,8 @@
-import { API_CODE } from "@/constants/Constants"
+import { API_CODE } from '@/constants/Constants'
+import { type IconEnumKeys } from '@/constants/Icon'
 
 // 通用response
-export type BaseResponse<T=never> = {
+export type BaseResponse<T = never> = {
   code: API_CODE
   msg: string
   data: T
@@ -49,8 +50,8 @@ export type UserListItem = Omit<UserInfo, 'permission'> & {
 }
 // 权限
 export type PermissionItem = {
-  name:string
-  path:string
+  name: string
+  path: string
 }
 
 // 左侧菜单
@@ -75,3 +76,15 @@ export type UserListRes = {
   total: number
   totalPage: number
 }
+// 用户信息
+export type UserInfo = BaseResponse<{
+  _id: string
+  username: string
+  sex: string
+  avator: string
+  email: string
+  age: number
+  role: string[]
+  permission: PermissionItem[]
+}>
+

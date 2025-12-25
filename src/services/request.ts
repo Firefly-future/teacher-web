@@ -1,21 +1,21 @@
-import axios from "axios"
-import { getToken } from "@/utils"
-import { message } from "antd"
+import axios from 'axios'
+import { getToken } from '@/utils'
+import { message } from 'antd'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: 5000,
+  timeout: 5000
 })
 
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {
-    // 在发送请求之前做些什么
-    config.headers.authorization = "Bearer " + getToken()
-    return config;
-  }, function (error) {
-    // 对请求错误做些什么
-    return Promise.reject(error);
-  });
+  // 在发送请求之前做些什么
+  config.headers.authorization = 'Bearer ' + getToken()
+  return config
+}, function (error) {
+  // 对请求错误做些什么
+  return Promise.reject(error)
+})
 
 // 添加响应拦截器
 request.interceptors.response.use(function (response) {
@@ -31,7 +31,6 @@ request.interceptors.response.use(function (response) {
     }
     return Promise.reject(error);
   });
-
 
 
 export default request
