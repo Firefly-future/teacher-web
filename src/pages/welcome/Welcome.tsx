@@ -8,7 +8,7 @@ const Welcome = () => {
     <Result
       icon={<SmileOutlined />}
       title="欢迎来到系统"
-      extra={<Button type="primary" onClick={() => navigate("/system")}>进入系统</Button>}
+      extra={<Button type="primary" onClick={() => navigate("/dashboard")}>进入系统</Button>}
     />
   )
 }

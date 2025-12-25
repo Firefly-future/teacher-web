@@ -1,5 +1,6 @@
 import { API_CODE } from "@/constants/Constants"
 
+// 通用response
 export type BaseResponse<T=never> = {
   code: API_CODE
   msg: string
@@ -11,12 +12,10 @@ export type LoginParams = {
   password: string
   code: string
 }
-
 // 获取图形验证码参数
 export type CaptchaCode = BaseResponse<{
   code: string
 }>
-
 // 登录返回值
 export type LoginResponse = BaseResponse<{
   token: string
@@ -47,4 +46,32 @@ export type UserListItem = Omit<UserInfo, 'permission'> & {
   password: string
   sex: '男' | '女'
   status: 0 | 1
+}
+// 权限
+export type PermissionItem = {
+  name:string
+  path:string
+}
+
+// 左侧菜单
+export type MenuListItem = {
+  component:string
+  createTime:number
+  createdAt:string
+  creator:string
+  disabled:string
+  icon:string
+  isBtn:boolean
+  name:string
+  path:string
+  pid:string
+  updatedAt:string
+  _id:string
+  children?:MenuListItem[]
+}
+
+export type UserListRes = {
+  list: UserListItem[]
+  total: number
+  totalPage: number
 }
