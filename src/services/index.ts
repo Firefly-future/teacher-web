@@ -8,7 +8,7 @@ import type {
   BaseResponse,
   UserListParams,
   UserListRes
-} from "./types"
+} from './types'
 
 // 获取图形验证码
 export const getCaptchaCode = () => {
