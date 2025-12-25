@@ -8,7 +8,7 @@ import {
   QuestionCircleOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Button, Dropdown, Space, Spin } from 'antd'
+import { Dropdown, Space, Spin } from 'antd'
 import userStore from '@/store/userStore'
 import style from './Home.module.scss'
 import { useEffect, useState } from 'react'
@@ -92,8 +92,10 @@ const Home = () => {
         avatarProps={{
           src:
             userInfo?.avator ||
+            userInfo?.avator ||
             'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
           size: 'small',
+          title: userInfo?.username || '用户',
           title: userInfo?.username || '用户',
           render: (_, dom) => {
             return (
