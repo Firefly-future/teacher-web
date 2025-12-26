@@ -41,7 +41,7 @@ export type UserListParams = {
 }
 
 // 用户列表信息
-export type UserListItem = Omit<UserInfo, 'permission'> & {
+export type UserListItem = Partial<UserInfo> & Omit<UserInfo, 'permission'> & {
   lastOnlineTime: number
   creator: string
   password: string
@@ -163,4 +163,16 @@ export type CreateMenuParams = Pick<MenuListItem, 'name' | 'path' | 'isBtn' | 's
 export type UpdateMenuParams = Partial<MenuListItem> & {
   id: string
   status?: 0 | 1
+}
+
+// 更新用户头像参数
+export type UpdateAvatorParams = {
+  username?: string
+  password?: string
+  status?: 0 | 1
+  avatar?: string
+}
+// 更新用户头像返回值
+export type UpdateAvatorResponse = {
+  url: string
 }
