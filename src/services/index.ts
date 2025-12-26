@@ -13,7 +13,10 @@ import type {
   RoleItemRes,
   UpdateRoleParams,
   PermissionListRes,
-  CreateMenuParams
+  CreateMenuParams,
+  ExamListResponse,
+  ExamUpdate,
+  ClassifyListResponse
 } from './types'
 
 // 获取图形验证码
@@ -76,4 +79,24 @@ export const deleteMenu = (id: string) =>{
 // 更新菜单
 export const updateMenu = (id:string) =>{
   return post<BaseResponse>('/permission/update', {id})
+}
+// 试卷列表
+export const examList = (params:UserListParams) =>{
+  return get<BaseResponse<ExamListResponse>>('/exam/list', {params})
+}
+// 删除试卷
+export const examRemove = (id:string) =>{
+  return post<BaseResponse>('/exam/remove', {id})
+}
+// 编辑试卷
+export const examUpdata = (params:ExamUpdate) => {
+  return post<BaseResponse>('/exam/update', params)
+}
+//试卷详情
+export const examDetail = (id:string) => {
+  return get<BaseResponse>(`/exam/detail?id=${id}`)
+}
+// 科目列表
+export const classifyList = (params:UserListParams) => {
+  return get<BaseResponse<ClassifyListResponse>>('/classify/list', {params})
 }
