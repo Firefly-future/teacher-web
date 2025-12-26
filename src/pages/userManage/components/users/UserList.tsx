@@ -30,7 +30,7 @@ const UserList = () => {
   const [showModal,setShowModal] = useState(false)
   const [query, setQuery] = useState({
     page: 1,
-    pagesize: 3
+    pagesize: 5
   }) 
   const [updateItem,setUpdateItem] = useState<UserListItem | null>(null)
   const [filterQuery, setFilterQuery] = useState({})
@@ -215,7 +215,14 @@ const UserList = () => {
   return (
     <div>
       <Search 
-        onFilterList={value=>setFilterQuery(value)}
+        onFilterList={value=>{
+          setFilterQuery(value)
+          console.log(value)
+          setQuery({
+            ...query,
+            page: 1
+          })
+        }}
       />
       <Button type="primary" className={style.btn} onClick={createModal}>创建用户</Button>
       <Table<UserListItem>

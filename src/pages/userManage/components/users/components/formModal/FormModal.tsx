@@ -165,8 +165,8 @@ const FormModal:React.FC<Props> = ({
           rules = {[{ required: true, message: '请输入性别!' }]}
         >
           <Select options = {[
-            { label: '男', value: 0 },
-            { label: '女', value: 1 },
+            { label: '男', value: 1 },
+            { label: '女', value: 0 },
           ]} />
         </Form.Item>
 
