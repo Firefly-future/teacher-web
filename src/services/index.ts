@@ -16,7 +16,13 @@ import type {
   CreateMenuParams,
   UserListItem,
   UpdateAvatorParams,
-  UpdateAvatorResponse
+  UpdateAvatorResponse,
+  CreatePaperParams,
+  ClassifyItem,
+  ClassifyListParams,
+  QuestionListParams,
+  QuestionItem,
+  QuestionTypeItem
 } from './types'
 
 // 获取图形验证码
@@ -88,4 +94,22 @@ export const updateUserInfo = (params: UserListItem) => {
 // 修改用户头像
 export const updateAvator = (params: UpdateAvatorParams) => {
   return post<BaseResponse<UpdateAvatorResponse>>('/profile', params)
+}
+
+// 创建试卷
+export const createPaper = (params: CreatePaperParams) =>{
+  return post<BaseResponse>('exam/create', params)  
+}
+// 查询科目列表
+export const getClassifyList = (params: ClassifyListParams) =>{
+  return get<BaseResponse<ClassifyItem>>('classify/list', {params})
+}
+// 查询题目列表
+export const getQuestionList = (params: QuestionListParams) =>{
+  return get<BaseResponse<QuestionItem>>('question/list', {params})
+}
+
+// 查询题目类型列表
+export const getQuestionTypeList = () =>{
+  return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
 }
