@@ -17,9 +17,13 @@
     "antd-img-crop": "^4.27.0",
     "axios": "^1.13.2",
     "classnames": "^2.5.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.4",
+    "jspdf-html2canvas": "^1.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.11.0",
+    "xlsx": "^0.18.5",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
