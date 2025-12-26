@@ -27,6 +27,7 @@ import { useState } from 'react'
 import type { DrawerProps } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import userStore from '@/store/userStore'
+import Draw from './Draw'
 
 // // 校验函数
 const checkPath = (_: any, value: string) => {
@@ -251,7 +252,17 @@ const Permission = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <Drawer
+      <Draw
+        open={open}
+        onClose={onClose}
+        onFinish={onFinish}
+        size={size}
+        options={options}
+        form={form}
+        path={path}
+        setPath={setPath}
+      />
+      {/* <Drawer
         title={'添加菜单'}
         size={size}
         onClose={onClose}
@@ -364,7 +375,7 @@ const Permission = () => {
             </Form.Item>
           </Flex>
         </Form>
-      </Drawer>
+      </Drawer> */}
     </>
   )
 }
