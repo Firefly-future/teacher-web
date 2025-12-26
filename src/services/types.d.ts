@@ -51,6 +51,7 @@ export type UserListItem = Omit<UserInfo, 'permission'> & {
 export type PermissionItem = {
   name: string
   path: string
+  isBtn: boolean
 }
 
 // 左侧菜单

@@ -49,7 +49,7 @@ const Permission = () => {
     setOpenEdit(true)
   }
 
-  const handleOk = async (values:any ) => {
+  const handleOk = async (values: any) => {
     setModalText('更新将在2秒后生效')
     setConfirmLoading(true)
     try {
@@ -227,25 +227,13 @@ const Permission = () => {
         onCancel={handleCancel}
       >
         <Form form={form} onFinish={onFinish}>
-          <Form.Item
-            label='菜单名称'
-            name='name'
-            rules={[{ required: true }]}
-          >
+          <Form.Item label='菜单名称' name='name' rules={[{ required: true }]}>
             <Input placeholder='请输入名称' />
           </Form.Item>
-          <Form.Item
-            label='菜单路径'
-            name='path'
-            rules={[{ required: true }]}
-          >
+          <Form.Item label='菜单路径' name='path' rules={[{ required: true }]}>
             <Input placeholder='请输入路径' />
           </Form.Item>
-          <Form.Item
-            label='权限类型'
-            name='isBtn'
-            rules={[{ required: true }]}
-          >
+          <Form.Item label='权限类型' name='isBtn' rules={[{ required: true }]}>
             <Select
               placeholder='请选择'
               style={{ width: 260 }}
@@ -285,7 +273,7 @@ const Permission = () => {
               label='选择菜单等级'
               name='level'
               rules={[{ required: true }]}
-              labelCol={{ span: 6 }}
+              labelCol={{ span: 20 }}
             >
               <Select
                 placeholder='请选择'
@@ -313,6 +301,7 @@ const Permission = () => {
                   label='状态'
                   name='status'
                   rules={[{ required: true }]}
+                  style={{ width: 120 }}
                 >
                   <Select
                     placeholder='请选择'
@@ -333,6 +322,7 @@ const Permission = () => {
                   label='权限类型'
                   name='isBtn'
                   rules={[{ required: true }]}
+                  style={{ width: 120 }}
                 >
                   <Select
                     placeholder='请选择'
