@@ -12,7 +12,7 @@ import {
   StepsForm,
 } from '@ant-design/pro-components'
 import { Button, message, Space } from 'antd'
-import { getClassifyList, getQuestionList } from '@/services'
+import { getClassifyList, getQuestionList, createPaper } from '@/services'
 import ModalQuestion from './ModalQuestion'
 import type {
   ClassifyItemList,
@@ -63,23 +63,15 @@ const CreateExercise = () => {
   }
 
   const [questionOptions, setQuestionOptions] = useState<QuestionItemList[]>([])
-  const CreateQuestionList = async (p: CreatePaperParams) => {
+  const CreateQuestionList = async (p: QuestionListParams) => {
     try {
       const res = await getQuestionList(p)
       if (res.code === API_CODE.SUCCESS) {
         setQuestionOptions(res.data?.list || [])
+        message.success('获取题目成功')
         return res.data?.list || []
-      }
-    } catch (e) {
-      console.error('获取题目失败:', e)
-    }
-  }
-  const CreateQuestionLi = async (p: QuestionListParams) => {
-    try {
-      const res = await getQuestionList(p)
-      if (res.code === API_CODE.SUCCESS) {
-        setQuestionOptions(res.data?.list || [])
-        return res.data?.list || []
+      }else {
+        message.error(`创建失败：${res.msg || '未知错误'}`)
       }
     } catch (e) {
       console.error('获取题目失败:', e)
@@ -297,12 +289,16 @@ const CreateExercise = () => {
         onFinish={async (values) => {
           try {
             await waitTime(0.5)
-            await CreateQuestionList({
-              classify: values.classify,
+            const res = await createPaper({
               name: values.name,
+              classify: values.classify,
               questions: values.choice?.split(',') || [],
             })
-            message.success('创建成功')
+            if (res.code === API_CODE.SUCCESS) {
+              message.success('创建试卷成功')
+            } else {
+              message.error(`创建失败：${res.msg || '未知错误'}`)
+            }
           } catch (e) {
             console.log(e)
           }
@@ -385,7 +381,7 @@ const CreateExercise = () => {
             onChange={async (v: string) => {
               const target = options.find((item) => item._id === v)
               if (target) {
-                await CreateQuestionLi({ classify: target.name})
+                await CreateQuestionList({ classify: target.name})
               }
               setAllValues((prev) => ({
                 ...prev,
