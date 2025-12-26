@@ -7,33 +7,36 @@ import type {
   MenuListItem,
   BaseResponse,
   UserListParams,
-  UserListRes,
+  UserListResponse,
   CreateUserParams,
   UpdateUserParams,
-  RoleRes
+  RoleItemRes,
+  UpdateRoleParams,
+  PermissionListRes,
+  CreateMenuParams
 } from './types'
 
 // 获取图形验证码
 export const getCaptchaCode = () => {
-  return get<CaptchaCode>('/login/captcha')
+  return get<BaseResponse<CaptchaCode>>('/login/captcha')
 }
 
 // 获取登录
 export const getLogin = (params: LoginParams) => {
-  return post<LoginResponse>('/login', params)
+  return post<BaseResponse<LoginResponse>>('/login', params)
 }
 
 // 用户信息
 export const getUserInfo = () => {
-  return get<UserInfo>('/user/info')
+  return get<BaseResponse<UserInfo>>('/user/info')
 }
-// 获取用户菜单
+// 获取用户左侧菜单
 export const getUserMenuList = () => {
   return get<BaseResponse<{list: MenuListItem[]}>>('/user/menulist')
 }
 
 export const getUserList = (params: UserListParams) => {
-  return get<BaseResponse<UserListRes>>('/user/list', { params })
+  return get<BaseResponse<UserListResponse>>('/user/list', { params })
 }
 // 删除用户
 export const getUserRemove = (id: string) => {
@@ -47,7 +50,30 @@ export const createUser = (params: CreateUserParams) => {
 export const updateUser = (params: UpdateUserParams) => {
   return post<BaseResponse>('/user/update', params)
 }
-
+// 获取角色列表
 export const getRoleList = () => {
-  return get<BaseResponse<RoleRes>>('/role/list')
+  return get<BaseResponse<RoleItemRes[]>>('/role/list')
+}
+
+// 编辑角色
+export const updateRole = (params: UpdateRoleParams) =>{
+  return post<BaseResponse>('/role/update', params)
+}
+
+// 获取权限列表
+export const getPermissionList = () =>{
+  return get<BaseResponse<PermissionListRes>>('/permission/list')
+}
+
+// 创建菜单
+export const createMenu = (params: CreateMenuParams) =>{
+  return post<BaseResponse>('/permission/create', params)
+}
+// 删除菜单
+export const deleteMenu = (id: string) =>{
+  return post<BaseResponse>('/permission/remove', {id})
+}
+// 更新菜单
+export const updateMenu = (id:string) =>{
+  return post<BaseResponse>('/permission/update', {id})
 }

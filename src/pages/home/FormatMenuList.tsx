@@ -1,7 +1,7 @@
 import React from 'react'
 import type { MenuListItem } from '@/services/types'
 import { IconEnum, type IconEnumKeys } from '@/constants/Icon'
-import { PieChartOutlined } from '@ant-design/icons'
+import { PieChartOutlined, SmileTwoTone } from '@ant-design/icons'
 
 const buildRoutes = (list: MenuListItem[]) => {
   return list.map((item) => {
@@ -29,7 +29,6 @@ const FormatMenuList = (list: MenuListItem[]) => {
       path: '/dashboard',
       name: '仪表盘',
       icon: <PieChartOutlined />,
-      // element: <DashBoard />,
     },
     ...routes,
   ]

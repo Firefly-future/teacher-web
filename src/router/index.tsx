@@ -6,6 +6,7 @@ import UserList from '@/pages/userManage/components/users/UserList'
 import UserInfo from '@/pages/userManage/components/personal/UserInfo'
 import Permission from '@/pages/userManage/components/permission/Permission'
 
+import Forbidden from '@/pages/403/Forbidden'
 import NotFound from '@/pages/404/NotFound'
 
 import Welcome from '@/pages/welcome/Welcome'
@@ -96,6 +97,10 @@ const router = [
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/403',
+    element: <Forbidden />,
   },
   {
     path: '*',

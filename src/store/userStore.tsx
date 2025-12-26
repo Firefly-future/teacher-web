@@ -13,8 +13,8 @@ const userStore = create<State>((set) => ({
   getUserInfo: async () => {
     try {
       const res = await getUserInfo()
-      console.log(res.data)
-      set(() => ({ userInfo: res }))
+      // console.log(res.data)
+      set(() => ({ userInfo: res.data}))
       const menuRes = await getUserMenuList()
       set(() => ({ menuList: menuRes.data.list }))
     } catch (e) {
