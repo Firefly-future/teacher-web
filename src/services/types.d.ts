@@ -176,3 +176,32 @@ export type UpdateAvatorParams = {
 export type UpdateAvatorResponse = {
   url: string
 }
+
+// 创建试卷参数
+export type CreatePaperParams = {
+  name: string
+  classify: string
+  questions:string[]
+}
+// 科目列表参数
+export type ClassifyListParams = {
+  page: number
+  pagesize: number
+}
+// 科目列
+export type ClassifyItemList = {
+  _id: string
+  name: string
+  value: string
+  creator: string
+  createTime: number
+}
+// 科目列表
+export type ClassifyItem = {
+  total:number
+  list:ClassifyItemList[]
+  page:number
+  pagesize:number
+  totalPage:number
+}
+
