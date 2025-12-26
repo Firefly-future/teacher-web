@@ -165,6 +165,81 @@ export type UpdateMenuParams = Partial<MenuListItem> & {
   status?: 0 | 1
 }
 
+export type Questions = {
+  order: number
+  question: string
+  score: number
+  _id: string
+}
+
+export type ExamListItem = {
+  classify: string
+  createdAt: string
+  creator: string
+  description: string
+  duration: number
+  name: string
+  questions: Questions[]
+  status: number
+  totalScore: number
+  updatedAt: string
+  __v: number
+  _id: string
+}
+
+// 试卷列表返回值
+export type ExamListResponse = {
+  total: number
+  list: ExamListItem[]
+  totalPage: number
+}
+
+//更新试卷
+export type ExamUpdate = {
+  id:string
+  name:string
+}
+// 题目类型
+export type ExamDetailQuestions = {
+  answer: string
+  classify: string
+  options: string[]
+  question: string
+  type: string
+  __v: number
+  _id: string
+} | null
+
+// 试卷详情
+export type ExamDetail = Pick<ExamListItem, 'classify' | 'createTime' | 'creator' | 'name' | '__v' | '_id'> & {
+  questions: ExamDetailQuestions[]
+}
+
+// 试卷查询
+export type ExamSearch ={
+  name?:string
+  creator?:string
+  classify?:string
+}
+
+// 科目列表
+export type ClassifyListResponse = {
+  total: number
+  list: ClassifyListItem[]
+  totalPage: number
+}
+
+export type ClassifyListItem = {
+  createdAt: string
+  creator: string
+  description: string
+  name: string
+  sort: number
+  status: number
+  updatedAt: string
+  value: string
+  _id: string
+}
 // 更新用户头像参数
 export type UpdateAvatorParams = {
   username?: string
