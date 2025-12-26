@@ -12,11 +12,19 @@ import {
   StepsForm,
 } from '@ant-design/pro-components'
 import { Button, message, Space } from 'antd'
-import { getClassifyList } from '@/services'
-import type { ClassifyItemList, ClassifyListParams } from '@/services/types'
+import { getClassifyList, getQuestionList } from '@/services'
+import ModalQuestion from './ModalQuestion'
+import type {
+  ClassifyItemList,
+  ClassifyListParams,
+  QuestionItemList,
+  QuestionListParams,
+  CreatePaperParams
+} from '@/services/types'
 import { useEffect, useState, useRef } from 'react'
 import { API_CODE } from '@/constants/Constants'
-import type { ProFormInstance } from '@ant-design/pro-components'
+// 改用 antd 原生的 FormInstance（ProFormInstance 可能与 StepsForm 不兼容）
+import type { FormInstance } from 'antd'
 
 const waitTime = (time: number = 1) => {
   return new Promise((resolve) => {
@@ -25,11 +33,20 @@ const waitTime = (time: number = 1) => {
 }
 
 const CreateExercise = () => {
+  const [selectQuestions, setSelectQuestions] = useState<QuestionItemList[]>([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [options, setOptions] = useState<ClassifyItemList[]>([])
-  /* 用于第三步即时展示 */
-  const [allValues, setAllValues] = useState<Record<string, any>>({})
-  const stepsFormRef = useRef<ProFormInstance>(null)
+  const [allValues, setAllValues] = useState<Record<string, any>>({
+    choiceQuestions: [] as QuestionItemList[],
+    name: '',
+    remark: '',
+    classify: '',
+    type: 'manual',
+    randomNum: 0,
+  })
 
+  // 1. 修正：使用 antd 原生 FormInstance
+  const stepsFormRef = useRef<FormInstance>(null)
   const subOptions = options.map((item) => ({
     label: item.name,
     value: item._id,
@@ -41,116 +58,187 @@ const CreateExercise = () => {
       const res = await getClassifyList(p)
       if (res.code === API_CODE.SUCCESS) setOptions(res.data?.list || [])
     } catch (e) {
-      console.log(e)
+      console.error('获取分类失败:', e)
     }
   }
+
+  const [questionOptions, setQuestionOptions] = useState<QuestionItemList[]>([])
+  const CreateQuestionList = async (p: CreatePaperParams) => {
+    try {
+      const res = await getQuestionList(p)
+      if (res.code === API_CODE.SUCCESS) {
+        setQuestionOptions(res.data?.list || [])
+        return res.data?.list || []
+      }
+    } catch (e) {
+      console.error('获取题目失败:', e)
+    }
+  }
+  const CreateQuestionLi = async (p: QuestionListParams) => {
+    try {
+      const res = await getQuestionList(p)
+      if (res.code === API_CODE.SUCCESS) {
+        setQuestionOptions(res.data?.list || [])
+        return res.data?.list || []
+      }
+    } catch (e) {
+      console.error('获取题目失败:', e)
+    }
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleModalConfirm = (selectedQuestions: QuestionItemList[]) => {
+    if (selectedQuestions.length === 0) {
+      message.warning('请至少选择一道题目')
+      return
+    }
+    setSelectQuestions(selectedQuestions)
+    // 2. 增加空值防护：使用可选链
+    stepsFormRef.current?.setFieldsValue({
+      choice: JSON.stringify(selectedQuestions.map((q) => q._id)),
+    })
+    setAllValues((prev) => ({
+      ...prev,
+      choiceQuestions: selectedQuestions,
+    }))
+    message.success(`已选择 ${selectedQuestions.length} 道题目`)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
   useEffect(() => {
     CreateClassifyList(defaultPage)
   }, [])
 
-  // 核心修改：手动实现表单值监听（兼容所有 ProForm 版本）
-  // 1. 第一步提交时保存基础数据
+  // 3. 增加空值防护：先判断 ref 是否存在
   const handleStep0Submit = async () => {
-    if (stepsFormRef.current) {
-      // 获取第一步的表单值
-      const step0Values = stepsFormRef.current.getFieldsValue([
-        'name',
-        'remark',
-      ])
-      // 合并到总数据中
-      setAllValues((prev) => ({ ...prev, ...step0Values }))
+    if (!stepsFormRef.current) {
+      message.error('表单未初始化')
+      return
     }
+    const step0Values = stepsFormRef.current.getFieldsValue(['name', 'remark'])
+    setAllValues((prev) => ({ ...prev, ...step0Values }))
   }
-  // 2. 第二步提交时保存组卷相关数据
+
   const handleStep1Submit = async () => {
-    if (stepsFormRef.current) {
-      // 获取第二步的表单值
-      const step1Values = stepsFormRef.current.getFieldsValue([
-        'classify',
-        'type',
-        'choice',
-        'randomNum',
-      ])
-      // 合并到总数据中
-      setAllValues((prev) => ({ ...prev, ...step1Values }))
+    if (!stepsFormRef.current) {
+      message.error('表单未初始化')
+      return
     }
+    const step1Values = stepsFormRef.current.getFieldsValue([
+      'classify',
+      'type',
+      'choice',
+      'randomNum',
+    ])
+    setAllValues((prev) => ({
+      ...prev,
+      ...step1Values,
+      choiceQuestions: selectQuestions,
+    }))
   }
-  /* 第三步展示组件：匹配参考图样式 */
+
   const PaperInfoDisplay = () => {
     const classifyName =
       subOptions.find((i) => i.value === allValues.classify)?.label || '未选择'
-    // 模拟试题列表（实际项目中替换为真实的试题数据）
+    const questionList = allValues.choiceQuestions || []
+
     return (
-      <div style={{ width: '100%' }}>
-        {/* 试卷信息区域 */}
-        <div style={{ marginBottom: '24px' }}>
-          <h3
-            style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600 }}
-          >
+      <div
+        style={{ width: 960, margin: '0 auto', fontSize: 14, color: '#000' }}
+      >
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
             试卷信息
-          </h3>
+          </div>
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '16px 48px',
-              fontSize: '14px',
+              gap: '12px 48px',
+              lineHeight: '28px',
             }}
           >
-            <p style={{ margin: 0 }}>
+            <div>
               <strong>试卷名称：</strong>
               {allValues.name || '未填写'}
-            </p>
-            <p style={{ margin: 0 }}>
+            </div>
+            <div>
               <strong>组卷方式：</strong>
               {allValues.type === 'manual'
                 ? '选题组卷'
                 : allValues.type === 'random'
                   ? '随机组卷'
                   : '未选择'}
-            </p>
-            <p style={{ margin: 0 }}>
+            </div>
+            <div>
               <strong>科目：</strong>
               {classifyName}
-            </p>
-            <p style={{ margin: 0 }}>
+            </div>
+            <div>
               <strong>备注：</strong>
               {allValues.remark || '无'}
-            </p>
-            {allValues.type === 'manual' && (
-              <p style={{ margin: 0 }}>
-                <strong>选择的试题：</strong>
-                {allValues.choice || '未选择'}
-              </p>
-            )}
+            </div>
             {allValues.type === 'random' && (
-              <p style={{ margin: 0 }}>
+              <div>
                 <strong>随机组卷数量：</strong>
                 {allValues.randomNum ?? '未输入'}
-              </p>
+              </div>
             )}
           </div>
         </div>
 
-        {/* 试题展示区域 */}
         <div>
-          <h3
-            style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600 }}
-          >
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
             试题展示
-          </h3>
-          <div style={{ border: '1px solid #e8e8e8', borderRadius: '4px' }}>
+          </div>
+          <div
+            style={{
+              border: '1px solid #e8e8e8',
+              borderRadius: 4,
+              background: '#fff',
+            }}
+          >
             <div
               style={{
                 padding: '8px 16px',
                 borderBottom: '1px solid #e8e8e8',
-                backgroundColor: '#f5f5f5',
-                fontSize: '14px',
+                background: '#fafafa',
+                fontWeight: 500,
               }}
             >
               List of test questions
             </div>
-            <div style={{ padding: '8px 0', fontSize: '14px' }}>
+            <div style={{ padding: '0 16px' }}>
+              {questionList.length === 0 ? (
+                <div style={{ padding: '16px 0', color: '#999' }}>暂无试题</div>
+              ) : (
+                questionList.map((q: any, idx: any) => (
+                  <div
+                    key={q._id || idx}
+                    style={{
+                      padding: '10px 0',
+                      borderBottom:
+                        idx === questionList.length - 1
+                          ? 'none'
+                          : '1px dashed #e8e8e8',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <span style={{ marginRight: 8, flexShrink: 0 }}>
+                      {idx + 1}.
+                    </span>
+                    <span style={{ flex: 1 }}>{q.question}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -158,8 +246,44 @@ const CreateExercise = () => {
     )
   }
 
+  const select = () => {
+    // 4. 增加空值防护
+    if (!stepsFormRef.current) {
+      message.error('表单未初始化')
+      return
+    }
+    const need = stepsFormRef.current.getFieldValue('randomNum')
+    if (!need || need <= 0) {
+      message.error('请输入随机抽题数量')
+      return
+    }
+    if (need > questionOptions.length) {
+      message.error('随机抽题数量不能大于题目总数')
+      return
+    }
+
+    const pool = [...questionOptions]
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[pool[i], pool[j]] = [pool[j], pool[i]]
+    }
+    const picked = pool.slice(0, need)
+
+    stepsFormRef.current.setFieldsValue({
+      choice: JSON.stringify(picked.map((q) => q._id)),
+    })
+    setSelectQuestions(picked)
+    setAllValues((prev) => ({
+      ...prev,
+      choiceQuestions: picked,
+      randomNum: need,
+    }))
+    message.success(`已随机抽取 ${need} 道题目`)
+  }
+
   return (
     <ProCard>
+      {/* 5. 确保 StepsForm 是 ProCard 的直接子元素，避免嵌套异常 */}
       <StepsForm<{
         name: string
         remark: string
@@ -168,11 +292,20 @@ const CreateExercise = () => {
         choice?: string
         randomNum: number
       }>
+        // 6. 绑定 formRef（确保是 StepsForm 的顶层属性）
         formRef={stepsFormRef}
-        /* 最终提交逻辑 */
         onFinish={async (values) => {
-          await waitTime(0.5)
-          message.success('提交成功')
+          try {
+            await waitTime(0.5)
+            await CreateQuestionList({
+              classify: values.classify,
+              name: values.name,
+              questions: values.choice?.split(',') || [],
+            })
+            message.success('创建成功')
+          } catch (e) {
+            console.log(e)
+          }
           return true
         }}
         formProps={{
@@ -185,7 +318,6 @@ const CreateExercise = () => {
                 <Button
                   type='primary'
                   onClick={async () => {
-                    // 第一步提交时先保存数据
                     await handleStep0Submit()
                     props.onSubmit?.()
                   }}
@@ -203,7 +335,6 @@ const CreateExercise = () => {
                   type='primary'
                   key='next'
                   onClick={async () => {
-                    // 第二步提交时保存数据
                     await handleStep1Submit()
                     props.onSubmit?.()
                   }}
@@ -227,7 +358,6 @@ const CreateExercise = () => {
           },
         }}
       >
-        {/* 第一步 */}
         <StepsForm.StepForm name='base' title='试卷基础信息'>
           <ProFormText
             name='name'
@@ -244,7 +374,6 @@ const CreateExercise = () => {
           />
         </StepsForm.StepForm>
 
-        {/* 第二步 */}
         <StepsForm.StepForm name='checkbox' title='选择组卷方式&科目'>
           <ProFormSelect
             name='classify'
@@ -253,6 +382,16 @@ const CreateExercise = () => {
             placeholder='请选择科目'
             rules={[{ required: true }]}
             options={subOptions}
+            onChange={async (v: string) => {
+              const target = options.find((item) => item._id === v)
+              if (target) {
+                await CreateQuestionLi({ classify: target.name})
+              }
+              setAllValues((prev) => ({
+                ...prev,
+                classify: v,
+              }))
+            }}
           />
           <ProFormRadio.Group
             name='type'
@@ -268,13 +407,18 @@ const CreateExercise = () => {
               <>
                 {type === 'manual' && (
                   <ProFormItem name='choice'>
-                    <Button type='primary' size='middle' style={{ width: 100 }}>
+                    <Button
+                      type='primary'
+                      size='middle'
+                      style={{ width: 100 }}
+                      onClick={showModal}
+                    >
                       选择试题
                     </Button>
                   </ProFormItem>
                 )}
                 {type === 'random' && (
-                  <ProFormGroup style={{marginBottom: 20}}>
+                  <ProFormGroup style={{ marginBottom: 20 }}>
                     <Space align='center'>
                       <span style={{ whiteSpace: 'nowrap' }}>试题数量:</span>
                       <ProFormDigit
@@ -282,9 +426,15 @@ const CreateExercise = () => {
                         width={100}
                         initialValue={0}
                         noStyle
-                        rules={[{ type: 'number', message: '请输入试卷数量' }]}
+                        rules={[
+                          {
+                            type: 'number',
+                            message: '请输入试卷数量',
+                            max: 10,
+                          },
+                        ]}
                       />
-                      <Button type='primary' size='middle'>
+                      <Button type='primary' size='middle' onClick={select}>
                         确定
                       </Button>
                     </Space>
@@ -295,11 +445,22 @@ const CreateExercise = () => {
           </ProFormDependency>
         </StepsForm.StepForm>
 
-        {/* 第三步：展示全部数据 */}
         <StepsForm.StepForm name='deploy' title='试卷信息确认'>
           <PaperInfoDisplay />
         </StepsForm.StepForm>
       </StepsForm>
+
+      {/* 7. 把 ModalQuestion 移到 StepsForm 外部（避免嵌套影响 ref 绑定） */}
+      <ModalQuestion
+        showModal={showModal}
+        onConfirm={handleModalConfirm}
+        handleCancel={handleCancel}
+        setIsModalOpen={setIsModalOpen}
+        isOpen={isModalOpen}
+        list={questionOptions}
+        selectedRowKeys={selectedRowKeys}
+        setSelectedRowKeys={setSelectedRowKeys}
+      />
     </ProCard>
   )
 }
