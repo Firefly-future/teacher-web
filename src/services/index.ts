@@ -62,7 +62,14 @@ export const getRoleList = () => {
 export const updateRole = (params: UpdateRoleParams) =>{
   return post<BaseResponse>('/role/update', params)
 }
-
+//删除角色
+export const deleteRole = (id: string) =>{
+  return post<BaseResponse>('/role/remove', {id})
+}
+// 创建角色
+export const createRole = (params: UpdateRoleParams) =>{
+  return post<BaseResponse>('/role/create', params)
+}
 // 获取权限列表
 export const getPermissionList = () =>{
   return get<BaseResponse<PermissionListRes>>('/permission/list')
@@ -89,3 +96,4 @@ export const updateUserInfo = (params: UserListItem) => {
 export const updateAvator = (params: UpdateAvatorParams) => {
   return post<BaseResponse<UpdateAvatorResponse>>('/profile', params)
 }
+
