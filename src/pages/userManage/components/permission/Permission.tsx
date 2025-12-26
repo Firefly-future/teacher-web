@@ -45,9 +45,8 @@ const Permission = () => {
   const [size, setSize] = useState<DrawerProps['size']>()
   const [openEdit, setOpenEdit] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
-  const [modalText, setModalText] = useState('确认更新吗？')
   const showModal = (record: MenuListItem) => {
-    form.setFieldsValue(record)
+    form.setFieldsValue({ ...record, _id: record._id || '' })
     setOpenEdit(true)
   }
   const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {

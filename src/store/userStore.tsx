@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { getUserInfo, getUserMenuList } from '@/services'
-import type { UserInfo, MenuListItem } from '@/services/types'
+import type { UserInfo, MenuListItem, UserListItem } from '@/services/types'
 interface State {
-  userInfo: UserInfo | null
+  userInfo: UserListItem | null
   menuList: MenuListItem[]
   getUserInfo: () => void
 }
