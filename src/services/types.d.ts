@@ -251,6 +251,26 @@ export type UpdateAvatorParams = {
 export type UpdateAvatorResponse = {
   url: string
 }
+// 创建试题参数
+export type questionCreateItem = {
+  question: string
+  type: number
+  classify: string
+  answer: string
+  options:  string[]
+  desc: string
+}
+// 试题类型返回值
+export type questionType = {
+  list: TypeItem[]
+}
+
+export type TypeItem = {
+  _id: string
+  value: number
+  name: string
+  __v?: number
+}
 
 // 创建试卷参数
 export type CreatePaperParams = {

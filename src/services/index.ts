@@ -20,6 +20,8 @@ import type {
   UserListItem,
   UpdateAvatorParams,
   UpdateAvatorResponse,
+  questionCreateItem,
+  questionType,
   CreatePaperParams,
   ClassifyItem,
   ClassifyListParams,
@@ -125,6 +127,14 @@ export const updateUserInfo = (params: UserListItem) => {
 // 修改用户头像
 export const updateAvator = (params: UpdateAvatorParams) => {
   return post<BaseResponse<UpdateAvatorResponse>>('/profile', params)
+}
+// 创建试题
+export const questionCreate = (params: questionCreateItem) => {
+  return post<BaseResponse>('/question/create', params)
+}
+// 试题类型
+export const questionTypeList = () => {
+  return get<BaseResponse<questionType>>('/question/type/list')
 }
 
 // 创建试卷
