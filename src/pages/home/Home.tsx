@@ -115,6 +115,7 @@ const Home = () => {
         <PageContainer>
           <ProCard
             style={{
+              height: 'auto',
               width: '100%',
             }}
           >
