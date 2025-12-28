@@ -69,7 +69,7 @@ const CreateCourse: React.FC = () => {
       render: (text, record, _, action) => [
         <a key='editable' onClick={() => action?.startEditable?.(record._id)}>
           编辑
-        </a>,
+        </a>
       ],
     },
   ]
