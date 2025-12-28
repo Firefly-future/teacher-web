@@ -25,7 +25,7 @@ const Home = () => {
       key: '1',
       label: (
         <a
-          type="link"
+          type='link'
           onClick={() => {
             console.log('帮助')
           }}
@@ -39,7 +39,7 @@ const Home = () => {
       key: '2',
       label: (
         <a
-          type="link"
+          type='link'
           onClick={() => {
             navigate('/login')
             removeToken()
@@ -78,7 +78,7 @@ const Home = () => {
   }
   return (
     <div
-      id="test-pro-layout"
+      id='test-pro-layout'
       style={{
         height: '100vh',
       }}
@@ -95,7 +95,6 @@ const Home = () => {
             userInfo?.avator ||
             'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
           size: 'small',
-          title: userInfo?.username || '用户',
           title: userInfo?.username || '用户',
           render: (_, dom) => {
             return (
@@ -116,7 +115,6 @@ const Home = () => {
         <PageContainer>
           <ProCard
             style={{
-              height: '100vh',
               width: '100%',
             }}
           >

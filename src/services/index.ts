@@ -25,7 +25,9 @@ import type {
   ClassifyListParams,
   QuestionListParams,
   QuestionItem,
-  QuestionTypeItem
+  QuestionTypeItem,
+  createClassifyParams,
+  updateClassifyParams
 } from './types'
 
 // 获取图形验证码
@@ -137,9 +139,19 @@ export const getClassifyList = (params: ClassifyListParams) =>{
 export const getQuestionList = (params: QuestionListParams) =>{
   return get<BaseResponse<QuestionItem>>('question/list', {params})
 }
-
 // 查询题目类型列表
 export const getQuestionTypeList = () =>{
   return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
 }
-
+// 创建科目
+export const createClassify = (params: createClassifyParams) =>{
+  return post<BaseResponse>('/classify/create', params)
+}
+// 编辑科目
+export const updateClassify = (params: updateClassifyParams) =>{
+  return post<BaseResponse>('/classify/update', params)
+}
+// 删除科目
+export const deleteClassify = (id: string) =>{
+  return post<BaseResponse>('/classify/remove', {id})
+}

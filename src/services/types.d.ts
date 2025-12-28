@@ -306,3 +306,19 @@ export type QuestionTypeItem = {
   name: string
   value: number
 }
+// 创建科目参数
+export type createClassifyParams = {
+  name: string
+  value: string
+}
+// 更新科目参数
+export type updateClassifyParams = {
+  id: string
+  name: string
+}
+// 科目列（表格数据）
+export type ClassifyTableItem = {
+  _id: string
+  name: string
+  value: string
+}
