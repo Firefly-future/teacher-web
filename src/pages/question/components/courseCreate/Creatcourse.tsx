@@ -8,7 +8,7 @@ import {
   ProForm,
   ProFormSegmented,
 } from '@ant-design/pro-components'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   createClassify,
@@ -89,7 +89,7 @@ const CreateCourse: React.FC = () => {
       submitter={false} // 去掉提交/重置按钮
     >
       <EditableProTable<ClassifyItemList>
-        rowKey='_id'
+        rowKey={(record) => record._id}
         scroll={{ x: 960 }}
         editableFormRef={editorFormRef}
         headerTitle='科目创建表'
