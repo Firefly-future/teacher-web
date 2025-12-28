@@ -6,7 +6,7 @@ import Type from '@/constants/Type'
 
 interface ModalQuestionProps {
   showModal: () => void
-  // 新增：接收选中题目后的回调
+  //接收选中题目后的回调
   onConfirm: (selectedQuestions: QuestionItemList[]) => void
   handleCancel: () => void
   setIsModalOpen: (isOpen: boolean) => void
@@ -33,7 +33,7 @@ const columns: TableColumnsType<DataType> = [
 
 const ModalQuestion: React.FC<ModalQuestionProps> = ({
   showModal,
-  onConfirm, // 新增回调
+  onConfirm, // 接收选中题目后的回调
   handleCancel,
   setIsModalOpen,
   isOpen,
@@ -41,12 +41,13 @@ const ModalQuestion: React.FC<ModalQuestionProps> = ({
   selectedRowKeys,
   setSelectedRowKeys,
 }) => {
-  // 新增：Modal 确认按钮逻辑
+  // Modal 确认按钮逻辑
   const handleModalOk = () => {
     // 根据选中的 rowKeys 筛选对应的题目数据
     const selectedQuestions = list.filter(item => 
       selectedRowKeys.includes(item._id!)
     )
+    console.log(selectedQuestions)
     // 调用回调，把选中的题目传给主组件
     onConfirm(selectedQuestions)
     // 关闭 Modal
