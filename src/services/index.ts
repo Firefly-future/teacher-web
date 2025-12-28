@@ -21,7 +21,13 @@ import type {
   UpdateAvatorParams,
   UpdateAvatorResponse,
   questionCreateItem,
-  questionType
+  questionType,
+  CreatePaperParams,
+  ClassifyItem,
+  ClassifyListParams,
+  QuestionListParams,
+  QuestionItem,
+  QuestionTypeItem
 } from './types'
 
 // 获取图形验证码
@@ -67,7 +73,14 @@ export const getRoleList = () => {
 export const updateRole = (params: UpdateRoleParams) =>{
   return post<BaseResponse>('/role/update', params)
 }
-
+//删除角色
+export const deleteRole = (id: string) =>{
+  return post<BaseResponse>('/role/remove', {id})
+}
+// 创建角色
+export const createRole = (params: UpdateRoleParams) =>{
+  return post<BaseResponse>('/role/create', params)
+}
 // 获取权限列表
 export const getPermissionList = () =>{
   return get<BaseResponse<PermissionListRes>>('/permission/list')
@@ -121,3 +134,22 @@ export const questionCreate = (params: questionCreateItem) => {
 export const questionTypeList = () => {
   return get<BaseResponse<questionType>>('/question/type/list')
 }
+
+// 创建试卷
+export const createPaper = (params: CreatePaperParams) =>{
+  return post<BaseResponse>('exam/create', params)  
+}
+// 查询科目列表
+export const getClassifyList = (params: ClassifyListParams) =>{
+  return get<BaseResponse<ClassifyItem>>('classify/list', {params})
+}
+// 查询题目列表
+export const getQuestionList = (params: QuestionListParams) =>{
+  return get<BaseResponse<QuestionItem>>('question/list', {params})
+}
+
+// 查询题目类型列表
+export const getQuestionTypeList = () =>{
+  return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
+}
+
