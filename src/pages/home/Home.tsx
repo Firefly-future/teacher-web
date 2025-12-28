@@ -96,7 +96,6 @@ const Home = () => {
             'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
           size: 'small',
           title: userInfo?.username || '用户',
-          title: userInfo?.username || '用户',
           render: (_, dom) => {
             return (
               <Dropdown menu={{ items }}>
@@ -116,7 +115,7 @@ const Home = () => {
         <PageContainer>
           <ProCard
             style={{
-              height: '100vh',
+              height: 'auto',
               width: '100%',
             }}
           >
