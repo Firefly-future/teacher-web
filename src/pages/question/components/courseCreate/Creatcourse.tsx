@@ -30,7 +30,6 @@ const CreateCourse: React.FC = () => {
   const [controlled, setControlled] = useState<boolean>(false)
   const formRef = useRef<ProFormInstance<any>>(null)
   const editorFormRef = useRef<EditableFormInstance<ClassifyItemList>>(null)
-  const [classifyList, setClassifyList] = useState<ClassifyItemList[]>([])
   const [defaultPage, setDefaultPage] = useState<ClassifyListParams>({
     page: 1,
     pagesize: 2,
@@ -40,7 +39,6 @@ const CreateCourse: React.FC = () => {
   const getClassify = async (params: ClassifyListParams) => {
     try {
       const res = await getClassifyList(params)
-      setClassifyList(res.data.list)
       if (formRef.current) {
         formRef.current.setFieldsValue({ table: res.data.list })
       }
@@ -87,7 +85,7 @@ const CreateCourse: React.FC = () => {
   return (
     <ProForm<{ table: ClassifyItemList[] }>
       formRef={formRef}
-      initialValues={{ table: classifyList }}
+      initialValues={{ table: [] }}
       submitter={false} // 去掉提交/重置按钮
     >
       <EditableProTable<ClassifyItemList>
