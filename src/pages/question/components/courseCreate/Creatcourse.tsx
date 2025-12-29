@@ -10,7 +10,7 @@ import {
 } from '@ant-design/pro-components'
 import { Button, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { createClassify, getClassifyList, updateClassify } from '@/services'
+import { createClassify, deleteClassify, getClassifyList, updateClassify } from '@/services'
 import type { ClassifyListParams, ClassifyItemList } from '@/services/types'
 
 const CreateCourse: React.FC = () => {
@@ -45,6 +45,23 @@ const CreateCourse: React.FC = () => {
         await updateClassify({ id: row._id, name: row.name })
       } else {
         await createClassify({ name: row.name, value: row.value })
+      }
+      message.success('操作成功')
+      getClassify(defaultPage)
+    } catch (e) {
+      console.error(e)
+      message.error('操作失败')
+    }
+  }
+  const handleDelete = async (
+    key: React.Key, 
+    row: ClassifyItemList & { index?: number },
+    originRow: ClassifyItemList & { index?: number },
+    newLineConfig?: any
+  ): Promise<any> => {
+    try {
+      if (row._id) {
+        await deleteClassify( row._id)
       }
       message.success('操作成功')
       getClassify(defaultPage)
@@ -134,7 +151,8 @@ const CreateCourse: React.FC = () => {
           type: 'multiple',
           editableKeys,
           onChange: setEditableRowKeys,
-          onSave: handleSave, // 现在类型完全匹配
+          onSave: handleSave, 
+          onDelete: handleDelete,
         }}
       />
     </ProForm>
