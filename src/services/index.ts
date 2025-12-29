@@ -28,6 +28,7 @@ import type {
   QuestionListParams,
   QuestionItem,
   QuestionTypeItem,
+  CreateMultiple,
   createClassifyParams,
   updateClassifyParams,
   CreateExamParams,
@@ -80,7 +81,7 @@ export const updateUser = (params: UpdateUserParams) => {
 }
 // 获取角色列表
 export const getRoleList = () => {
-  return get<BaseResponse<RoleItemRes[]>>('/role/list')
+  return get<BaseResponse<RoleItemRes>>('/role/list')
 }
 
 // 编辑角色
@@ -164,6 +165,10 @@ export const getQuestionList = (params: QuestionListParams) => {
 // 查询题目类型列表
 export const getQuestionTypeList = () => {
   return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
+}
+// 批量导入试题
+export const questionCreateMultiple = (params: CreateMultiple) => {
+  return post<BaseResponse>('/question/create/multiple',params)
 }
 // 创建科目
 export const createClassify = (params: createClassifyParams) => {

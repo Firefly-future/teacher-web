@@ -280,6 +280,11 @@ export type questionType = {
   list: TypeItem[]
 }
 
+// 试题批量创建参数
+export type CreateMultiple = {
+  list: questionCreateItem[]
+}
+
 export type TypeItem = {
   _id: string
   value: number
@@ -324,6 +329,12 @@ export type QuestionListParams = {
 
 // 题目list
 export type QuestionItemList = {
+  answer:string
+  classify:string
+  options:string[]
+  question:string
+  type:string
+  _id:string
   answer: string
   classify: string
   options: string[]
