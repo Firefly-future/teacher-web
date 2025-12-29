@@ -10,12 +10,19 @@ import {
 } from '@ant-design/pro-components'
 import { Button, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { createClassify, deleteClassify, getClassifyList, updateClassify } from '@/services'
+import {
+  createClassify,
+  deleteClassify,
+  getClassifyList,
+  updateClassify,
+} from '@/services'
 import type { ClassifyListParams, ClassifyItemList } from '@/services/types'
 
 const CreateCourse: React.FC = () => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() => [])
-  const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>('bottom')
+  const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>(
+    'bottom'
+  )
   const [controlled, setControlled] = useState<boolean>(false)
 
   const formRef = useRef<ProFormInstance<any>>(null)
@@ -35,7 +42,8 @@ const CreateCourse: React.FC = () => {
   const handleSave = async (
     key: React.Key,
     row: ClassifyItemList,
-    originRow: ClassifyItemList
+    originRow: ClassifyItemList,
+    _newLine?: any
   ): Promise<any> => {
     try {
       if (row._id && !String(row._id).startsWith('new_')) {
@@ -54,7 +62,9 @@ const CreateCourse: React.FC = () => {
 
   const handleDelete = async (
     key: React.Key,
-    row: ClassifyItemList
+    row: ClassifyItemList,
+    _originRow: ClassifyItemList,
+    _newLine?: any
   ): Promise<any> => {
     try {
       if (row._id) {
@@ -80,15 +90,15 @@ const CreateCourse: React.FC = () => {
       tooltip: '不可以重复科目',
       width: '20%',
       formItemProps: {
-        rules: [{ required: true, message: '请输入科目名称' }]
-      }
+        rules: [{ required: true, message: '请输入科目名称' }],
+      },
     },
-    { 
-      title: '科目内容', 
+    {
+      title: '科目内容',
       dataIndex: 'value',
       formItemProps: {
-        rules: [{ required: true, message: '请输入科目内容' }]
-      }
+        rules: [{ required: true, message: '请输入科目内容' }],
+      },
     },
     {
       title: '操作',
@@ -158,7 +168,7 @@ const CreateCourse: React.FC = () => {
           type: 'multiple',
           editableKeys,
           onChange: setEditableRowKeys,
-          onSave: handleSave, 
+          onSave: handleSave,
           onDelete: handleDelete,
         }}
       />
