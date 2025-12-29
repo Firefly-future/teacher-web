@@ -39,10 +39,8 @@ const CreateCourse: React.FC = () => {
   ): Promise<any> => {
     try {
       if (row._id && !String(row._id).startsWith('new_')) {
-        // 编辑现有记录
         await updateClassify({ id: row._id, name: row.name })
       } else {
-        // 创建新记录
         await createClassify({ name: row.name, value: row.value })
       }
       message.success('编辑成功')
@@ -50,7 +48,6 @@ const CreateCourse: React.FC = () => {
     } catch (e) {
       console.error(e)
       message.error('操作失败')
-      // 返回 Promise.reject 可以阻止编辑状态自动退出
       return Promise.reject(e)
     }
   }
