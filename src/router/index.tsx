@@ -27,8 +27,6 @@ import BankQuestion from '@/pages/question/components/bankQuestion/BankQuestion'
 import CreateCourse from '@/pages/question/components/courseCreate/Creatcourse'
 
 import ClassList from '@/pages/class/components/classList/ClassList'
-import DelClass from '@/pages/class/components/delClass/DelClass'
-import EditStudent from '@/pages/class/components/editStudent/EditStudent'
 import StudentList from '@/pages/class/components/studentList/StudentList'
 
 import Auth from './Auth'
@@ -88,8 +86,6 @@ const router = [
         children: [
           { path: '/manage-group/group-list', element: <ClassList /> },
           { path: '/manage-group/group-students', element: <StudentList /> },
-          { path: '/manage-group/del-group', element: <DelClass /> },
-          { path: '/manage-group/edit-group', element: <EditStudent /> },
         ],
       },
     ],

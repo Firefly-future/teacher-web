@@ -29,6 +29,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 import userStore from '@/store/userStore'
 import Draw from './Draw'
 import ModalForm from './ModalForm'
+import { API_CODE } from '@/constants/Constants'
 // // 校验函数
 const checkPath = (_: any, value: string) => {
   if (!value) return Promise.reject(new Error('请输入路径'))
@@ -53,10 +54,13 @@ const Permission = () => {
     try {
       setConfirmLoading(true)
       // 调用更新接口，传入包含 _id 的完整数据
-      await updateMenu(values)
-      messageApi.success('菜单更新成功！')
-      run() // 重新拉取列表
-      setOpenEdit(false) // 关闭弹窗
+      const res = await updateMenu(values)
+      if (res.code === API_CODE.SUCCESS) {
+        updateMenu(values)
+        messageApi.success('菜单更新成功！')
+        run() // 重新拉取列表
+        setOpenEdit(false) // 关闭弹窗
+      }
     } catch (error) {
       messageApi.error('更新失败，请重试')
       console.error('更新失败：', error)
