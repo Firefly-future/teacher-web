@@ -71,14 +71,14 @@ const ClassList = () => {
         dataIndex: 'teacher',
         search: true,
         valueEnum: teacherEnum,
-        render: (_, record) => teacherEnum[record.teacher] ?? record.teacher,
+        render: (_, record) => teacherEnum[record.teacher!] ?? record.teacher,
       },
       {
         title: '科目类别',
         dataIndex: 'classify',
         search: true,
         valueEnum: classifyEnum,
-        render: (_, record) => classifyEnum[record.classify] ?? record.classify,
+        render: (_, record) => classifyEnum[record.classify!] ?? record.classify,
       },
       {
         title: '创建时间',
