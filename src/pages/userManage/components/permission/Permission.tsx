@@ -228,7 +228,7 @@ const Permission = () => {
         confirmLoading={confirmLoading}
         handleCancel={handleCancel}
         form={form}
-        onFinish={handleEditFinish} // 传入编辑专属的提交逻辑
+        onFinish={handleEditFinish} 
       />
 
       <Draw
