@@ -35,7 +35,7 @@ const CreateCourse: React.FC = () => {
   }
 
   const handleSave = async (
-    key: React.Key, 
+    key: string | number, 
     row: ClassifyItemList & { index?: number },
     originRow: ClassifyItemList & { index?: number },
     newLineConfig?: any
@@ -60,7 +60,7 @@ const CreateCourse: React.FC = () => {
     newLineConfig?: any
   ): Promise<any> => {
     try {
-      if (row._id) {
+      if (row._id && !String(row._id).startsWith('new_')) {
         await deleteClassify( row._id)
       }
       message.success('操作成功')
