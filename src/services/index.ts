@@ -27,7 +27,8 @@ import type {
   ClassifyListParams,
   QuestionListParams,
   QuestionItem,
-  QuestionTypeItem
+  QuestionTypeItem,
+  CreateMultiple
 } from './types'
 
 // 获取图形验证码
@@ -66,7 +67,7 @@ export const updateUser = (params: UpdateUserParams) => {
 }
 // 获取角色列表
 export const getRoleList = () => {
-  return get<BaseResponse<RoleItemRes[]>>('/role/list')
+  return get<BaseResponse<RoleItemRes>>('/role/list')
 }
 
 // 编辑角色
@@ -152,4 +153,7 @@ export const getQuestionList = (params: QuestionListParams) =>{
 export const getQuestionTypeList = () =>{
   return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
 }
-
+// 批量导入试题
+export const questionCreateMultiple = (params: CreateMultiple) => {
+  return post<BaseResponse>('/question/create/multiple',params)
+}
