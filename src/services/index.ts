@@ -38,6 +38,10 @@ import type {
   SubmitExamParams,
   CreateClassParams,
   UpdateClassParams,
+  StudentListParams,
+  StudentListRes,
+  CreateStudentParams,
+  UpdateStudentParams,
 } from './types'
 
 // 获取图形验证码
@@ -222,4 +226,21 @@ export const updateClass = (id: string, params: UpdateClassParams) => {
 // 删除班级
 export const deleteClass = (id: string) => {
   return post<BaseResponse>('/studentGroup/remove', { id })
+}
+
+// 查询学生列表
+export const getStudentList = (params: StudentListParams) => {
+  return get<BaseResponse<StudentListRes>>('/student/list', { params })
+}
+// 创建学生
+export const createStudent = (params: CreateStudentParams) => {
+  return post<BaseResponse>('/student/create', params)
+}
+// 编辑学生
+export const updateStudent = ( params: UpdateStudentParams) => {
+  return post<BaseResponse>('/student/update',{params})
+}
+// 删除学生
+export const deleteStudent = (id: string) => {
+  return post<BaseResponse>('/student/remove', { id })
 }

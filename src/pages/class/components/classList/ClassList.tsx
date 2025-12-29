@@ -115,7 +115,6 @@ const ClassList = () => {
       students: params.students,
     }
     try {
-      // 关键：把 id 也放进 body
       const res = await updateClass(id, { ...payload })
       if (res.code === API_CODE.SUCCESS) {
         updateClass(id, {...payload})

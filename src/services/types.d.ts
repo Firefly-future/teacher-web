@@ -430,7 +430,7 @@ export type SubmitExamParams = {
 // 考试班级--学生列表项
 export type StudentsItem = {
   age: number
-  avatar: string
+  avator: string
   classId: string
   className: string
   createTime: number
@@ -460,3 +460,61 @@ export type UpdateClassParams = {
   classify?: string
   students?: string[] | number[]
 }
+// 查询学生列表参数
+export type StudentListParams = {
+  page?: number
+  pagesize?: number
+  sex?: string
+  className?: string
+  age?: number
+  username?: string
+  classId?: string
+}
+// 学生列表项
+export type StudentListItem = {
+  _id: string
+  password: string
+  sex: string
+  age: number
+  email: string
+  className: string
+  avator: string
+  status: 0 | 1
+  creator: string
+  createTime: number
+  __v: number
+  role: string
+  username: string
+}
+// 查询学生列表返回值
+export type StudentListRes = {
+  total: number
+  list: StudentListItem[]
+  page: number
+  pagesize: number
+  totalPage: number
+}
+// 创建学生参数
+export type CreateStudentParams = {
+  username?: string
+  passwrd?: string
+  sex?: string
+  age?: number
+  className?: string
+  email?: string
+  avator?: string
+  status?: 0 | 1
+  idCard?: string
+}
+// 更新学生参数
+export type UpdateStudentParams = {
+  id: string
+  name: string
+  passwrd?: string
+  sex?: string
+  age?: number
+  className?: string
+  email?: string
+  avator?: string
+  status?: 0 | 1
+} 

@@ -87,6 +87,7 @@ const DrawerForm: React.FC<DrawerFormProps> = ({
             <Form.Item<FieldType>
               label='班级名称'
               name='name'
+              tooltip='最长为24位'
               rules={[{ required: true, message: '请输入名称' }]}
             >
               <Input placeholder='请输入名称' />
