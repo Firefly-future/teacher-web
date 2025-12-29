@@ -12,6 +12,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 0 40px;
+  :global(.ant-form-item) {
+    width: 30%;
+  }
 }
 
 .btns{

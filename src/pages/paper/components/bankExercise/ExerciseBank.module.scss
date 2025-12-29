@@ -1,0 +1,52 @@
+.exam{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  h2{
+    text-align: center;
+    line-height: 40px;
+    margin-bottom: 10px;
+  }
+  .classify{
+    line-height: 40px;
+    text-align: center;
+  }
+}
+
+.singleChoice{
+  display: flex;
+  flex-direction: column;
+  .single{
+    line-height: 30px;
+    color: #3EA8FF;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .singleChoice_item{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    font-size: 16px;
+    .topic{
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .options{
+      display: flex;
+      align-items: center;
+      color: #666;
+      span{
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.hint{
+  width: 100px;
+  line-height: 40px;
+  margin: 100px auto;
+  text-align: center;
+  color: #666;
+  font-size: 20px;
+}

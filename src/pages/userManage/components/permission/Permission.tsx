@@ -28,7 +28,7 @@ import type { DrawerProps } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import userStore from '@/store/userStore'
 import Draw from './Draw'
-
+import ModalForm from './ModalForm'
 // // 校验函数
 const checkPath = (_: any, value: string) => {
   if (!value) return Promise.reject(new Error('请输入路径'))
@@ -45,28 +45,27 @@ const Permission = () => {
   const [size, setSize] = useState<DrawerProps['size']>()
   const [openEdit, setOpenEdit] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
-  const [modalText, setModalText] = useState('确认更新吗？')
   const showModal = (record: MenuListItem) => {
+    form.setFieldsValue({ ...record, _id: record._id || '' })
     setOpenEdit(true)
   }
-
-  const handleOk = async (values: any) => {
-    setModalText('更新将在2秒后生效')
-    setConfirmLoading(true)
+  const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
     try {
+      setConfirmLoading(true)
+      // 调用更新接口，传入包含 _id 的完整数据
       await updateMenu(values)
-      messageApi.success('更新成功')
-      // 更新成功后重新请求列表数据
-      run()
-      // 关闭弹窗
-      form.resetFields()
-      setOpenEdit(false)
-      setConfirmLoading(false)
+      messageApi.success('菜单更新成功！')
+      run() // 重新拉取列表
+      setOpenEdit(false) // 关闭弹窗
     } catch (error) {
       messageApi.error('更新失败，请重试')
       console.error('更新失败：', error)
+    } finally {
+      setConfirmLoading(false)
+      form.resetFields() // 重置表单
     }
   }
+
   const handleCancel = () => {
     console.log('点击了取消按钮')
     setOpenEdit(false)
@@ -220,38 +219,14 @@ const Permission = () => {
         )}
         pagination={false}
       />
-      <Modal
-        title='编辑菜单'
-        open={openEdit}
-        onOk={handleOk}
+      <ModalForm
+        openEdit={openEdit}
         confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <Form form={form} onFinish={onFinish}>
-          <Form.Item label='菜单名称' name='name' rules={[{ required: true }]}>
-            <Input placeholder='请输入名称' />
-          </Form.Item>
-          <Form.Item label='菜单路径' name='path' rules={[{ required: true }]}>
-            <Input placeholder='请输入路径' />
-          </Form.Item>
-          <Form.Item label='权限类型' name='isBtn' rules={[{ required: true }]}>
-            <Select
-              placeholder='请选择'
-              style={{ width: 260 }}
-              options={[
-                {
-                  label: '按钮',
-                  value: true,
-                },
-                {
-                  label: '页面',
-                  value: false,
-                },
-              ]}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
+        handleCancel={handleCancel}
+        form={form}
+        onFinish={handleEditFinish} // 传入编辑专属的提交逻辑
+      />
+
       <Draw
         open={open}
         onClose={onClose}
@@ -262,120 +237,6 @@ const Permission = () => {
         path={path}
         setPath={setPath}
       />
-      {/* <Drawer
-        title={'添加菜单'}
-        size={size}
-        onClose={onClose}
-        open={open}
-        footer={
-          <Flex justify='flex-end'>
-            <Space>
-              <Button onClick={onClose}>取消</Button>
-              <Button type='primary' onClick={() => form.submit()}>
-                确认
-              </Button>
-            </Space>
-          </Flex>
-        }
-      >
-        <Form form={form} layout='vertical' onFinish={onFinish}>
-          <Flex vertical>
-            <Form.Item
-              label='选择菜单等级'
-              name='level'
-              rules={[{ required: true }]}
-              labelCol={{ span: 20 }}
-            >
-              <Select
-                placeholder='请选择'
-                style={{ width: 260 }}
-                options={options}
-              />
-            </Form.Item>
-            <Flex>
-              <Space>
-                <Form.Item
-                  label={
-                    <Tooltip title='菜单名称，用于显示在菜单中'>
-                      <span>
-                        菜单名字 <QuestionCircleOutlined />
-                      </span>
-                    </Tooltip>
-                  }
-                  name='name'
-                  rules={[{ required: true }]}
-                  style={{ width: 260 }}
-                >
-                  <Input placeholder='请输入名称' />
-                </Form.Item>
-                <Form.Item
-                  label='状态'
-                  name='status'
-                  rules={[{ required: true }]}
-                  style={{ width: 120 }}
-                >
-                  <Select
-                    placeholder='请选择'
-                    style={{ width: 120 }}
-                    options={[
-                      {
-                        label: '禁用',
-                        value: 0,
-                      },
-                      {
-                        label: '可用',
-                        value: 1,
-                      },
-                    ]}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label='权限类型'
-                  name='isBtn'
-                  rules={[{ required: true }]}
-                  style={{ width: 120 }}
-                >
-                  <Select
-                    placeholder='请选择'
-                    style={{ width: 120 }}
-                    options={[
-                      {
-                        label: '页面',
-                        value: false,
-                      },
-                      {
-                        label: '按钮',
-                        value: true,
-                      },
-                    ]}
-                  />
-                </Form.Item>
-              </Space>
-            </Flex>
-            <Form.Item
-              label={
-                <Tooltip title='路径格式：/path'>
-                  <span>
-                    路径 <QuestionCircleOutlined />
-                  </span>
-                </Tooltip>
-              }
-              name='path'
-              rules={[{ required: true, validator: checkPath }]}
-              style={{ width: 260 }}
-            >
-              <Input
-                placeholder='请输入路径'
-                onChange={(e) => {
-                  if (path) {
-                    checkPath(null, e.target.value)
-                  }
-                }}
-              />
-            </Form.Item>
-          </Flex>
-        </Form>
-      </Drawer> */}
     </>
   )
 }

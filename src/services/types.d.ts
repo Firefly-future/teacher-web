@@ -41,7 +41,7 @@ export type UserListParams = {
 }
 
 // 用户列表信息
-export type UserListItem = Omit<UserInfo, 'permission'> & {
+export type UserListItem = Partial<UserInfo> & Omit<UserInfo, 'permission'> & {
   lastOnlineTime: number
   creator: string
   password: string
@@ -165,7 +165,185 @@ export type UpdateMenuParams = Partial<MenuListItem> & {
   status?: 0 | 1
 }
 
+export type Questions = {
+  order: number
+  question: string
+  score: number
+  _id: string
+}
 
+export type ExamListItem = {
+  classify: string
+  createdAt: string
+  creator: string
+  description: string
+  duration: number
+  name: string
+  questions: Questions[]
+  status: number
+  totalScore: number
+  updatedAt: string
+  __v: number
+  _id: string
+}
+
+// 试卷列表返回值
+export type ExamListResponse = {
+  total: number
+  list: ExamListItem[]
+  totalPage: number
+}
+
+//更新试卷
+export type ExamUpdate = {
+  id:string
+  name:string
+}
+// 题目类型
+export type ExamDetailQuestions = {
+  answer: string
+  classify: string
+  options: string[]
+  question: string
+  type: string
+  __v: number
+  _id: string
+} | null
+
+// 试卷详情
+export type ExamDetail = Pick<ExamListItem, 'classify' | 'createTime' | 'creator' | 'name' | '__v' | '_id'> & {
+  questions: ExamDetailQuestions[]
+}
+
+// 试卷查询
+export type ExamSearch ={
+  name?:string
+  creator?:string
+  classify?:string
+}
+
+// 科目列表
+export type ClassifyListResponse = {
+  total: number
+  list: ClassifyListItem[]
+  totalPage: number
+}
+
+export type ClassifyListItem = {
+  createdAt: string
+  creator: string
+  description: string
+  name: string
+  sort: number
+  status: number
+  updatedAt: string
+  value: string
+  _id: string
+}
+// 更新用户头像参数
+export type UpdateAvatorParams = {
+  username?: string
+  password?: string
+  status?: 0 | 1
+  avatar?: string
+}
+// 更新用户头像返回值
+export type UpdateAvatorResponse = {
+  url: string
+}
+// 创建试题参数
+export type questionCreateItem = {
+  question: string
+  type: number
+  classify: string
+  answer: string
+  options:  string[]
+  desc: string
+}
+// 试题类型返回值
+export type questionType = {
+  list: TypeItem[]
+}
+
+export type TypeItem = {
+  _id: string
+  value: number
+  name: string
+  __v?: number
+}
+
+// 创建试卷参数
+export type CreatePaperParams = {
+  name: string
+  classify: string
+  questions:string[]
+}
+// 科目列表参数
+export type ClassifyListParams = {
+  page: number
+  pagesize: number
+}
+// 科目列
+export type ClassifyItemList = {
+  _id: string
+  name: string
+  value: string
+  creator: string
+  createTime: number
+}
+// 科目列表
+export type ClassifyItem = {
+  name: any
+  _id: any
+  total:number
+  list:ClassifyItemList[]
+  page:number
+  pagesize:number
+  totalPage:number
+}
+
+// 题目列表参数
+export type QuestionListParams = {
+  classify: string
+}
+
+// 题目list
+export type QuestionItemList = {
+  answer:string
+  classify:string
+  options:string[]
+  question:string
+  type:s
+  _id:string
+}
+// 题目data返回值
+export type QuestionItem = {
+  total:number
+  list:QuestionItemList[]
+  totalPage:number
+}
+// 题目list列表
+export type QuestionTypeItem = {
+  id: string
+  name: string
+  value: number
+}
+// 创建科目参数
+export type createClassifyParams = {
+  name: string
+  value: string
+}
+// 更新科目参数
+export type updateClassifyParams = {
+  id: string
+  name: string
+}
+// 科目列（表格数据）
+export type ClassifyTableItem = {
+  _id: string
+  name: string
+  value: string
+}
 
 // 创建考试
 export type CreateExamParams = {
