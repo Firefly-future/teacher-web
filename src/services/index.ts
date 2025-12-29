@@ -225,8 +225,8 @@ export const createClass = (params: CreateClassParams) => {
 }
 
 // 编辑班级
-export const updateClass = (id: string, params: UpdateClassParams) => {
-  return post<BaseResponse>(`/studentGroup/update?${id}`,{params})
+export const updateClass = ( params: UpdateClassParams) => {
+  return post<BaseResponse>(`/studentGroup/update?${Date.now()}`,params)
 }
 
 // 删除班级

@@ -78,7 +78,8 @@ const ClassList = () => {
         dataIndex: 'classify',
         search: true,
         valueEnum: classifyEnum,
-        render: (_, record) => classifyEnum[record.classify!] ?? record.classify,
+        render: (_, record) =>
+          classifyEnum[record.classify!] ?? record.classify,
       },
       {
         title: '创建时间',
@@ -106,24 +107,31 @@ const ClassList = () => {
 
   const actionRef = useRef<any>(null)
 
-  const saveClass = async (id: string, params: UpdateClassParams) => {
-    const payload = {
-      id,
-      name: params.name,
-      teacher: params.teacher,
-      classify: params.classify,
-      students: params.students,
+  const saveClass: ProTableProps['editable']['onSave'] = async (
+    key,
+    row,
+    oriRow
+  ) => {
+    // row   -> 只包含被修改的字段
+    // oriRow -> 原始整行数据
+    const payload: UpdateClassParams = {
+      id: oriRow._id,
+      name: row.name ?? oriRow.name,
+      teacher: row.teacher ?? oriRow.teacher,
+      classify: row.classify ?? oriRow.classify,
+      students: row.students ?? oriRow.students,
     }
+
     try {
-      const res = await updateClass(id, { ...payload })
+      const res = await updateClass(payload)
       if (res.code === API_CODE.SUCCESS) {
-        updateClass(id, {...payload})
         message.success('更新成功')
         actionRef.current?.reload()
       }
-    } catch (error) {
+    } catch (e) {
       message.error('更新失败')
-      console.error(error)
+      console.error(e)
+      throw e // 一定要抛出去，ProTable 才知道保存失败
     }
   }
   // 删除班级
