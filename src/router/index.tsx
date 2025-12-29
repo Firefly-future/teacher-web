@@ -1,35 +1,62 @@
+import { lazy } from 'react'
+
 import Login from '../pages/login/Login'
 import Home from '@/pages/home/Home'
-import DashBoard from '@/pages/dashboard/DashBoard'
-import RoleList from '@/pages/userManage/components/role/RoleList'
-import UserList from '@/pages/userManage/components/users/UserList'
-import UserInfo from '@/pages/userManage/components/personal/UserInfo'
-import Permission from '@/pages/userManage/components/permission/Permission'
-
 import Forbidden from '@/pages/403/Forbidden'
 import NotFound from '@/pages/404/NotFound'
-
 import Welcome from '@/pages/welcome/Welcome'
-import Class from '@/pages/class/Class'
-import Exercise from '@/pages/paper/Exercise'
-import Question from '@/pages/question/Question'
-import System from '@/pages/userManage/System'
-import Test from '@/pages/exam/Test'
-
-import ExerciseBank from '@/pages/paper/components/bankExercise/ExerciseBank'
-import CreateExercise from '@/pages/paper/components/createExercise/CreateExercise'
-
-import CreateTest from '@/pages/exam/components/createTest/CreateTest'
-import HistoryTest from '@/pages/exam/components/historyTest/HistoryTest'
-
-import AddQuestion from '@/pages/question/components/addQuestion/AddQuestion'
-import BankQuestion from '@/pages/question/components/bankQuestion/BankQuestion'
-import CreateCourse from '@/pages/question/components/courseCreate/Creatcourse'
-
-import ClassList from '@/pages/class/components/classList/ClassList'
-import StudentList from '@/pages/class/components/studentList/StudentList'
-
 import Auth from './Auth'
+
+const Class = lazy(() => import('@/pages/class/Class'))
+const Exercise = lazy(() => import('@/pages/paper/Exercise'))
+const Question = lazy(() => import('@/pages/question/Question'))
+const System = lazy(() => import('@/pages/userManage/System'))
+const Test = lazy(() => import('@/pages/exam/Test'))
+
+const DashBoard = lazy(() => import('@/pages/dashboard/DashBoard'))
+const RoleList = lazy(
+  () => import('@/pages/userManage/components/role/RoleList')
+)
+const UserList = lazy(
+  () => import('@/pages/userManage/components/users/UserList')
+)
+const UserInfo = lazy(
+  () => import('@/pages/userManage/components/personal/UserInfo')
+)
+const Permission = lazy(
+  () => import('@/pages/userManage/components/permission/Permission')
+)
+
+const ExerciseBank = lazy(
+  () => import('@/pages/paper/components/bankExercise/ExerciseBank')
+)
+const CreateExercise = lazy(
+  () => import('@/pages/paper/components/createExercise/CreateExercise')
+)
+
+const CreateTest = lazy(
+  () => import('@/pages/exam/components/createTest/CreateTest')
+)
+const HistoryTest = lazy(
+  () => import('@/pages/exam/components/historyTest/HistoryTest')
+)
+
+const AddQuestion = lazy(
+  () => import('@/pages/question/components/addQuestion/AddQuestion')
+)
+const BankQuestion = lazy(
+  () => import('@/pages/question/components/bankQuestion/BankQuestion')
+)
+const CreateCourse = lazy(
+  () => import('@/pages/question/components/courseCreate/Creatcourse')
+)
+
+const ClassList = lazy(
+  () => import('@/pages/class/components/classList/ClassList')
+)
+const StudentList = lazy(
+  () => import('@/pages/class/components/studentList/StudentList')
+)
 
 const router = [
   {
