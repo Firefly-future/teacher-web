@@ -7,11 +7,11 @@ import {
 } from '@ant-design/icons'
 
 export const IconEnum = {
-  'file-text': CrownOutlined,
-  'form': FileUnknownOutlined,
-  'setting': FormOutlined,
-  'database': SnippetsOutlined,
-  'team': TeamOutlined,
+  'file-text': FormOutlined,
+  form: FileUnknownOutlined,
+  setting: CrownOutlined,
+  database: SnippetsOutlined,
+  team: TeamOutlined,
 } as const
 
 export type IconEnumKeys = keyof typeof IconEnum

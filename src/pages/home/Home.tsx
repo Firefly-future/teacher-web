@@ -25,7 +25,7 @@ const Home = () => {
       key: '1',
       label: (
         <a
-          type="link"
+          type='link'
           onClick={() => {
             console.log('帮助')
           }}
@@ -39,7 +39,7 @@ const Home = () => {
       key: '2',
       label: (
         <a
-          type="link"
+          type='link'
           onClick={() => {
             navigate('/login')
             removeToken()
@@ -78,7 +78,7 @@ const Home = () => {
   }
   return (
     <div
-      id="test-pro-layout"
+      id='test-pro-layout'
       style={{
         height: '100vh',
       }}
