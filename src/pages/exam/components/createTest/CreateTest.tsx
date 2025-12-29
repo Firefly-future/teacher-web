@@ -113,7 +113,7 @@ const CreateTest: React.FC = () => {
     }
   }
 
-  // 上一步点击
+  // 点击上一步
   const handleBack = () => {
     setCurrent(current - 1)
   }
