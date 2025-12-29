@@ -164,3 +164,68 @@ export type UpdateMenuParams = Partial<MenuListItem> & {
   id: string
   status?: 0 | 1
 }
+
+
+
+// 创建考试
+export type CreateExamParams = {
+  name: string
+  classify: string
+  examItem: string
+  group: string
+  examiner: string
+  startTime: number
+  endTime: number
+}
+
+// 科目分类
+export type ClassifyItem = {
+  _id: string
+  name: string
+  value: string
+}
+// 科目分类返回值
+export type ClassifyListRes = {
+  list: ClassifyItem[]
+}
+
+// 监考人
+export type ExaminerItem = {
+  _id: string
+  username: string
+}
+// 监考人返回值
+export type ExaminerListRes = {
+  list: ExaminerItem[]
+}
+// 考试班级
+export type ClassItem = {
+  _id: string
+  name: string
+  value: string
+}
+// 考试班级返回值
+export type ClassListRes = {
+  list: ClassItem[]
+}
+// 考试管理--配置试卷-- 试卷列表
+export type ExamItem = {
+  _id: string
+  name: string
+  classify: string
+  examItem: string
+  group: string
+  examiner: string
+  startTime: number
+  endTime: number
+}
+// 考试管理--配置试卷-- 试卷列表返回值
+export type ExamListRes = {
+  list: ExamItem[]
+}
+
+// 考试管理--发布考试--提交考试参数
+export type SubmitExamParams = {
+  examId: string
+  answers: string[]
+}

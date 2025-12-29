@@ -13,7 +13,13 @@ import type {
   RoleItemRes,
   UpdateRoleParams,
   PermissionListRes,
-  CreateMenuParams
+  CreateMenuParams,
+  CreateExamParams,
+  ClassifyListRes,
+  ExaminerListRes,
+  ClassListRes,
+  ExamListRes,
+  SubmitExamParams,
 } from './types'
 
 // 获取图形验证码
@@ -76,4 +82,37 @@ export const deleteMenu = (id: string) =>{
 // 更新菜单
 export const updateMenu = (id:string) =>{
   return post<BaseResponse>('/permission/update', {id})
+}
+
+
+
+
+
+// 考试管理--创建考试
+export const createExam = (params: CreateExamParams) => {
+  return post<BaseResponse>('/examination/create', params)
+}
+// 考试管理--获取科目分类
+export const getClassifyList = () => {
+  return get<BaseResponse<ClassifyListRes>>('/classify/list')
+}
+// 考试管理--获取监考人
+export const getExaminerList = () => {
+  return get<BaseResponse<ExaminerListRes>>('/user/list')
+}
+
+// 考试管理--获取考试班级
+// 查询班级
+export const getClassList = () => {
+  return get<BaseResponse<ClassListRes>>('/studentGroup/list')
+}
+
+//考试管理--配置试卷-- 查询试卷列表
+export const getExamList = () => {
+  return get<BaseResponse<ExamListRes>>('/exam/list?page=1&pagesize=10')
+}
+
+// 考试管理--发布考试--提交考试
+export const submitExam = () => {
+  return post<BaseResponse<SubmitExamParams>>('/student/exam/submit')
 }
