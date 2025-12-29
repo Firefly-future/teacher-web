@@ -103,16 +103,36 @@ const StudentList = () => {
   }, [classList])
 
   /* 4. 行编辑保存 / 删除 */
-  const saveStudent = async (params: UpdateStudentParams) => {
-    const res = await updateStudent(params)
-    if (res.code === API_CODE.SUCCESS) {
-      updateStudent(params)
-      message.success('更新成功')
-      actionRef.current?.reload()
-    } else {
-      message.error('更新失败')
+  /* 行编辑保存 */
+  const saveStudent: ProTableProps<StudentListItem>['editable']['onSave'] =
+    async (
+      _key,
+      row, // 仅包含被修改的字段
+      originRow // 原始整行数据
+    ) => {
+      // 合并出完整参数
+      const payload: UpdateStudentParams = {
+        id: originRow._id,
+        username: row.username ?? originRow.username,
+        sex: row.sex ?? originRow.sex,
+        age: row.age ?? originRow.age,
+        className: row.className ?? originRow.className,
+      }
+
+      try {
+        const res = await updateStudent(payload)
+        if (res.code === API_CODE.SUCCESS) {
+          message.success('更新成功')
+          actionRef.current?.reload()
+        } else {
+          message.error('更新失败')
+          throw new Error(res.msg ?? '更新失败') // 让 ProTable 知道失败了
+        }
+      } catch (e) {
+        message.error('更新失败')
+        throw e // 必须继续抛出去
+      }
     }
-  }
 
   const delStudent = async (id: string) => {
     const res = await deleteStudent(id)
@@ -160,7 +180,13 @@ const StudentList = () => {
           onDelete: delStudent,
         }}
       />
-      <DrawerForm open={open} onClose={onClose} actionRef={actionRef} size={size} classList={classList} />
+      <DrawerForm
+        open={open}
+        onClose={onClose}
+        actionRef={actionRef}
+        size={size}
+        classList={classList}
+      />
     </ConfigProvider>
   )
 }

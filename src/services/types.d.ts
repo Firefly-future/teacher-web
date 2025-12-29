@@ -526,7 +526,7 @@ export type CreateStudentParams = {
 // 更新学生参数
 export type UpdateStudentParams = {
   id: string
-  name: string
+  username: string
   passwrd?: string
   sex?: string
   age?: number

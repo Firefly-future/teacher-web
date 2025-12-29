@@ -244,7 +244,7 @@ export const createStudent = (params: CreateStudentParams) => {
 }
 // 编辑学生
 export const updateStudent = ( params: UpdateStudentParams) => {
-  return post<BaseResponse>('/student/update',{params})
+  return post<BaseResponse>(`/student/update?${Date.now()}`,params)
 }
 // 删除学生
 export const deleteStudent = (id: string) => {
