@@ -53,20 +53,22 @@ const Permission = () => {
   const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
     try {
       setConfirmLoading(true)
-      // 调用更新接口，传入包含 _id 的完整数据
-      const res = await updateMenu(values)
+      const payload = {
+        id: form.getFieldValue('_id'),
+        name: values.name,
+        path: values.path,
+      }
+      const res = await updateMenu(payload)
       if (res.code === API_CODE.SUCCESS) {
-        updateMenu(values)
         messageApi.success('菜单更新成功！')
-        run() // 重新拉取列表
-        setOpenEdit(false) // 关闭弹窗
+        run()
+        setOpenEdit(false)
+        form.resetFields()
       }
     } catch (error) {
       messageApi.error('更新失败，请重试')
-      console.error('更新失败：', error)
     } finally {
       setConfirmLoading(false)
-      form.resetFields() // 重置表单
     }
   }
 
@@ -228,7 +230,7 @@ const Permission = () => {
         confirmLoading={confirmLoading}
         handleCancel={handleCancel}
         form={form}
-        onFinish={handleEditFinish} 
+        onFinish={handleEditFinish}
       />
 
       <Draw

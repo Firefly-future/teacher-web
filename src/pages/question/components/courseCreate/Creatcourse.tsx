@@ -47,7 +47,7 @@ const CreateCourse: React.FC = () => {
   ): Promise<any> => {
     try {
       if (row._id && !String(row._id).startsWith('new_')) {
-        await updateClassify({ id: row._id, name: row.name })
+        await updateClassify({ id: row._id, name: row.name, value: row.value })
       } else {
         await createClassify({ name: row.name, value: row.value })
       }

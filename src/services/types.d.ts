@@ -170,7 +170,12 @@ export type CreateMenuParams = Pick<
   MenuListItem,
   'name' | 'path' | 'isBtn' | 'status'
 >
-
+// 更新菜单
+export type UpMenuParams = {
+  id: string
+  name: string
+  path: string
+}
 // 更新菜单参数
 export type UpdateMenuParams = Partial<MenuListItem> & {
   id: string
@@ -329,12 +334,12 @@ export type QuestionListParams = {
 
 // 题目list
 export type QuestionItemList = {
-  answer:string
-  classify:string
-  options:string[]
-  question:string
-  type:string
-  _id:string
+  answer: string
+  classify: string
+  options: string[]
+  question: string
+  type: string
+  _id: string
   answer: string
   classify: string
   options: string[]
@@ -363,6 +368,7 @@ export type createClassifyParams = {
 export type updateClassifyParams = {
   id: string
   name: string
+  value: string
 }
 // 科目列（表格数据）
 export type ClassifyTableItem = {
@@ -528,4 +534,4 @@ export type UpdateStudentParams = {
   email?: string
   avator?: string
   status?: 0 | 1
-} 
+}

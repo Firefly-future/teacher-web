@@ -43,6 +43,7 @@ import type {
   StudentListRes,
   CreateStudentParams,
   UpdateStudentParams,
+  UpMenuParams,
 } from './types'
 
 // 获取图形验证码
@@ -110,8 +111,8 @@ export const deleteMenu = (id: string) => {
   return post<BaseResponse>('/permission/remove', { id })
 }
 // 更新菜单
-export const updateMenu = (id: string) => {
-  return post<BaseResponse>('/permission/update', { id })
+export const updateMenu = (params: UpMenuParams) => {
+  return post<BaseResponse>('/permission/update', params)
 }
 // 试卷列表
 export const examList = (params: UserListParams) => {
