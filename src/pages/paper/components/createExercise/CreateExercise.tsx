@@ -54,7 +54,7 @@ const CreateExercise = () => {
   })
 
   const stepsFormRef = useRef<FormInstance>(null)
-  const subOptions = options.map((item) => ({ label: item.name, value: item._id }))
+  const subOptions = options.map((item) => ({ label: item.name, value: item.name }))
   const defaultPage = { page: 1, pagesize: 2 }
 
   const CreateClassifyList = async (p: ClassifyListParams) => {
@@ -66,7 +66,6 @@ const CreateExercise = () => {
     }
   }
 
-  /* ----------  关键：把后端返回的题目列表统一带上 answer  ---------- */
   const [questionOptions, setQuestionOptions] = useState<QuestionItemList[]>([])
   const CreateQuestionList = async (p: QuestionListParams) => {
     try {
@@ -74,7 +73,7 @@ const CreateExercise = () => {
       if (res.code === API_CODE.SUCCESS) {
         const list = (res.data?.list || []).map((q: any) => ({
           ...q,
-          answer: q.answer ?? '', // 保证 answer 字段存在
+          answer: q.answer ?? '', 
         }))
         setQuestionOptions(list)
         message.success('获取题目成功')
@@ -287,9 +286,9 @@ const CreateExercise = () => {
             rules={[{ required: true }]}
             options={subOptions}
             onChange={async (v: string) => {
-              const target = options.find((item) => item._id === v)
+              const target = options.find((item) => item.name === v)
               if (target) await CreateQuestionList({ classify: target.name })
-              setAllValues((prev) => ({ ...prev, classify: v }))
+              setAllValues((prev) => ({ ...prev, classify: target!.name }))
             }}
           />
           <ProFormRadio.Group

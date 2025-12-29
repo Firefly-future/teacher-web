@@ -118,6 +118,7 @@ const ClassList = () => {
       // 关键：把 id 也放进 body
       const res = await updateClass(id, { ...payload })
       if (res.code === API_CODE.SUCCESS) {
+        updateClass(id, {...payload})
         message.success('更新成功')
         actionRef.current?.reload()
       }
