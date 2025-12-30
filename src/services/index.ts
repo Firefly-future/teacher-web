@@ -44,13 +44,10 @@ import type {
   CreateStudentParams,
   UpdateStudentParams,
   UpMenuParams,
-<<<<<<< HEAD
   ClassListParams,
   ClassDetailRes,
-=======
   ExamRecordListRes,
   SubmitExamRes,
->>>>>>> master
 } from './types'
 
 // 获取图形验证码
