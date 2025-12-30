@@ -56,19 +56,19 @@ export type PermissionItem = {
 
 // 左侧菜单
 export type MenuListItem = {
-  component:string
-  createTime:number
-  createdAt:string
-  creator:string
-  disabled:string
-  icon:string
-  isBtn:boolean
-  name:string
-  path:string
-  pid:string
-  updatedAt:string
-  _id:string
-  children?:MenuListItem[]
+  component: string
+  createTime: number
+  createdAt: string
+  creator: string
+  disabled: string
+  icon: string
+  isBtn: boolean
+  name: string
+  path: string
+  pid: string
+  updatedAt: string
+  _id: string
+  children?: MenuListItem[]
 }
 
 export type UserListRes = {
@@ -196,8 +196,8 @@ export type ExamListResponse = {
 
 //更新试卷
 export type ExamUpdate = {
-  id:string
-  name:string
+  id: string
+  name: string
 }
 // 题目类型
 export type ExamDetailQuestions = {
@@ -216,10 +216,10 @@ export type ExamDetail = Pick<ExamListItem, 'classify' | 'createTime' | 'creator
 }
 
 // 试卷查询
-export type ExamSearch ={
-  name?:string
-  creator?:string
-  classify?:string
+export type ExamSearch = {
+  name?: string
+  creator?: string
+  classify?: string
 }
 
 // 科目列表
@@ -257,7 +257,7 @@ export type questionCreateItem = {
   type: number
   classify: string
   answer: string
-  options:  string[]
+  options: string[]
   desc: string
 }
 // 试题类型返回值
@@ -276,7 +276,7 @@ export type TypeItem = {
 export type CreatePaperParams = {
   name: string
   classify: string
-  questions:string[]
+  questions: string[]
 }
 // 科目列表参数
 export type ClassifyListParams = {
@@ -295,11 +295,11 @@ export type ClassifyItemList = {
 export type ClassifyItem = {
   name: any
   _id: any
-  total:number
-  list:ClassifyItemList[]
-  page:number
-  pagesize:number
-  totalPage:number
+  total: number
+  list: ClassifyItemList[]
+  page: number
+  pagesize: number
+  totalPage: number
 }
 
 // 题目列表参数
@@ -309,18 +309,18 @@ export type QuestionListParams = {
 
 // 题目list
 export type QuestionItemList = {
-  answer:string
-  classify:string
-  options:string[]
-  question:string
-  type:s
-  _id:string
+  answer: string
+  classify: string
+  options: string[]
+  question: string
+  type: s
+  _id: string
 }
 // 题目data返回值
 export type QuestionItem = {
-  total:number
-  list:QuestionItemList[]
-  totalPage:number
+  total: number
+  list: QuestionItemList[]
+  totalPage: number
 }
 // 题目list列表
 export type QuestionTypeItem = {
@@ -349,7 +349,8 @@ export type ClassifyTableItem = {
 export type CreateExamParams = {
   name: string
   classify: string
-  examItem: string
+  // examItem: string
+  examId: string
   group: string
   examiner: string
   startTime: number
@@ -380,7 +381,7 @@ export type ExaminerListRes = {
 export type ClassItem = {
   _id: string
   name: string
-  value: string
+  // value: string
 }
 // 考试班级返回值
 export type ClassListRes = {
@@ -406,4 +407,37 @@ export type ExamListRes = {
 export type SubmitExamParams = {
   examId: string
   answers: string[]
+
+}
+// 考试管理--发布考试--提交考试返回值
+export type SubmitExamRes = {
+  // score: number
+  classify?: string
+  endTime?: number
+  examId?: string
+  examiner?: string
+  group?: string
+  name?: string
+  startTime?: number
+
+}
+
+// 考试记录--查询考试列表
+export type ExamRecordItem = {
+  _id: string
+  examId: string
+  name: string
+  classify: string
+  examItem: string
+  group: string
+  examiner: string
+  startTime: number
+  endTime: number
+  status: number
+  // score: number
+}
+
+// 考试记录--查询考试列表返回值
+export type ExamRecordListRes = {
+  list: ExamRecordItem[]
 }

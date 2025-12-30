@@ -35,7 +35,8 @@ interface ExamValues {
   examiner: string
   examTime?: Date[]
   // 配置试卷
-  examItem: string
+  // examItem: string
+  examId: string
   pageName?: string
   questionCount?: number
   totalScore?: number
@@ -90,9 +91,9 @@ const CreateTest: React.FC = () => {
   // 选择试卷
   const handleExamSelect = (examId: string) => {
     form.setFieldsValue({
-      examItem: examId,
+      examId: examId,
     })
-    form.validateFields(['examItem'])
+    form.validateFields(['examId'])
   }
 
   // 下一步
@@ -102,7 +103,7 @@ const CreateTest: React.FC = () => {
       if (current === 0) {
         await form.validateFields(['name', 'examTime', 'classify', 'examiner', 'group'])
       } else if (current === 1) {
-        await form.validateFields(['examItem'])
+        await form.validateFields(['examId'])
       }
 
       // 点击进入下一步
@@ -119,18 +120,95 @@ const CreateTest: React.FC = () => {
   }
 
   // 提交表单
+  // const handleSubmit = async () => {
+  //   try {
+  //     setLoading(true)
+  //     // 验证所有表单字段
+  //     await form.validateFields()
+  //     const formValues = form.getFieldsValue()
+
+  //     // 确保examItem存在且不为空
+  //     if (!formValues.examId) {
+  //       message.error('请选择试卷')
+  //       return
+  //     }
+
+  //     // 转换日期格式为时间戳
+  //     let startTime = 0
+  //     let endTime = 0
+  //     if (formValues.examTime && formValues.examTime.length === 2) {
+  //       startTime = new Date(formValues.examTime[0]).getTime()
+  //       endTime = new Date(formValues.examTime[1]).getTime()
+  //     }
+
+  //     // 
+  //     const examParams: CreateExamParams = {
+  //       name: formValues.name,
+  //       classify: formValues.classify,
+  //       // examItem: formValues.examItem,
+  //       examId: formValues.examId,
+  //       group: formValues.group,
+  //       examiner: formValues.examiner,
+  //       startTime,
+  //       endTime
+  //     }
+
+  //     const res = await createExam(examParams)
+  //     console.log(res)
+  //     if (res.code === 200) {
+  //       message.success('创建成功')
+  //       // 重置表单
+  //       form.resetFields()
+  //       setCurrent(0)
+  //     } else {
+  //       message.error(res.msg || '创建失败')
+  //     }
+  //   } catch (err) {
+  //     console.log(err)
+  //     message.error('创建考试失败,请重试')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  // 提交表单
   const handleSubmit = async () => {
     try {
       setLoading(true)
-      // 验证所有表单字段
-      await form.validateFields()
-      const formValues = form.getFieldsValue()
 
-      // 确保examItem存在且不为空
-      if (!formValues.examItem) {
+      // 强制获取所有字段值，包括未渲染的字段
+      const formValues = form.getFieldsValue(true)
+      console.log('表单数据:', formValues)
+
+      if (!formValues.examId) {
         message.error('请选择试卷')
         return
       }
+      // 验证必填字段
+      // if (!formValues.name) {
+      //   message.error('请输入考试名称')
+      //   return
+      // }
+      // if (!formValues.examTime || formValues.examTime.length !== 2) {
+      //   message.error('请选择考试时间')
+      //   return
+      // }
+      // if (!formValues.classify) {
+      //   message.error('请选择科目分类')
+      //   return
+      // }
+      // if (!formValues.examiner) {
+      //   message.error('请选择监考人')
+      //   return
+      // }
+      // if (!formValues.group) {
+      //   message.error('请选择考试班级')
+      //   return
+      // }
+      // if (!formValues.examId) {
+      //   message.error('请选择试卷')
+      //   return
+      // }
 
       // 转换日期格式为时间戳
       let startTime = 0
@@ -138,21 +216,36 @@ const CreateTest: React.FC = () => {
       if (formValues.examTime && formValues.examTime.length === 2) {
         startTime = new Date(formValues.examTime[0]).getTime()
         endTime = new Date(formValues.examTime[1]).getTime()
+        console.log('时间戳:', { startTime, endTime })
+
+        // 验证时间戳是否有效
+        // if (isNaN(startTime) || isNaN(endTime)) {
+        //   message.error('考试时间格式无效，请重新选择')
+        //   return
+        // }
+
+        // // 验证结束时间是否晚于开始时间
+        // if (endTime <= startTime) {
+        //   message.error('考试结束时间必须晚于开始时间')
+        //   return
+        // }
       }
 
-      // 
       const examParams: CreateExamParams = {
         name: formValues.name,
         classify: formValues.classify,
-        examItem: formValues.examItem,
+        examId: formValues.examId,
         group: formValues.group,
         examiner: formValues.examiner,
         startTime,
         endTime
       }
 
+      console.log('提交参数:', examParams)
+
       const res = await createExam(examParams)
-      console.log(res)
+      console.log('API返回:', res)
+
       if (res.code === 200) {
         message.success('创建成功')
         // 重置表单
@@ -162,12 +255,13 @@ const CreateTest: React.FC = () => {
         message.error(res.msg || '创建失败')
       }
     } catch (err) {
-      console.log(err)
+      console.log('错误详情:', err)
       message.error('创建考试失败,请重试')
     } finally {
       setLoading(false)
     }
   }
+
 
 
   return (
@@ -191,12 +285,10 @@ const CreateTest: React.FC = () => {
         className={style.form}
         {...formItemLayout}
         form={form}
-        // style={{ maxWidth: 600, margin: '0 auto' }}
-
-        onFinish={handleSubmit}
+        // onFinish={handleSubmit}
       >
         <Form.Item
-          name="examItem"
+          name="examId"
           rules={[{ required: true, message: '请选择试卷' }]}
           // hidden
           shouldUpdate
@@ -272,7 +364,7 @@ const CreateTest: React.FC = () => {
           <>
             <SetExam
               onSelect={handleExamSelect}
-              selectedExamId={form.getFieldValue('examItem')}
+              selectedExamId={form.getFieldValue('examId')}
             />
           </>
         )}
@@ -324,7 +416,7 @@ const CreateTest: React.FC = () => {
               下一步
             </Button>
           ) : (
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" onClick={handleSubmit} loading={loading}>
               发布考试
             </Button>
           )}

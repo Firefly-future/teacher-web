@@ -36,6 +36,8 @@ import type {
   ClassListRes,
   ExamListRes,
   SubmitExamParams,
+  ExamRecordListRes,
+  SubmitExamRes,
 } from './types'
 
 // 获取图形验证码
@@ -145,15 +147,15 @@ export const questionTypeList = () => {
 
 // 创建试卷
 export const createPaper = (params: CreatePaperParams) =>{
-  return post<BaseResponse>('exam/create', params)  
+  return post<BaseResponse>('/exam/create', params)  
 }
 // 查询科目列表
 // export const getClassifyList = (params: ClassifyListParams) =>{
-//   return get<BaseResponse<ClassifyItem>>('classify/list', {params})
+//   return get<BaseResponse<ClassifyItem>>('/classify/list', {params})
 // }
 // 查询题目列表
 export const getQuestionList = (params: QuestionListParams) =>{
-  return get<BaseResponse<QuestionItem>>('question/list', {params})
+  return get<BaseResponse<QuestionItem>>('/question/list', {params})
 }
 // 查询题目类型列表
 export const getQuestionTypeList = () =>{
@@ -200,6 +202,11 @@ export const getExamList = () => {
 }
 
 // 考试管理--发布考试--提交考试
-export const submitExam = () => {
-  return post<BaseResponse<SubmitExamParams>>('/student/exam/submit')
+export const submitExam = (params: SubmitExamParams) => {
+  return post<BaseResponse<SubmitExamRes>>('/student/exam/submit', params)
+}
+
+// 考试记录--查询考试列表
+export const getExamRecordList = (params: any) => {
+  return get<BaseResponse<ExamRecordListRes>>('/examination/list', {params})
 }
