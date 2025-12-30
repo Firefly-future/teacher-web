@@ -1,29 +1,61 @@
 import React from 'react'
 
-import { Drawer, Form, Input, Select, Space, Button, Flex, Tooltip, type FormProps, type DrawerProps } from 'antd'
+import {
+  Drawer,
+  Form,
+  Input,
+  Select,
+  Space,
+  Button,
+  Flex,
+  Tooltip,
+  type FormProps,
+  type DrawerProps,
+} from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
 interface DrawProps {
   open: boolean
   onClose: () => void
-  onFinish: FormProps<any>['onFinish']  // 表单提交回调
-  size: DrawerProps['size']             // 抽屉尺寸
-  options: { label: string; value: string }[]  // 菜单等级选项
-  form: any        // Form 实例
-  path: string                               // 路径输入值
-  setPath: (value: string) => void           // 更新路径的方法
+  onFinish: FormProps<any>['onFinish'] // 表单提交回调
+  size: DrawerProps['size'] // 抽屉尺寸
+  options: { label: string; value: string }[] // 菜单等级选项
+  form: any // Form 实例
+  path: string // 路径输入值
+  setPath: (value: string) => void // 更新路径的方法
 }
 
 // // 校验函数
 const checkPath = (_: any, value: string) => {
   if (!value) return Promise.reject(new Error('请输入路径'))
-  if (!/^(\/[A-Za-z]+)+$/.test(value)) {
-    return Promise.reject(new Error('路径必须以 / 开头，且只能包含英文字母'))
+
+  // 检查是否以 / 开头
+  if (!value.startsWith('/')) {
+    return Promise.reject(new Error('路径必须以 / 开头'))
+  }
+  if (/(\/\/|--)/.test(value)) {
+    return Promise.reject(new Error('路径中不能连续出现 / 或 -'))
+  }
+  if (!/^\/[a-zA-Z]+(?:[/-][a-zA-Z]+)*$/.test(value)) {
+    return Promise.reject(
+      new Error(
+        '路径格式不正确：必须以/开头，后面可包含字母、/、-，但不能连续出现/或-'
+      )
+    )
   }
   return Promise.resolve()
 }
 
-const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: DrawProps) => {  
+const Draw = ({
+  open,
+  onClose,
+  onFinish,
+  size,
+  options,
+  form,
+  path,
+  setPath,
+}: DrawProps) => {
   return (
     <Drawer
       title={'添加菜单'}

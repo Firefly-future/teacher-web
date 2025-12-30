@@ -4,14 +4,9 @@ import {
   Space,
   Table,
   Tag,
-  Drawer,
   Form,
-  Input,
-  Select,
   message,
   Popconfirm,
-  Tooltip,
-  Modal,
 } from 'antd'
 import type { FormProps, TableProps, PopconfirmProps } from 'antd'
 import {
@@ -25,19 +20,10 @@ import type { MenuListItem } from '@/services/types'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import type { DrawerProps } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 import userStore from '@/store/userStore'
 import Draw from './Draw'
 import ModalForm from './ModalForm'
 import { API_CODE } from '@/constants/Constants'
-// // 校验函数
-const checkPath = (_: any, value: string) => {
-  if (!value) return Promise.reject(new Error('请输入路径'))
-  if (!/^(\/[A-Za-z]+)+$/.test(value)) {
-    return Promise.reject(new Error('路径必须以 / 开头，且只能包含英文字母'))
-  }
-  return Promise.resolve()
-}
 
 const Permission = () => {
   const permissionList = userStore((state) => state.userInfo?.permission)
@@ -46,33 +32,11 @@ const Permission = () => {
   const [size, setSize] = useState<DrawerProps['size']>()
   const [openEdit, setOpenEdit] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
+  const { data, loading, run } = useRequest(getPermissionList)
   const showModal = (record: MenuListItem) => {
     form.setFieldsValue({ ...record, _id: record._id || '' })
     setOpenEdit(true)
   }
-  const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
-    try {
-      setConfirmLoading(true)
-      const payload = {
-        id: form.getFieldValue('_id'),
-        name: values.name,
-        path: values.path,
-        isBtn: values.isBtn,
-      }
-      const res = await updateMenu(payload)
-      if (res.code === API_CODE.SUCCESS) {
-        messageApi.success('菜单更新成功！')
-        run()
-        setOpenEdit(false)
-        form.resetFields()
-      }
-    } catch (error) {
-      messageApi.error('更新失败，请重试')
-    } finally {
-      setConfirmLoading(false)
-    }
-  }
-
   const handleCancel = () => {
     console.log('点击了取消按钮')
     setOpenEdit(false)
@@ -125,24 +89,50 @@ const Permission = () => {
   const onFinish: FormProps<any>['onFinish'] = async (values) => {
     console.log('Success:', values)
     try {
-      await createMenu({
+      const res = await createMenu({
+        pid: values.pid === '__new_level__' ? '' : values.pid,
         name: values.name,
         path: values.path,
         isBtn: values.isBtn,
         status: values.status,
       })
-      messageApi.success('操作成功')
-      // 操作成功后重新请求列表数据
-      run()
-      // 关闭抽屉
-      form.resetFields()
-      onClose()
+      if (res.code === API_CODE.SUCCESS) {
+        messageApi.success('菜单创建成功！')
+        await run()
+        form.resetFields()
+        onClose()
+      } else {
+        messageApi.error(res.msg || '操作失败，请重试')
+        onClose()
+      }
     } catch (error) {
       messageApi.error('操作失败，请重试')
       console.error('操作失败：', error)
     }
   }
-  const { data, loading, run } = useRequest(getPermissionList)
+  const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
+    try {
+      setConfirmLoading(true)
+      const payload = {
+        id: form.getFieldValue('_id'),
+        name: values.name,
+        path: values.path,
+        isBtn: values.isBtn,
+        pid: values.pid === '__new_level__' ? '' : values.pid,
+      }
+      const res = await updateMenu(payload)
+      if (res.code === API_CODE.SUCCESS) {
+        messageApi.success('菜单更新成功！')
+        run()
+        setOpenEdit(false)
+        form.resetFields()
+      }
+    } catch (error) {
+      messageApi.error('更新失败，请重试')
+    } finally {
+      setConfirmLoading(false)
+    }
+  }
   // 表格列配置
   const columns: TableProps<MenuListItem>['columns'] = [
     {
