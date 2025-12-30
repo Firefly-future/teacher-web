@@ -38,7 +38,8 @@ const StudentList = () => {
   const actionRef = useRef<any>(null)
   const fetchStudents = async (params: StudentListParams) => {
     const res = await getStudentList({
-      // classId: classList.find((c) => c._id === params.classId)?._id,
+      page: params.page || 1,
+      pagesize: params.pagesize || 100,
       classId: params.classId,
       username: params.username,
       sex: params.sex,
@@ -68,7 +69,7 @@ const StudentList = () => {
           0: '女',
         },
         search: true,
-        render: (_, r) => (r.sex === 1 ? '男' : r.sex === 0 ? '女' : '-'),
+        render: (_, r) => (r.sex == 1 ? '男' : r.sex == 0 ? '女' : '-'),
       },
       {
         title: '年龄',
