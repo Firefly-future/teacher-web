@@ -44,6 +44,8 @@ import type {
   CreateStudentParams,
   UpdateStudentParams,
   UpMenuParams,
+  ClassListParams,
+  ClassDetailRes,
 } from './types'
 
 // 获取图形验证码
@@ -110,7 +112,7 @@ export const createMenu = (params: CreateMenuParams) => {
 export const deleteMenu = (id: string) => {
   return post<BaseResponse>('/permission/remove', { id })
 }
-// 更新菜单
+// 更新菜单权限
 export const updateMenu = (params: UpMenuParams) => {
   return post<BaseResponse>('/permission/update', params)
 }
@@ -190,7 +192,7 @@ export const createExam = (params: CreateExamParams) => {
 }
 // 考试管理--获取科目分类
 export const getClassifyList = (params?: ClassifyListParams) => {
-  return get<BaseResponse<ClassifyListRes>>('/classify/list')
+  return get<BaseResponse<ClassifyListRes>>('/classify/list', { params })
 }
 // 考试管理--获取监考人
 export const getExaminerList = () => {
@@ -199,14 +201,8 @@ export const getExaminerList = () => {
 
 // 考试管理--获取考试班级
 // 查询班级
-export const getClassList = (p0?: {
-  name?: string
-  teacher?: string
-  classify?: string
-  page?: number
-  pagesize?: number
-}) => {
-  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
+export const getClassList = (params?: ClassListParams) => {
+  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params })
 }
 
 //考试管理--配置试卷-- 查询试卷列表
@@ -222,6 +218,10 @@ export const submitExam = () => {
 // 新建班级
 export const createClass = (params: CreateClassParams) => {
   return post<BaseResponse>('/studentGroup/create', params)
+}
+// 班级详情
+export const getClassDetail = (id: string) => {
+  return get<BaseResponse<ClassDetailRes>>(`/studentGroup/detail?id=${id}`)
 }
 
 // 编辑班级

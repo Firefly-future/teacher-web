@@ -34,7 +34,6 @@ const Login = () => {
     try {
       setLoading(true)
       const res = await getLogin({ username, password, code, sessionId: captcha?.sessionId || '' })
-      console.log(res.data)
       if (res.code === API_CODE.SUCCESS) {
         message.success('登录成功')
         setToken(res.data.token)

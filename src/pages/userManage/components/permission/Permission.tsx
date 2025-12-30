@@ -57,6 +57,7 @@ const Permission = () => {
         id: form.getFieldValue('_id'),
         name: values.name,
         path: values.path,
+        isBtn: values.isBtn,
       }
       const res = await updateMenu(payload)
       if (res.code === API_CODE.SUCCESS) {

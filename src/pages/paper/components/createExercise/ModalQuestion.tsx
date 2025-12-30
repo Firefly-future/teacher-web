@@ -60,7 +60,7 @@ const ModalQuestion: React.FC<ModalQuestionProps> = ({
   const dataSource = list.map((item) => ({
     key: item._id,
     question: item.question,
-    name: Type.find((type) => type.type === item.type)!.name,
+    name: Type.find((type) => type.type === item.type)?.name || '',
     answer: item.answer,
   }))
   

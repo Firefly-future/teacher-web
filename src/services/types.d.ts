@@ -41,6 +41,8 @@ export type UserInfo = {
 export type UserListParams = {
   page: number
   pagesize: number
+  username?: string
+  status?: 0 | 1
 }
 
 // 用户列表信息
@@ -50,6 +52,8 @@ export type UserListItem = Partial<UserInfo> &
     creator: string
     password: string
     status: 0 | 1
+    password?: string
+    createdAt: string
   }
 // 权限
 export type PermissionItem = {
@@ -79,12 +83,14 @@ export type UserListRes = {
   list: UserListItem[]
   total: number
   totalPage: number
+  page: number
+  pageSize: number
 }
 // 用户信息
 export type UserInfo = {
   _id: string
   username: string
-  sex: 1 | 0
+  sex: 0 | 1
   avator: string
   email: string
   age: number
@@ -171,13 +177,15 @@ export type PermissionListRes = {
 // 创建菜单参数
 export type CreateMenuParams = Pick<
   MenuListItem,
-  'name' | 'path' | 'isBtn' | 'status'
+  'name' | 'path' | 'isBtn' | 'status' | 'pid'
 >
 // 更新菜单
 export type UpMenuParams = {
+  pid?: string
   id: string
   name: string
   path: string
+  isBtn?: boolean
 }
 // 更新菜单参数
 export type UpdateMenuParams = Partial<MenuListItem> & {
@@ -305,11 +313,15 @@ export type CreatePaperParams = {
   name: string
   classify: string
   questions: string[]
+  duration?: number
+  difficulty?: 2 | 3 | 1
 }
 // 科目列表参数
 export type ClassifyListParams = {
-  page: number
-  pagesize: number
+  page?: number
+  pagesize?: number
+  name?: string
+  status?: 0 | 1
 }
 // 科目列
 export type ClassifyItemList = {
@@ -323,6 +335,10 @@ export type ClassifyItemList = {
 export type ClassifyItem = {
   name: any
   _id: any
+  description: string
+  status: 0 | 1
+  creator: string
+  createdAt: string
   total: number
   list: ClassifyItemList[]
   page: number
@@ -343,22 +359,25 @@ export type QuestionItemList = {
   question: string
   type: string
   _id: string
-  answer: string
-  classify: string
-  options: string[]
-  question: string
-  type: s
-  _id: string
+  score: number
+  difficulty?: 2 | 3 | 1
+  explanation?: string
+  creator?: string
+  status?: 0 | 1
+  createdAt: string
+  updatedAt: string
 }
 // 题目data返回值
 export type QuestionItem = {
   total: number
   list: QuestionItemList[]
   totalPage: number
+  page: number
+  pagesize: number
 }
 // 题目list列表
 export type QuestionTypeItem = {
-  id: string
+  id?: string
   name: string
   value: number
 }
@@ -411,19 +430,36 @@ export type ExaminerItem = {
 export type ExaminerListRes = {
   list: ExaminerItem[]
 }
+
+// 组合
+export type TeacherItem = {
+  _id: string
+  username: string
+}
+
 // 考试班级
 export type ClassItem = {
+  capacity: number
+  createdAt: string
+  grade: string
+  deletedAt: string
+  status: 0 | 1
   _id: string
+  updatedAt: string
   name: string
-  students?: StudentsItem[]
-  createTime?: number
-  classify?: string
-  creator?: string
-  teacher?: string
+  description: string
+  creator: string
+  classify: teacherParams
+  teacher: TeacherItem
+  students: TeacherItem[]
 }
 // 考试班级返回值
 export type ClassListRes = {
   list: ClassItem[]
+  total: number
+  totalPage: number
+  page: number
+  pagesize: number
 }
 // 考试管理--配置试卷-- 试卷列表
 export type ExamItem = {
@@ -460,17 +496,31 @@ export type StudentsItem = {
   password: string
   role: number
   username: string
-  sex: string
+  sex: 0 | 1
   _id: string
   exam: ExamItem[]
+}
+// 查询班级参数
+export type ClassListParams = {
+  name?: string
+  teacher?: string
+  classify?: string
+  page?: number
+  pagesize?: number
+  grade?: string
+  status?: 0 | 1
 }
 
 // 新建班级参数
 export type CreateClassParams = {
   name: string
-  teacher: string
-  classify: string
-  students: string[] | number[]
+  teacher?: string
+  classify?: string
+  students?: string[] | number[]
+  description?: string
+  grade?: string
+  capacity?: number
+  status?: 0 | 1
 }
 // 更新班级参数
 export type UpdateClassParams = {
@@ -479,12 +529,44 @@ export type UpdateClassParams = {
   teacher?: string
   classify?: string
   students?: string[] | number[]
+  description?: string
+  grade?: string
+  capacity?: number
+  status?: 0 | 1
 }
+
+export type teacherParams = {
+  _id: string
+  name: string
+}
+export type studentsParams = {
+  _id: string
+  username: string
+  studentId: string
+  email: string
+}
+// 班级详情返回值
+export type ClassDetailRes = {
+  _id: string
+  name: string
+  teacher?: teacherParams
+  classify?: teacherParams
+  students?: studentsParams[]
+  description?: string
+  grade?: string
+  capacity?: number
+  status?: 0 | 1
+  creator?: string
+  deleteAt?: null
+  crreatAt: string
+  updatedAt: string
+}
+
 // 查询学生列表参数
 export type StudentListParams = {
   page?: number
   pagesize?: number
-  sex?: string
+  sex?: 0 | 1
   className?: string
   age?: number
   username?: string
@@ -494,7 +576,7 @@ export type StudentListParams = {
 export type StudentListItem = {
   _id: string
   password: string
-  sex: string
+  sex: 0 | 1
   age: number
   email: string
   className: string
@@ -505,6 +587,9 @@ export type StudentListItem = {
   __v: number
   role: string
   username: string
+  createdAt: string
+  updatedAt: string
+  classId: string
 }
 // 查询学生列表返回值
 export type StudentListRes = {
@@ -517,24 +602,27 @@ export type StudentListRes = {
 // 创建学生参数
 export type CreateStudentParams = {
   username?: string
-  passwrd?: string
-  sex?: string
+  password?: string
+  classId?: string
+  sex?: 0 | 1
   age?: number
   className?: string
   email?: string
-  avator?: string
+  avatar?: string
   status?: 0 | 1
   idCard?: string
 }
 // 更新学生参数
 export type UpdateStudentParams = {
   id: string
-  username: string
-  passwrd?: string
-  sex?: string
+  username?: string
+  password?: string
+  sex?: 0 | 1
+  idCard?: string
   age?: number
   className?: string
   email?: string
-  avator?: string
+  avatar?: string
   status?: 0 | 1
+  classId?: string
 }

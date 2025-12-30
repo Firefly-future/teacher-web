@@ -25,7 +25,6 @@ import { useEffect, useState, useRef } from 'react'
 import { API_CODE } from '@/constants/Constants'
 import type { FormInstance } from 'antd'
 
-/* ==========  工具：把任意值转成字符串数组  ========== */
 const parseQuestionIds = (val: unknown): string[] => {
   if (Array.isArray(val)) return val.filter(Boolean).map(String)
   if (typeof val === 'string') {
@@ -40,6 +39,7 @@ const parseQuestionIds = (val: unknown): string[] => {
 const waitTime = (time: number = 1) =>
   new Promise((resolve) => setTimeout(() => resolve(true), time * 1000))
 
+// ... existing code ...
 const CreateExercise = () => {
   const [selectQuestions, setSelectQuestions] = useState<QuestionItemList[]>([])
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -54,8 +54,9 @@ const CreateExercise = () => {
   })
 
   const stepsFormRef = useRef<FormInstance>(null)
-  const subOptions = options.map((item) => ({ label: item.name, value: item.name }))
-  const defaultPage = { page: 1, pagesize: 2 }
+  // 修复1: 使用 _id 作为 value 而不是 name
+  const subOptions = options.map((item) => ({ label: item.name, value: item._id }))
+  const defaultPage = { page: 1, pagesize: 100 }
 
   const CreateClassifyList = async (p: ClassifyListParams) => {
     try {
@@ -160,6 +161,7 @@ const CreateExercise = () => {
 
   /* ----------------  信息展示  ---------------- */
   const PaperInfoDisplay = () => {
+    // 修复2: 使用 _id 查找而不是 name
     const classifyName = subOptions.find((i) => i.value === allValues.classify)?.label || '未选择'
     const questionList = allValues.choiceQuestions || []
     return (
@@ -197,9 +199,14 @@ const CreateExercise = () => {
                       alignItems: 'flex-start',
                     }}
                   >
-                    <span style={{ marginRight: 8, flexShrink: 0 }}>科目：{q.classify}</span>|
-                    <span>题目：{q.question}</span>|：
-                    <span style={{ flexShrink: 0 }}>答案：{q.answer}</span>
+                    {/* 修复3: 确保渲染的是字符串而不是对象 */}
+                    <span style={{ marginRight: 8, flexShrink: 0 }}>
+                      科目：{typeof q.classify === 'object' ? q.classify.name || '---' : q.classify || '---'}
+                    </span>|
+                    <span>题目：{typeof q.question === 'object' ? JSON.stringify(q.question) : q.question || '---'}</span>|：
+                    <span style={{ flexShrink: 0 }}>
+                      答案：{typeof q.answer === 'object' ? JSON.stringify(q.answer) : q.answer || '---'}
+                    </span>
                   </div>
                 ))
               )}
@@ -285,10 +292,13 @@ const CreateExercise = () => {
             placeholder="请选择科目"
             rules={[{ required: true }]}
             options={subOptions}
+            // 修复4: 更新 onChange 事件处理
             onChange={async (v: string) => {
-              const target = options.find((item) => item.name === v)
-              if (target) await CreateQuestionList({ classify: target.name })
-              setAllValues((prev) => ({ ...prev, classify: target!.name }))
+              const target = options.find((item) => item._id === v)
+              if (target) {
+                await CreateQuestionList({ classify: target._id })
+                setAllValues((prev) => ({ ...prev, classify: target._id }))
+              }
             }}
           />
           <ProFormRadio.Group

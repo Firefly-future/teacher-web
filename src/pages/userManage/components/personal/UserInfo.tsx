@@ -19,17 +19,19 @@ const UserInfo = () => {
         username: userInfo?.username || '',
         sex: userInfo?.sex || '',
         age: userInfo?.age || '',
+        password: userInfo?.password || '',
         email: userInfo?.email || '',
       })
     }
   }, [editing, userInfo, form])
   const save = async () => {
+    const values = form.getFieldsValue()
     try {
       setLoading(true)
       const res = await updateUserInfo({
-        ...form.getFieldsValue(),
-        id: userInfo?._id || '',
-        password: userInfo?.password || '',
+        ...values,
+        id: userInfo?._id,
+        password: values.password || userInfo!.password,
       })
       if (res.code === API_CODE.SUCCESS) {
         message.success('更新成功')
@@ -68,6 +70,15 @@ const UserInfo = () => {
               </Form.Item>
             ) : (
               renderText(userInfo!.username)
+            )}
+          </Form.Item>
+          <Form.Item label='密码' style={{ flex: 1 }}>
+            {editing ? (
+              <Form.Item name='password' noStyle tooltip='密码为6-20位'>
+                <Input.Password />
+              </Form.Item>
+            ) : (
+              renderText(userInfo!.password)
             )}
           </Form.Item>
 
