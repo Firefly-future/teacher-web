@@ -13,6 +13,7 @@ import type {
   QuestionListResponse
 } from './types'
 import { useBankQuestionEditLogic } from './BankQuestionEditLogic'
+import {Link} from 'react-router-dom'
 const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({ typeOptions = [], classifyOptions = [], onSearch }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
@@ -412,7 +413,7 @@ const BankQuestion = () => {
 
   return (
     <div>
-      <Button type="primary" className={style.title}>添加试题</Button>
+      <Link to="/question/create-item"><Button type="primary" className={style.title}>添加试题</Button></Link>  
       <AdvancedSearchForm
         typeOptions={typeOptions}
         classifyOptions={classifyOptions}
