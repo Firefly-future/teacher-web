@@ -50,6 +50,9 @@ importers:
       react-router-dom:
         specifier: ^7.11.0
         version: 7.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      styled:
+        specifier: ^1.0.0
+        version: 1.0.0
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5
@@ -2029,6 +2032,9 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  styled@1.0.0:
+    resolution: {integrity: sha512-mPbinkDY7K//Jxi7hZBNSiUF3Q9LE8NHrlUuQXLHCFZcVJeSXQh/Kn4C7lWf8Obre3iyYHo0OqA3WptZrwST/A==}
 
   stylis@4.3.6:
     resolution: {integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==}
@@ -4319,6 +4325,8 @@ snapshots:
   string-convert@0.2.1: {}
 
   strip-json-comments@3.1.1: {}
+
+  styled@1.0.0: {}
 
   stylis@4.3.6: {}
 
