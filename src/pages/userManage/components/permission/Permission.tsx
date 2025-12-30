@@ -29,6 +29,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 import userStore from '@/store/userStore'
 import Draw from './Draw'
 import ModalForm from './ModalForm'
+import { API_CODE } from '@/constants/Constants'
 // // 校验函数
 const checkPath = (_: any, value: string) => {
   if (!value) return Promise.reject(new Error('请输入路径'))
@@ -52,17 +53,22 @@ const Permission = () => {
   const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
     try {
       setConfirmLoading(true)
-      // 调用更新接口，传入包含 _id 的完整数据
-      await updateMenu(values)
-      messageApi.success('菜单更新成功！')
-      run() // 重新拉取列表
-      setOpenEdit(false) // 关闭弹窗
+      const payload = {
+        id: form.getFieldValue('_id'),
+        name: values.name,
+        path: values.path,
+      }
+      const res = await updateMenu(payload)
+      if (res.code === API_CODE.SUCCESS) {
+        messageApi.success('菜单更新成功！')
+        run()
+        setOpenEdit(false)
+        form.resetFields()
+      }
     } catch (error) {
       messageApi.error('更新失败，请重试')
-      console.error('更新失败：', error)
     } finally {
       setConfirmLoading(false)
-      form.resetFields() // 重置表单
     }
   }
 
@@ -224,7 +230,7 @@ const Permission = () => {
         confirmLoading={confirmLoading}
         handleCancel={handleCancel}
         form={form}
-        onFinish={handleEditFinish} // 传入编辑专属的提交逻辑
+        onFinish={handleEditFinish}
       />
 
       <Draw
