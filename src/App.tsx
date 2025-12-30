@@ -2,8 +2,7 @@ import React, { Suspense, useEffect } from 'react'
 import router from './router'
 import { useLocation, useRoutes } from 'react-router-dom'
 import userStore from './store/userStore'
-import { Spin } from 'antd'
-
+import Loading from '@/components/Loading'
 const App = () => {
   const getUserInfo = userStore((state) => state.getUserInfo)
   const location = useLocation()
@@ -14,7 +13,7 @@ const App = () => {
     }
   }, [])
   return (
-    <Suspense fallback={<Spin size="large" style={{ width: '100vw',height: '100vh',display: 'flex',justifyContent: 'center',alignItems: 'center' }} />}>
+    <Suspense fallback={<Loading />}>
       {useRoutes(router)}
     </Suspense>
   )
