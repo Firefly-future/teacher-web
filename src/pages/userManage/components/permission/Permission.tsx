@@ -76,6 +76,7 @@ const Permission = () => {
       messageApi.success('删除成功')
       // 删除成功后重新请求列表数据
       run()
+      await getUserInfo()
     } catch (error) {
       messageApi.error('删除失败，请重试')
       console.error('删除失败：', error)
@@ -100,18 +101,16 @@ const Permission = () => {
         status: values.status,
       }
 
-      if (values.level !== '__new_level__' && selectedMenu?.id) {
+      if (values.pid !== '__new_level__' && selectedMenu?.id) {
         createParams.pid = selectedMenu.id
       }
       const res = await createMenu(createParams)
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单创建成功！')
-        await getUserInfo()
         run()
-        setTimeout(() => {
-          setOpen(false)
-          form.resetFields()
-        }, 500)
+        await getUserInfo()
+        form.resetFields()
+        onClose()
       } else {
         messageApi.error(res.msg || '操作失败，请重试')
       }
@@ -134,10 +133,9 @@ const Permission = () => {
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单更新成功！')
         run()
-        setTimeout(() => {
-          setOpenEdit(false)
-          form.resetFields()
-        }, 500)
+        await getUserInfo()
+        setOpenEdit(false)
+        form.resetFields()
       } else {
         messageApi.error(res.msg || '操作失败，请重试')
         setOpenEdit(false)
