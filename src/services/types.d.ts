@@ -147,6 +147,10 @@ export type UpdateUserParams = Partial<
 
 // 角色列表
 export type RoleItem = {
+  createdAt(createdAt: any): unknown
+  classify: string
+  type(type: any): unknown
+  question: string
   name: string
   value: string
   _id: string
@@ -384,7 +388,8 @@ export type ClassifyTableItem = {
 export type CreateExamParams = {
   name: string
   classify: string
-  examItem: string
+  // examItem: string
+  examId: string
   group: string
   examiner: string
   startTime: number
@@ -420,6 +425,7 @@ export type ClassItem = {
   classify?: string
   creator?: string
   teacher?: string
+  // value: string
 }
 // 考试班级返回值
 export type ClassListRes = {
@@ -537,4 +543,37 @@ export type UpdateStudentParams = {
   email?: string
   avator?: string
   status?: 0 | 1
+}
+
+// 考试管理--发布考试--提交考试返回值
+export type SubmitExamRes = {
+  // score: number
+  classify?: string
+  endTime?: number
+  examId?: string
+  examiner?: string
+  group?: string
+  name?: string
+  startTime?: number
+
+}
+
+// 考试记录--查询考试列表
+export type ExamRecordItem = {
+  _id: string
+  examId: string
+  name: string
+  classify: string
+  examItem: string
+  group: string
+  examiner: string
+  startTime: number
+  endTime: number
+  status: number
+  // score: number
+}
+
+// 考试记录--查询考试列表返回值
+export type ExamRecordListRes = {
+  list: ExamRecordItem[]
 }

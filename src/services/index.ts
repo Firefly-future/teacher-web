@@ -44,6 +44,8 @@ import type {
   CreateStudentParams,
   UpdateStudentParams,
   UpMenuParams,
+  ExamRecordListRes,
+  SubmitExamRes,
 } from './types'
 
 // 获取图形验证码
@@ -150,19 +152,39 @@ export const questionCreate = (params: questionCreateItem) => {
 export const questionTypeList = () => {
   return get<BaseResponse<questionType>>('/question/type/list')
 }
-
+export const getQuestionClassifyList = () =>{
+  return get<BaseResponse>('/classify/list')
+}
+// 编辑试题
+export const updateQuestion = () =>{
+  return post<BaseResponse>('/question/update')
+}
+// 删除试题
+export const deleteQuestion = (id: string) =>{
+  return post<BaseResponse>('/question/remove', {id})
+}
+// 试题详情
+export const getQuestionDetail = (id: string) =>{
+  return get<BaseResponse>('/exam/detail', {params: {id} })
+}
 // 创建试卷
 export const createPaper = (params: CreatePaperParams) => {
   return post<BaseResponse>('exam/create', params)
 }
+// export const createPaper = (params: CreatePaperParams) =>{
+//   return post<BaseResponse>('/exam/create', params)  
+// }
 // 查询科目列表
 // export const getClassifyList = (params: ClassifyListParams) =>{
-//   return get<BaseResponse<ClassifyItem>>('classify/list', {params})
+//   return get<BaseResponse<ClassifyItem>>('/classify/list', {params})
 // }
 // 查询题目列表
 export const getQuestionList = (params: QuestionListParams) => {
   return get<BaseResponse<QuestionItem>>('question/list', { params })
 }
+// export const getQuestionList = (params: QuestionListParams) =>{
+//   return get<BaseResponse<QuestionItem>>('/question/list', {params})
+// }
 // 查询题目类型列表
 export const getQuestionTypeList = () => {
   return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
@@ -249,4 +271,12 @@ export const updateStudent = ( params: UpdateStudentParams) => {
 // 删除学生
 export const deleteStudent = (id: string) => {
   return post<BaseResponse>('/student/remove', { id })
+}
+// export const submitExam = (params: SubmitExamParams) => {
+//   return post<BaseResponse<SubmitExamRes>>('/student/exam/submit', params)
+// }
+
+// 考试记录--查询考试列表
+export const getExamRecordList = (params: any) => {
+  return get<BaseResponse<ExamRecordListRes>>('/examination/list', {params})
 }
