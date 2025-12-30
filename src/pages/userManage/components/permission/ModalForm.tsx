@@ -9,7 +9,6 @@ interface ModalFormProps {
   form: FormInstance 
   onFinish: FormProps<any>['onFinish'] 
 }
-
 const ModalForm = ({
   openEdit,
   confirmLoading,
