@@ -104,7 +104,7 @@ const UserList = () => {
       render: (_, record) => (
         <Space>
           {record.role.map((role, index) =>
-            <Tag key={role} color={presets[index]}>{role}</Tag>
+            <Tag key={role._id} color={presets[index]}>{role.name}</Tag>
           )}
         </Space>
       )

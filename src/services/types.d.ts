@@ -33,8 +33,13 @@ export type UserInfo = {
   avator: string
   email: string
   age: number
-  role: string[]
+  role: roleItem[]
   permission: PermissionItem[]
+}
+
+export type roleItem = {
+  _id: string
+  name: string
 }
 
 // 用户列表参数
@@ -273,21 +278,18 @@ export type ExamSearch = {
 
 // 科目列表
 export type ClassifyListResponse = {
-  total: number
   list: ClassifyListItem[]
-  totalPage: number
 }
 // 科目列表项
 export type ClassifyListItem = {
-  createdAt: string
-  creator: string
-  description: string
-  name: string
-  sort: number
-  status: number
-  updatedAt: string
-  value: string
   _id: string
+  name: string
+  description: string
+  icon: string
+  sortOrder: number
+  status: number
+  creator: string
+  createdAt: string
 }
 // 更新用户头像参数
 export type UpdateAvatorParams = {
@@ -302,13 +304,19 @@ export type UpdateAvatorResponse = {
 }
 // 创建试题参数
 export type questionCreateItem = {
-  question: string
-  type: number
-  classify: string
-  answer: string
-  options: string[]
-  desc: string
+  question: string,
+  type: string,
+  classify: string,
+  answer: boolean | string,
+  options?: options[],
+  explanation: string
 }
+ 
+export type options = {
+  label: string
+  value: string
+}
+
 // 试题类型返回值
 export type questionType = {
   list: TypeItem[]
@@ -320,10 +328,8 @@ export type CreateMultiple = {
 }
 
 export type TypeItem = {
-  _id: string
-  value: number
+  value: string
   name: string
-  __v?: number
 }
 
 // 创建试卷参数

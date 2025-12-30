@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import type { FormProps } from 'antd'
 import { Button, Form, Input, Space, Row, Col, Select } from 'antd'
-import type {ExamSearch} from '@/services/types'
+import type {ExamSearch, ClassifyListItem} from '@/services/types'
 import style from './Search.module.scss'
 import {getUserList, classifyList} from '@/services/index'
 
@@ -12,7 +12,7 @@ interface Props {
 const Search:React.FC<Props> = ({onFilterSearch}) => {
   const [form] = Form.useForm<ExamSearch>()
   const [list, setList] = useState<string[]>([])
-  const [data, setData] = useState<string[]>([])
+  const [data, setData] = useState<ClassifyListItem[]>([])
   const [filterForm, setFilterForm] = useState<ExamSearch>({
     name: undefined,
     creator: undefined,
@@ -21,12 +21,12 @@ const Search:React.FC<Props> = ({onFilterSearch}) => {
 
   const UserList = async ()=>{
     try{
-      const res = await getUserList({page: 1,pagesize: 9999})
+      const res = await getUserList()
       console.log(res)
       setList(res.data.list.map(v=>v.username))
-      const res1 = await classifyList({page: 1,pagesize: 9999})
+      const res1 = await classifyList()
       console.log(res1)
-      setData(res1.data.list.map(v=>v.name))
+      setData(res1.data.list)
     }catch(e){
       console.log(e)
     }
@@ -104,7 +104,7 @@ const Search:React.FC<Props> = ({onFilterSearch}) => {
               labelCol={{span: 8}}
               rules={[{ required: false }]}
             >
-              <Select options={data.map(item => ({ label: item, value: item }))} />
+              <Select options={data.map(item => ({ label: item.name, value: item._id }))} />
             </Form.Item>
           </Col>
 

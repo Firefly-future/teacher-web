@@ -70,7 +70,7 @@ export const getUserMenuList = () => {
 }
 // 获取用户列表
 export const getUserList = (params: UserListParams) => {
-  return get<BaseResponse<UserListResponse>>('/user/list', { params })
+  return get<BaseResponse<UserListResponse>>('/user/list', {params})
 }
 // 删除用户
 export const getUserRemove = (id: string) => {
@@ -135,8 +135,8 @@ export const examDetail = (id: string) => {
   return get<BaseResponse>(`/exam/detail?id=${id}`)
 }
 // 科目列表
-export const classifyList = (params: UserListParams) => {
-  return get<BaseResponse<ClassifyListResponse>>('/classify/list', { params })
+export const classifyList = () => {
+  return get<BaseResponse<ClassifyListResponse>>('/classify/list')
 }
 // 修改用户信息
 export const updateUserInfo = (params: UserListItem) => {

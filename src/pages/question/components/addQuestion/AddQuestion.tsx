@@ -15,33 +15,47 @@ const AddQuestion = () => {
   const [list, setList] = useState<TypeItem[]>([])
   const [typeList, setTypeList] = useState<ClassifyListItem[]>([])
   const { TextArea } = Input
-  const [currentType, setCurrentType] = useState<number>(1)
-  const getInitialValues = (type: number): Partial<questionCreateItem> => {
+  const option = ['A', 'B', 'C', 'D']
+  const [currentType, setCurrentType] = useState<string>('single')
+  const getInitialValues = (type: string): Partial<questionCreateItem> => {
     switch (type) {
-    case 1: // 单选题
+    case 'single': // 单选题
       return {
-        options: ['', '', '', ''],
-        answer: '1'
+        options: [
+          { label: 'A', value: '' },
+          { label: 'B', value: '' },
+          { label: 'C', value: '' },
+          { label: 'D', value: '' }
+        ],
+        answer: 'A'
       }
-    case 2: // 多选题
+    case 'multiple': // 多选题
       return {
-        options: ['', '', '', ''],
+        options: [
+          { label: 'A', value: '' },
+          { label: 'B', value: '' },
+          { label: 'C', value: '' },
+          { label: 'D', value: '' }
+        ],
         answer: ''
       }
-    case 3: // 判断题
+    case 'judge': // 判断题
       return {
-        options: ['对', '错'],
-        answer: '对'
+        answer: true
       }
-    case 4: // 填空题
+    case 'fill': // 填空题
       return {
-        options: [''],
         answer: ''
       }
     default:
       return {
-        options: ['', '', '', ''],
-        answer: '1'
+        options: [
+          { label: 'A', value: '' },
+          { label: 'B', value: '' },
+          { label: 'C', value: '' },
+          { label: 'D', value: '' }
+        ],
+        answer: 'A'
       }
     }
   }
@@ -55,8 +69,8 @@ const AddQuestion = () => {
   const questionType = async () => {
     try{
       const res = await questionTypeList()
-      const uniqueList = Array.from(new Map(res.data.list.map(item => [item._id, item])).values())
-      setList(uniqueList)
+      console.log(res)
+      setList(res.data.list)
     }catch(e){
       console.log(e)
     }
@@ -64,7 +78,7 @@ const AddQuestion = () => {
   // 科目列表
   const classifyListItem = async () => {
     try{
-      const res = await classifyList({page: 1,pagesize: 9999})
+      const res = await classifyList()
       setTypeList(res.data.list)
     }catch(e){
       console.log(e)
@@ -88,7 +102,15 @@ const AddQuestion = () => {
 
   const onFinish: FormProps<questionCreateItem>['onFinish'] = (values) => {
     console.log('Success:', values)
-    createQuestion(values)
+    const transformedValues = {
+      ...values,
+      options: values.options?.map((opt, index) => ({
+        label: option[index],
+        value: opt.value
+      }))
+    }
+    console.log(transformedValues)
+    createQuestion(transformedValues)
   }
 
   useEffect(()=>{
@@ -97,7 +119,7 @@ const AddQuestion = () => {
     form.setFieldsValue(getInitialValues(currentType))
   },[])
 
-  const handleTypeChange = (value: number) => {
+  const handleTypeChange = (value: string) => {
     console.log(value)
     setCurrentType(value)
     form.setFieldsValue(getInitialValues(value))
@@ -110,7 +132,7 @@ const AddQuestion = () => {
 
   const renderQuestionContent = () =>{
     switch(currentType){
-    case 1:
+    case 'single':
       return (
         <Form.Item<questionCreateItem>
           label="选项"
@@ -124,11 +146,11 @@ const AddQuestion = () => {
             <Radio.Group>
               <Row>
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Radio value='1'>
+                  <Radio value='A'>
                     <span style={{ color: 'red' }}>*</span> A 
                   </Radio>
                   <Form.Item<questionCreateItem>
-                    name={['options', 0]}
+                    name={['options', 0, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -137,11 +159,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Radio value='2'>
+                  <Radio value='B'>
                     <span style={{ color: 'red' }}>*</span> B
                   </Radio>
                   <Form.Item<questionCreateItem>
-                    name={['options', 1]}
+                    name={['options', 1, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -150,11 +172,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Radio value='3'>
+                  <Radio value='C'>
                     <span style={{ color: 'red' }}>*</span> C
                   </Radio>
                   <Form.Item<questionCreateItem>
-                    name={['options', 2]}
+                    name={['options', 2, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -163,11 +185,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8}>
-                  <Radio value='4'>
+                  <Radio value='D'>
                     <span style={{ color: 'red' }}>*</span> D
                   </Radio>
                   <Form.Item<questionCreateItem>
-                    name={['options', 3]}
+                    name={['options', 3, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -179,7 +201,7 @@ const AddQuestion = () => {
           </Form.Item>
         </Form.Item>
       )
-    case 2:
+    case 'multiple':
       return (
         <Form.Item<questionCreateItem>
           label="选项"
@@ -196,11 +218,11 @@ const AddQuestion = () => {
             >
               <Row>
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Checkbox value='1'>
+                  <Checkbox value='A'>
                     <span style={{ color: 'red' }}>*</span> A 
                   </Checkbox>
                   <Form.Item<questionCreateItem>
-                    name={['options', 0]}
+                    name={['options', 0, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -209,11 +231,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Checkbox value='2'>
+                  <Checkbox value='B'>
                     <span style={{ color: 'red' }}>*</span> B
                   </Checkbox>
                   <Form.Item<questionCreateItem>
-                    name={['options', 1]}
+                    name={['options', 1, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -222,11 +244,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8} style={{marginBottom: '10px'}}>
-                  <Checkbox value='3'>
+                  <Checkbox value='C'>
                     <span style={{ color: 'red' }}>*</span> C
                   </Checkbox>
                   <Form.Item<questionCreateItem>
-                    name={['options', 2]}
+                    name={['options', 2, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -235,11 +257,11 @@ const AddQuestion = () => {
                 </Col>
 
                 <Col span={8}>
-                  <Checkbox value='4'>
+                  <Checkbox value='D'>
                     <span style={{ color: 'red' }}>*</span> D
                   </Checkbox>
                   <Form.Item<questionCreateItem>
-                    name={['options', 3]}
+                    name={['options', 3, 'value']}
                     noStyle
                     rules={[{ required: true, message: '选项内容不能为空!' }]}
                   >
@@ -251,20 +273,12 @@ const AddQuestion = () => {
           </Form.Item>
         </Form.Item>
       )
-    case 3:
+    case 'judge':
       return (
         <Form.Item<questionCreateItem>
           label="选项"
           layout="vertical"  
         >
-          <Form.Item<questionCreateItem>
-            name="options"
-            noStyle
-            initialValue={['对', '错']}
-          >
-            <input type="hidden" />
-          </Form.Item>
-          
           <Form.Item<questionCreateItem>
             name="answer"
             noStyle
@@ -273,12 +287,12 @@ const AddQuestion = () => {
             <Radio.Group>
               <Row>
                 <Col span={12} style={{marginBottom: '10px'}}>
-                  <Radio value='对'>
+                  <Radio value={true}>
                     <span></span> 对 
                   </Radio>
                 </Col>
                 <Col span={12}>
-                  <Radio value='错'>
+                  <Radio value={false}>
                     <span></span> 错
                   </Radio>
                 </Col>
@@ -287,7 +301,7 @@ const AddQuestion = () => {
           </Form.Item>
         </Form.Item>
       )
-    case 4:
+    case 'fill':
       return (
         <Form.Item<questionCreateItem>
           label="正确答案"
@@ -297,7 +311,6 @@ const AddQuestion = () => {
           <Form.Item<questionCreateItem>
             name="options"
             noStyle
-            initialValue={[]}
           >
             <input type="hidden" />
           </Form.Item>
@@ -329,13 +342,14 @@ const AddQuestion = () => {
           const workbook = XLSX.read(data, { type: 'array' })
           const worksheet = workbook.Sheets[workbook.SheetNames[0]]
           const excelData = XLSX.utils.sheet_to_json(worksheet) as any[]
+          console.log(excelData)
           const clean = excelData.map(row => ({
             question: String(row.question),
-            type: Number(row.type),
+            type: String(row.type),
             classify: String(row.classify),
             answer: row.answer + '',
             options: JSON.parse(String(row.options)),
-            desc: String(row.desc)
+            explanation: String(row.explanation)
           }))
           console.log(clean)
           setParsedQuestions(clean)
@@ -411,7 +425,7 @@ const AddQuestion = () => {
                 layout="vertical"
                 rules={[{ required: true, message: '请选择分类!' }]}
               >
-                <Select options={typeList.map(v=>({ label: v.name,value: v.value }))} placeholder = '选择科目' />
+                <Select options={typeList?.map(v=>({ label: v.name,value: v._id })) || []} placeholder = '选择科目' />
               </Form.Item>
             </Col>
           </Row>
@@ -422,18 +436,18 @@ const AddQuestion = () => {
             layout="vertical"
             rules={[{ required: true, message: '题目不能为空!' }]}
           >
-            <TextArea rows={4} placeholder="请输入题目" maxLength={12} size = "middle" />
+            <TextArea rows={4} placeholder="请输入题目" maxLength={100} size = "middle" />
           </Form.Item>
           
           {renderQuestionContent()}
 
           <Form.Item<questionCreateItem>
             label="解析"
-            name="desc"
+            name="explanation"
             layout="vertical"
             rules={[{ required: false }]}
           >
-            <TextArea rows={4} placeholder="请输入" maxLength={12} size = "middle" />
+            <TextArea rows={4} placeholder="请输入" maxLength={100} size = "middle" />
           </Form.Item>
 
           <Form.Item>
