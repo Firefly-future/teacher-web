@@ -12,10 +12,13 @@ export type LoginParams = {
   username: string
   password: string
   code: string
+  sessionId: string
 }
 // 获取图形验证码参数
 export type CaptchaCode = {
   code: string
+  sessionId?: string
+  text?: string
 }
 // 登录返回值
 export type LoginResponse = {
