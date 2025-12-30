@@ -135,6 +135,10 @@ export type UpdateUserParams = Partial<
 
 // 角色列表
 export type RoleItem = {
+  createdAt(createdAt: any): unknown
+  classify: string
+  type(type: any): unknown
+  question: string
   name: string
   value: string
   _id: string

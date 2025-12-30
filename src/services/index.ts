@@ -84,5 +84,27 @@ export const deleteMenu = (id: string) =>{
 export const updateMenu = (id:string) =>{
   return post<BaseResponse>('/permission/update', {id})
 }
-
-
+//获取试题列表
+export const getQuestionList = () =>{
+  return get<BaseResponse>('/question/list')
+}
+//分类列表
+export const getQuestionTypeList = () =>{
+  return get<BaseResponse>('/question/type/list')
+}
+//类型列表
+export const getQuestionClassifyList = () =>{
+  return get<BaseResponse>('/classify/list')
+}
+// 编辑试题
+export const updateQuestion = () =>{
+  return post<BaseResponse>('/question/update')
+}
+// 删除试题
+export const deleteQuestion = (id: string) =>{
+  return post<BaseResponse>('/question/remove', {id})
+}
+// 试题详情
+export const getQuestionDetail = (id: string) =>{
+  return get<BaseResponse>('/exam/detail', {params: {id} })
+}
