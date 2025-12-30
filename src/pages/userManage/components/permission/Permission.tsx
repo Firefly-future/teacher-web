@@ -93,7 +93,7 @@ const Permission = () => {
   const onFinish: FormProps<any>['onFinish'] = async (values) => {
     console.log('Success:', values)
     try {
-      const selectedMenu = options.find((item) => item.value === values.pid)
+      const selectedMenu = options.find((item) => item.value === values.level)
       const createParams: any = {
         name: values.name,
         path: values.path,
@@ -101,7 +101,7 @@ const Permission = () => {
         status: values.status,
       }
 
-      if (values.pid !== '__new_level__' && selectedMenu?.id) {
+      if (values.level !== '__new_level__' && selectedMenu?.id) {
         createParams.pid = selectedMenu.id
       }
       const res = await createMenu(createParams)
