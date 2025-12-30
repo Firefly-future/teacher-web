@@ -310,7 +310,7 @@ const ExerciseBank = () => {
       </Space>
       <Table<ExamListItem>
         columns={columns} 
-        dataSource={data?.data.list} 
+        dataSource={data?.data?.list || []} 
         rowKey={row => row._id}
         scroll={{ x: 1200 }}
         size="small"
