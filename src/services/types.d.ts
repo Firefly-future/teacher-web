@@ -206,9 +206,10 @@ export type CreateMenuParams = Partial<
 export type UpMenuParams = {
   pid?: string
   id: string
-  name: string
-  path: string
+  name?: string
+  path?: string
   isBtn?: boolean
+  status?: 0 | 1
 }
 // 更新菜单参数
 export type UpdateMenuParams = Partial<MenuListItem> & {

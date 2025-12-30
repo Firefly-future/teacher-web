@@ -17,8 +17,7 @@ import {
 } from '@/services'
 import { useRequest } from 'ahooks'
 import type { MenuListItem, Permissionlit } from '@/services/types'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { DrawerProps } from 'antd'
 import userStore from '@/store/userStore'
 import Draw from './Draw'
@@ -33,48 +32,58 @@ const Permission = () => {
   const [size, setSize] = useState<DrawerProps['size']>()
   const [openEdit, setOpenEdit] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
+  const [editForm] = Form.useForm()
+  const [createForm] = Form.useForm()
   const { data, loading, run } = useRequest(getPermissionList)
   const showModal = (record: Permissionlit) => {
-    form.setFieldsValue({ ...record, _id: record._id || '' })
+    let pidPath = '__new_level__'
+    if (record.pid) {
+      const parentItem = data?.data.list.find((item) => item._id === record.pid)
+      if (parentItem) {
+        pidPath = parentItem.path
+      }
+    }
+    editForm.setFieldsValue({
+      ...record,
+      _id: record._id || '',
+      pid: pidPath,
+      status: (record as any).status ?? 1, 
+    })
     setOpenEdit(true)
   }
+
   const handleCancel = () => {
-    console.log('点击了取消按钮')
     setOpenEdit(false)
+    editForm.resetFields()
   }
-  // 权限等级选择列表
+
   const optionsItem = permissionList?.filter((item) => !item.isBtn)
   const defaultOption = {
     label: '创建新的一级菜单',
     value: '__new_level__',
-    id: null,
   }
   const options = [
     defaultOption,
     ...(optionsItem?.map((item) => ({
       label: item.name,
       value: item.path,
-      id: item._id,
     })) || []),
   ]
-  // 显示添加菜单抽屉
+
   const showLargeDrawer = () => {
     setSize('large')
     setOpen(true)
   }
-  // 关闭抽屉
+
   const onClose = () => {
     setOpen(false)
-    form.resetFields()
+    createForm.resetFields()
   }
-  // 删除菜单
+
   const handleDeleteConfirm = async (id: string) => {
     try {
-      // 这里可以调用删除接口
       await deleteMenu(id)
-      console.log('删除菜单ID：', id)
       messageApi.success('删除成功')
-      // 删除成功后重新请求列表数据
       run()
       await getUserInfo()
     } catch (error) {
@@ -82,71 +91,87 @@ const Permission = () => {
       console.error('删除失败：', error)
     }
   }
-  // 取消删除
+
   const cancel: PopconfirmProps['onCancel'] = (e) => {
     console.log(e)
-    messageApi.error('取消删除')
+    messageApi.warning('取消删除')
   }
+
   const [messageApi, holder] = message.useMessage()
-  const [form] = Form.useForm()
-  // 提交表单
-  const onFinish: FormProps<any>['onFinish'] = async (values) => {
-    console.log('Success:', values)
+
+  const handleCreateFinish: FormProps<any>['onFinish'] = async (values) => {
     try {
-      const selectedMenu = options.find((item) => item.value === values.level)
-      const createParams: any = {
+      let pid: string | undefined = undefined
+      if (values.pid && values.pid !== '__new_level__') {
+        const parentMenu = data?.data.list.find(
+          (item) => item.path === values.pid
+        )
+        if (parentMenu) {
+          pid = parentMenu._id
+        }
+      }
+      const createParams = {
         name: values.name,
         path: values.path,
         isBtn: values.isBtn,
         status: values.status,
-      }
-
-      if (values.level !== '__new_level__' && selectedMenu?.id) {
-        createParams.pid = selectedMenu.id
+        pid, 
       }
       const res = await createMenu(createParams)
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单创建成功！')
         run()
         await getUserInfo()
-        form.resetFields()
         onClose()
+        createForm.resetFields()
       } else {
-        messageApi.error(res.msg || '操作失败，请重试')
+        messageApi.error(res.msg || '创建失败，请重试')
       }
     } catch (error) {
-      messageApi.error('操作失败，请重试')
-      console.error('操作失败：', error)
+      messageApi.error('创建失败，请重试')
+      console.error('创建失败：', error)
     }
   }
+
   const handleEditFinish: FormProps<any>['onFinish'] = async (values) => {
     try {
       setConfirmLoading(true)
+      let pid: string | undefined = undefined
+      if (values.pid && values.pid !== '__new_level__') {
+        const parentMenu = data?.data.list.find(
+          (item) => item.path === values.pid
+        )
+        if (parentMenu) {
+          pid = parentMenu._id
+        }
+      }
       const payload = {
         id: values._id,
         name: values.name,
         path: values.path,
         isBtn: values.isBtn,
-        pid: values.pid === '__new_level__' ? '' : values.pid,
+        status: values.status,
+        pid, 
       }
+
       const res = await updateMenu(payload)
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单更新成功！')
         run()
         await getUserInfo()
         setOpenEdit(false)
-        form.resetFields()
+        editForm.resetFields()
       } else {
-        messageApi.error(res.msg || '操作失败，请重试')
-        setOpenEdit(false)
+        messageApi.error(res.msg || '更新失败，请重试')
       }
     } catch (error) {
       messageApi.error('更新失败，请重试')
+      console.error('更新失败：', error)
     } finally {
       setConfirmLoading(false)
     }
   }
-  // 表格列配置
+
   const columns: TableProps<Permissionlit>['columns'] = [
     {
       title: '菜单名称',
@@ -205,9 +230,10 @@ const Permission = () => {
       ),
     },
   ]
+
   useEffect(() => {
     run()
-  }, [])
+  }, [run])
 
   return (
     <>
@@ -233,17 +259,17 @@ const Permission = () => {
         openEdit={openEdit}
         confirmLoading={confirmLoading}
         handleCancel={handleCancel}
-        form={form}
+        form={editForm}
         onFinish={handleEditFinish}
       />
 
       <Draw
         open={open}
         onClose={onClose}
-        onFinish={onFinish}
+        onFinish={handleCreateFinish}
         size={size}
         options={options}
-        form={form}
+        form={createForm}
         path={path}
         setPath={setPath}
       />
