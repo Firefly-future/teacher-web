@@ -60,6 +60,7 @@ export type PermissionItem = {
   name: string
   path: string
   isBtn: boolean
+  _id?: string
 }
 
 // 左侧菜单
@@ -172,17 +173,30 @@ export type RoleItemRes = {
 export type UpdateRoleParams = Partial<Omit<RoleItem, '_id'>> & {
   id: string
 }
+// 权限列
+export type Permissionlit = {
+  _id: string
+  name: string
+  pid: string
+  path: string
+  disabled: boolean
+  createTime: number
+  isBtn: boolean
+}
 
 // 权限列表
 export type PermissionListRes = {
-  list: MenuListItem[]
+  total: number
+  list: Permissionlit[]
+  totalPage: number
 }
 
 // 创建菜单参数
-export type CreateMenuParams = Pick<
-  MenuListItem,
-  'name' | 'path' | 'isBtn' | 'status' | 'pid'
->
+export type CreateMenuParams = Partial<
+  Pick<MenuListItem, 'name' | 'path' | 'isBtn' | 'status' | 'pid'>
+> & {
+  disabled?: boolean
+}
 // 更新菜单
 export type UpMenuParams = {
   pid?: string
@@ -452,20 +466,17 @@ export type ClassItem = {
   _id: string
   updatedAt: string
   name: string
-<<<<<<< HEAD
   description: string
   creator: string
   classify: teacherParams
   teacher: TeacherItem
   students: TeacherItem[]
-=======
   students?: StudentsItem[]
   createTime?: number
   classify?: string
   creator?: string
   teacher?: string
   // value: string
->>>>>>> master
 }
 // 考试班级返回值
 export type ClassListRes = {
@@ -651,7 +662,6 @@ export type SubmitExamRes = {
   group?: string
   name?: string
   startTime?: number
-
 }
 
 // 考试记录--查询考试列表

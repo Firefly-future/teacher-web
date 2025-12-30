@@ -56,6 +56,17 @@ const Draw = ({
   path,
   setPath,
 }: DrawProps) => {
+  const handleLevelChange = (value: string) => {
+    const selectedOption = options.find((option) => option.value === value)
+    if (selectedOption && selectedOption.value !== '__new_level__') {
+      setPath(selectedOption.value)
+      form.setFieldsValue({ path: `${selectedOption.value}/` })
+    } else {
+      setPath('')
+      form.setFieldsValue({ path: '' })
+    }
+  }
+
   return (
     <Drawer
       title={'添加菜单'}
@@ -77,7 +88,7 @@ const Draw = ({
         <Flex vertical>
           <Form.Item
             label='选择菜单等级'
-            name='level'
+            name='pid'
             rules={[{ required: true }]}
             labelCol={{ span: 20 }}
           >
@@ -85,6 +96,7 @@ const Draw = ({
               placeholder='请选择'
               style={{ width: 260 }}
               options={options}
+              onChange={handleLevelChange} // 添加变化处理
             />
           </Form.Item>
           <Flex>
@@ -149,7 +161,7 @@ const Draw = ({
           </Flex>
           <Form.Item
             label={
-              <Tooltip title='路径格式：/path'>
+              <Tooltip title='路径格式：/path 或 /parent/path'>
                 <span>
                   路径 <QuestionCircleOutlined />
                 </span>
@@ -162,9 +174,7 @@ const Draw = ({
             <Input
               placeholder='请输入路径'
               onChange={(e) => {
-                if (path) {
-                  checkPath(null, e.target.value)
-                }
+                setPath(e.target.value)
               }}
             />
           </Form.Item>

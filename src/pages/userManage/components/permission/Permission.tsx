@@ -16,7 +16,7 @@ import {
   updateMenu,
 } from '@/services'
 import { useRequest } from 'ahooks'
-import type { MenuListItem } from '@/services/types'
+import type { MenuListItem, Permissionlit } from '@/services/types'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import type { DrawerProps } from 'antd'
@@ -27,13 +27,14 @@ import { API_CODE } from '@/constants/Constants'
 
 const Permission = () => {
   const permissionList = userStore((state) => state.userInfo?.permission)
+  const getUserInfo = userStore((state) => state.getUserInfo)
   const [path, setPath] = useState('')
   const [open, setOpen] = useState(false)
   const [size, setSize] = useState<DrawerProps['size']>()
   const [openEdit, setOpenEdit] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const { data, loading, run } = useRequest(getPermissionList)
-  const showModal = (record: MenuListItem) => {
+  const showModal = (record: Permissionlit) => {
     form.setFieldsValue({ ...record, _id: record._id || '' })
     setOpenEdit(true)
   }
@@ -46,12 +47,14 @@ const Permission = () => {
   const defaultOption = {
     label: '创建新的一级菜单',
     value: '__new_level__',
+    id: null,
   }
   const options = [
     defaultOption,
     ...(optionsItem?.map((item) => ({
       label: item.name,
       value: item.path,
+      id: item._id,
     })) || []),
   ]
   // 显示添加菜单抽屉
@@ -89,21 +92,28 @@ const Permission = () => {
   const onFinish: FormProps<any>['onFinish'] = async (values) => {
     console.log('Success:', values)
     try {
-      const res = await createMenu({
-        pid: values.pid === '__new_level__' ? '' : values.pid,
+      const selectedMenu = options.find((item) => item.value === values.pid)
+      const createParams: any = {
         name: values.name,
         path: values.path,
         isBtn: values.isBtn,
         status: values.status,
-      })
+      }
+
+      if (values.level !== '__new_level__' && selectedMenu?.id) {
+        createParams.pid = selectedMenu.id
+      }
+      const res = await createMenu(createParams)
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单创建成功！')
-        await run()
-        form.resetFields()
-        onClose()
+        await getUserInfo()
+        run()
+        setTimeout(() => {
+          setOpen(false)
+          form.resetFields()
+        }, 500)
       } else {
         messageApi.error(res.msg || '操作失败，请重试')
-        onClose()
       }
     } catch (error) {
       messageApi.error('操作失败，请重试')
@@ -114,7 +124,7 @@ const Permission = () => {
     try {
       setConfirmLoading(true)
       const payload = {
-        id: form.getFieldValue('_id'),
+        id: values._id,
         name: values.name,
         path: values.path,
         isBtn: values.isBtn,
@@ -124,8 +134,13 @@ const Permission = () => {
       if (res.code === API_CODE.SUCCESS) {
         messageApi.success('菜单更新成功！')
         run()
+        setTimeout(() => {
+          setOpenEdit(false)
+          form.resetFields()
+        }, 500)
+      } else {
+        messageApi.error(res.msg || '操作失败，请重试')
         setOpenEdit(false)
-        form.resetFields()
       }
     } catch (error) {
       messageApi.error('更新失败，请重试')
@@ -134,7 +149,7 @@ const Permission = () => {
     }
   }
   // 表格列配置
-  const columns: TableProps<MenuListItem>['columns'] = [
+  const columns: TableProps<Permissionlit>['columns'] = [
     {
       title: '菜单名称',
       dataIndex: 'name',
@@ -199,7 +214,7 @@ const Permission = () => {
   return (
     <>
       {holder}
-      <Table<MenuListItem>
+      <Table<Permissionlit>
         columns={columns}
         dataSource={data?.data.list}
         loading={loading}
