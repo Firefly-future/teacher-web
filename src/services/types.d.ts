@@ -291,14 +291,14 @@ export type ClassifyListItem = {
 }
 // 更新用户头像参数
 export type UpdateAvatorParams = {
-  username?: string
-  password?: string
-  status?: 0 | 1
+  id?: string
   avatar?: string
 }
 // 更新用户头像返回值
 export type UpdateAvatorResponse = {
   url: string
+  filename: string
+  size: number
 }
 // 创建试题参数
 export type questionCreateItem = {

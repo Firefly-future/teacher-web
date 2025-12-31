@@ -11,15 +11,14 @@ const UserInfo = () => {
   const [form] = Form.useForm()
   const [editing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [userInfoAvator, setUserInfoAvator] = useState(userInfo!.avator)
   useEffect(() => {
     if (editing) {
       form.setFieldsValue({
-        username: userInfo?.username || '',
-        sex: userInfo?.sex || '',
-        age: userInfo?.age || '',
-        password: userInfo?.password || '',
-        email: userInfo?.email || '',
+        username: userInfo!.username,
+        sex: userInfo!.sex,
+        age: userInfo!.age,
+        password: userInfo!.password,
+        email: userInfo!.email,
       })
     }
   }, [editing, userInfo, form])
@@ -41,25 +40,22 @@ const UserInfo = () => {
         setEditing(false)
       }
     } catch (e) {
-      console.log(e)
+      console.error('更新用户信息失败:', e)
+      message.error('更新失败，请稍后再试')
+      setEditing(false)
     } finally {
       setLoading(false)
     }
   }
+
   const renderText = (val: any) => (
     <span style={{ lineHeight: '32px' }}>{val ?? ''}</span>
   )
 
   return (
     <div style={{ padding: 20 }}>
-      <PictureUp
-        onAvatarChange={setUserInfoAvator}
-        initialAvatar={userInfoAvator}
-      />
-      <Form
-        form={form}
-        style={{ maxWidth: '100%', marginTop: 20 }}
-      >
+      <PictureUp />
+      <Form form={form} style={{ maxWidth: '100%', marginTop: 20 }}>
         <Flex justify='space-around'>
           <Form.Item label='用户名称' style={{ flex: 1 }}>
             {editing ? (
@@ -72,7 +68,12 @@ const UserInfo = () => {
           </Form.Item>
           <Form.Item label='密码' style={{ flex: 1 }}>
             {editing ? (
-              <Form.Item name='password' noStyle tooltip='密码为6-20位' rules={[{ min: 6, max: 20 }]}>
+              <Form.Item
+                name='password'
+                noStyle
+                tooltip='密码为6-20位'
+                rules={[{ min: 6, max: 20 }]}
+              >
                 <Input.Password />
               </Form.Item>
             ) : (

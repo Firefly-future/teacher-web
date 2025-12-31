@@ -74,7 +74,7 @@ export const getUserMenuList = () => {
 }
 // 获取用户列表
 export const getUserList = (params: UserListParams) => {
-  return get<BaseResponse<UserListResponse>>('/user/list', {params})
+  return get<BaseResponse<UserListResponse>>('/user/list', { params })
 }
 // 删除用户
 export const getUserRemove = (id: string) => {
@@ -87,6 +87,10 @@ export const createUser = (params: CreateUserParams) => {
 // 更新用户
 export const updateUser = (params: UpdateUserParams) => {
   return post<BaseResponse>('/user/update', params)
+}
+// 上传头像
+export const uploadAvator = (file: File) => {
+  return post<BaseResponse<UpdateAvatorResponse>>('/upload/image', file)
 }
 // 获取角色列表
 export const getRoleList = () => {
@@ -148,7 +152,7 @@ export const updateUserInfo = (params: UserListItem) => {
 }
 // 修改用户头像
 export const updateAvator = (params: UpdateAvatorParams) => {
-  return post<BaseResponse<UpdateAvatorResponse>>('/profile', params)
+  return post<BaseResponse<UpdateAvatorResponse>>('/user/update', params)
 }
 // 创建试题
 export const questionCreate = (params: questionCreateItem) => {
@@ -158,27 +162,27 @@ export const questionCreate = (params: questionCreateItem) => {
 export const questionTypeList = () => {
   return get<BaseResponse<questionType>>('/question/type/list')
 }
-export const getQuestionClassifyList = () =>{
+export const getQuestionClassifyList = () => {
   return get<BaseResponse>('/classify/list')
 }
 // 编辑试题
-export const updateQuestion = () =>{
+export const updateQuestion = () => {
   return post<BaseResponse>('/question/update')
 }
 // 删除试题
-export const deleteQuestion = (id: string) =>{
-  return post<BaseResponse>('/question/remove', {id})
+export const deleteQuestion = (id: string) => {
+  return post<BaseResponse>('/question/remove', { id })
 }
 // 试题详情
-export const getQuestionDetail = (id: string) =>{
-  return get<BaseResponse>('/exam/detail', {params: {id} })
+export const getQuestionDetail = (id: string) => {
+  return get<BaseResponse>('/exam/detail', { params: { id } })
 }
 // 创建试卷
 export const createPaper = (params: CreatePaperParams) => {
   return post<BaseResponse>('exam/create', params)
 }
 // export const createPaper = (params: CreatePaperParams) =>{
-//   return post<BaseResponse>('/exam/create', params)  
+//   return post<BaseResponse>('/exam/create', params)
 // }
 // 查询科目列表
 // export const getClassifyList = (params: ClassifyListParams) =>{
@@ -197,7 +201,7 @@ export const getQuestionTypeList = () => {
 }
 // 批量导入试题
 export const questionCreateMultiple = (params: CreateMultiple) => {
-  return post<BaseResponse>('/question/create/multiple',params)
+  return post<BaseResponse>('/question/create/multiple', params)
 }
 // 创建科目
 export const createClassify = (params: createClassifyParams) => {
@@ -247,7 +251,7 @@ export const getClassList = (params?: ClassListParams) => {
 
 //考试管理--配置试卷-- 查询试卷列表
 export const getExamList = (params: ExamListRes) => {
-  return get<BaseResponse<ExamListRes>>('/exam/list', {params})  ///exam/list?page=1&pagesize=10
+  return get<BaseResponse<ExamListRes>>('/exam/list', { params }) ///exam/list?page=1&pagesize=10
 }
 
 // 考试管理--发布考试--提交考试
@@ -265,8 +269,8 @@ export const getClassDetail = (id: string) => {
 }
 
 // 编辑班级
-export const updateClass = ( params: UpdateClassParams) => {
-  return post<BaseResponse>(`/studentGroup/update?${Date.now()}`,params)
+export const updateClass = (params: UpdateClassParams) => {
+  return post<BaseResponse>(`/studentGroup/update?${Date.now()}`, params)
 }
 
 // 删除班级
@@ -283,8 +287,8 @@ export const createStudent = (params: CreateStudentParams) => {
   return post<BaseResponse>('/student/create', params)
 }
 // 编辑学生
-export const updateStudent = ( params: UpdateStudentParams) => {
-  return post<BaseResponse>(`/student/update?${Date.now()}`,params)
+export const updateStudent = (params: UpdateStudentParams) => {
+  return post<BaseResponse>(`/student/update?${Date.now()}`, params)
 }
 // 删除学生
 export const deleteStudent = (id: string) => {
@@ -296,10 +300,10 @@ export const deleteStudent = (id: string) => {
 
 // 考试记录--查询考试列表
 export const getExamRecordList = (params: any) => {
-  return get<BaseResponse<ExamRecordListRes>>('/examination/list', {params})
+  return get<BaseResponse<ExamRecordListRes>>('/examination/list', { params })
 }
 
 // 考试记录 -- 删除考试记录
-export const deleteExam = (id:string) => {
-  return post<BaseResponse>('/examination/remove',{id})
+export const deleteExam = (id: string) => {
+  return post<BaseResponse>('/examination/remove', { id })
 }
