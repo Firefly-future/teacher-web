@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Space, Table, Tag, message, Modal } from 'antd'
 import type { TableProps } from 'antd'
-import { deleteExam, getExamList, getExamRecordList } from '@/services'
-import type { ExamItem, ExamRecordItem } from '@/services/types'
+import { deleteExam, getExamList, getExamRecordList,getClassifyList,getExaminerList } from '@/services'
+import type { ExamItem, ExamRecordItem,ClassifyItem,ExaminerItem } from '@/services/types'
 
 
 interface DataType {

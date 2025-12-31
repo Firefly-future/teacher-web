@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { Space, Table, Button, message, Popconfirm,Input, Drawer  } from 'antd'
 import type { TableProps, PopconfirmProps } from 'antd'
-import {examList, examRemove, examUpdata, examDetail} from '@/services/index'
-import type {ExamListResponse, BaseResponse, ExamListItem, ExamDetail, ExamSearch} from '@/services/types'
+import {examList, examRemove, examUpdata, examDetail, classifyList} from '@/services/index'
+import type {ExamListResponse, BaseResponse, ExamListItem, ExamDetail, ExamSearch, ClassifyName} from '@/services/types'
 import {API_CODE} from '@/constants/Constants'
 import { useNavigate } from 'react-router-dom'
 import style from './ExerciseBank.module.scss'
@@ -30,6 +30,7 @@ const ExerciseBank = () => {
   const multipleChoice = (examDeta?.questions || []).filter(v=>v?.type === '2')
   const estimate = (examDeta?.questions || []).filter(v=>v?.type === '3')
   const [list,setList] = useState<ExamSearch>()
+  const [classify, setClassify] = useState<ClassifyName[]>([])
   // 试卷列表
   const getExamList = async ()=> {
     try{
@@ -40,6 +41,21 @@ const ExerciseBank = () => {
       console.log(e)
     }
   }
+
+  const getClassifyList = async ()=>{
+    try{
+      const res = await classifyList()
+      console.log(res.data.list)
+      const classify = res.data.list.map(v=>({_id: v._id, name: v.name}))
+      setClassify(classify)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  useEffect(()=>{
+    getClassifyList()
+  },[])
 
   useEffect(()=>{
     getExamList()
@@ -61,6 +77,7 @@ const ExerciseBank = () => {
       dataIndex: 'classify',
       key: 'classify',
       align: 'center',
+      render: (_,record) => classify.find(v=>v._id === record.classify)?.name
     },
     {
       title: '总分',
@@ -255,7 +272,7 @@ const ExerciseBank = () => {
       message.loading('正在导出Excel...', 0)
       
       // 获取所有数据（不分页）
-      const res = await examList({ page: 1, pagesize: 9999 })
+      const res = await examList({ page: 1, pagesize: 99 })
       const examData = res?.data?.list || []
       
       if (examData.length === 0) {
@@ -292,6 +309,7 @@ const ExerciseBank = () => {
   }
 
   const filterSearch = (list: ExamSearch) => {
+    console.log(list)
     setList(list)
     setQuery({
       ...query,

@@ -21,7 +21,7 @@ const Search:React.FC<Props> = ({onFilterSearch}) => {
 
   const UserList = async ()=>{
     try{
-      const res = await getUserList()
+      const res = await getUserList({page: 1, pagesize: 99})
       console.log(res)
       setList(res.data.list.map(v=>v.username))
       const res1 = await classifyList()
