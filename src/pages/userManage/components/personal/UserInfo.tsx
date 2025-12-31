@@ -5,7 +5,6 @@ import { Button, Flex, Form, Input, message, Select } from 'antd'
 import { updateUserInfo } from '@/services'
 import { API_CODE } from '@/constants/Constants'
 import SexEnum from '@/constants/SexEnum'
-import UploadAvator from './UploadAvator'
 import { getToken } from '@/utils'
 
 const UserInfo = () => {
