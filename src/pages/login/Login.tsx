@@ -3,7 +3,8 @@ import style from './login.module.scss'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import type { CaptchaCode, LoginParams } from '@/services/types'
+// import type { CaptchaCode, LoginParams } from '@/services/types'
+import type { LoginParams, CaptchaCode } from '@/services/types'
 import { API_CODE } from '@/constants/Constants'
 import { setToken } from '@/utils'
 import { getCaptchaCode, getLogin } from '@/services'
@@ -30,10 +31,15 @@ const Login = () => {
 
   const onFinish = async (values: LoginParams) => {
     console.log(values)
-    const { username, password, code } = values
+    // const { username, password, code } = values
+    // try {
+    //   setLoading(true)
+    //   const res = await getLogin({ username, password, code, sessionId: captcha?.sessionId || '' })
+    const {username,password,code} = values
     try {
       setLoading(true)
-      const res = await getLogin({ username, password, code, sessionId: captcha?.sessionId || '' })
+      const res = await getLogin({username,password,code,sessionId: captcha?.sessionId || ''})
+      console.log(res.data)
       if (res.code === API_CODE.SUCCESS) {
         message.success('登录成功')
         setToken(res.data.token)
