@@ -4,7 +4,6 @@ import type { GetProp, UploadFile, UploadProps } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import { API_CODE } from '@/constants/Constants'
 import userStore from '@/store/userStore'
-// 导入封装好的接口和类型
 import { uploadImageFile, updateUserAvatarUrl } from '@/services'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
