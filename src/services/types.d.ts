@@ -429,15 +429,17 @@ export type CreateExamParams = {
   name: string
   classify: string
   examId: string
-  group: string
-  examiner: string
+  // group: string
+  // examiner: string
+  group: string[]
+  examiner: string[]
   startTime: number
   endTime: number
 }
 
 // 科目分类
 export type ClassifyItem = {
-  // _id: string
+  _id: string
   // name: string
   // value: string
 
@@ -455,6 +457,8 @@ export type ClassifyListRes = {
 export type ExaminerItem = {
   _id: string
   username: string
+  // examiner: string
+  // creator: string
 }
 // 监考人返回值
 export type ExaminerListRes = {
@@ -469,37 +473,38 @@ export type TeacherItem = {
 
 // 考试班级
 export type ClassItem = {
-  capacity: number
-  createdAt: string
-  grade: string
-  deletedAt: string
-  status: 0 | 1
-  _id: string
-  updatedAt: string
-  name: string
-  description: string
-  creator: string
-  classify: teacherParams
-  teacher: TeacherItem
-  students: TeacherItem[]
-  students?: StudentsItem[]
-  createTime?: number
-  classify?: string
-  creator?: string
+  // capacity: number
+  // createdAt: string
+  // grade: string
+  // deletedAt: string
+  // status: 0 | 1
   // _id: string
+  // updatedAt: string
   // name: string
+  // description: string
+  // creator: string
+  // classify: teacherParams
+  // teacher: TeacherItem
+  // students: TeacherItem[]
   // students?: StudentsItem[]
   // createTime?: number
   // classify?: string
   // creator?: string
+  _id: string
+  // name: string
+  // students?: StudentsItem[]
+  createTime?: number
+  // classify?: string
+  creator?: string
   // teacher?: string
   page?: number
   pagesize?: number
-  // name?: string
-  // teacher?: string
-  // classify?: string
-  // status?: number
+  name?: string
+  teacher?: string
+  classify?: string
+  status?: number
   // grade?: string
+  // examiner: string
 }
 // 考试班级返回值
 export type ClassListRes = {
@@ -508,6 +513,7 @@ export type ClassListRes = {
   totalPage: number
   page: number
   pagesize: number
+
 }
 // 考试管理--配置试卷-- 试卷列表
 export type ExamItem = {
@@ -695,15 +701,15 @@ export type SubmitExamRes = {
 
 // 考试记录--查询考试列表
 export type ExamRecordItem = {
-  // _id: string
+  _id: string
   // examId: string
   // name: string
   // classify: string
   // examItem: string
   // group: string[]
   // examiner: string
-  // startTime: number
-  // endTime: number
+  startTime: number
+  endTime: number
   // status: number
   page?: number
   pagesize?: number
