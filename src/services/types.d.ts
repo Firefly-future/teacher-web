@@ -428,7 +428,6 @@ export type ClassifyTableItem = {
 export type CreateExamParams = {
   name: string
   classify: string
-  // examItem: string
   examId: string
   group: string
   examiner: string
@@ -438,9 +437,14 @@ export type CreateExamParams = {
 
 // 科目分类
 export type ClassifyItem = {
-  _id: string
-  name: string
-  value: string
+  // _id: string
+  // name: string
+  // value: string
+
+  page?: number
+  pagesize?: number
+  name?: string
+  status?: number
 }
 // 科目分类返回值
 export type ClassifyListRes = {
@@ -482,8 +486,20 @@ export type ClassItem = {
   createTime?: number
   classify?: string
   creator?: string
-  teacher?: string
-  // value: string
+  // _id: string
+  // name: string
+  // students?: StudentsItem[]
+  // createTime?: number
+  // classify?: string
+  // creator?: string
+  // teacher?: string
+  page?: number
+  pagesize?: number
+  // name?: string
+  // teacher?: string
+  // classify?: string
+  // status?: number
+  // grade?: string
 }
 // 考试班级返回值
 export type ClassListRes = {
@@ -495,14 +511,20 @@ export type ClassListRes = {
 }
 // 考试管理--配置试卷-- 试卷列表
 export type ExamItem = {
-  _id: string
-  name: string
-  classify: string
-  examItem: string
-  group: string
-  examiner: string
-  startTime: number
-  endTime: number
+  // _id: string
+  // name: string
+  // classify: string
+  // examItem: string
+  // group: string
+  // examiner: string
+  // startTime: number
+  // endTime: number
+  page?: number
+  pagesize?: number
+  name?: string
+  classify?: string
+  status?: number
+  creator?: string
 }
 // 考试管理--配置试卷-- 试卷列表返回值
 export type ExamListRes = {
@@ -511,7 +533,7 @@ export type ExamListRes = {
 
 // 考试管理--发布考试--提交考试参数
 export type SubmitExamParams = {
-  examId: string
+  id: string
   answers: string[]
 }
 
@@ -673,20 +695,28 @@ export type SubmitExamRes = {
 
 // 考试记录--查询考试列表
 export type ExamRecordItem = {
-  _id: string
-  examId: string
-  name: string
-  classify: string
-  examItem: string
-  group: string
-  examiner: string
-  startTime: number
-  endTime: number
-  status: number
-  // score: number
+  // _id: string
+  // examId: string
+  // name: string
+  // classify: string
+  // examItem: string
+  // group: string[]
+  // examiner: string
+  // startTime: number
+  // endTime: number
+  // status: number
+  page?: number
+  pagesize?: number
+  name?: string
+  status?: number
 }
 
 // 考试记录--查询考试列表返回值
 export type ExamRecordListRes = {
   list: ExamRecordItem[]
+}
+
+// 考试记录 -- 删除考试记录
+export type DeleteExamParams = {
+  id: string
 }
