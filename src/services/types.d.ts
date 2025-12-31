@@ -291,7 +291,7 @@ export type ClassifyListItem = {
 }
 // 更新用户头像参数
 export type UpdateAvatorParams = {
-  _id: string
+  id: string
   avatar: string
 }
 // 更新用户头像返回值

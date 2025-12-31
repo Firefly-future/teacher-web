@@ -11,74 +11,64 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const PictureUp: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const userInfo = userStore((state) => state.userInfo)
-  useEffect(() => {
-    if (userInfo?.avator) {
-      setFileList([
-        {
-          uid: '-1',
-          name: 'current_avatar.png',
-          status: 'done',
-          url:
-            userInfo.avator ||
-            'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-        },
-      ])
-    }
-  }, [userInfo?.avator])
+
   const handleAvatarProcess = async (file: File) => {
     try {
       const uploadRes = await uploadImageFile(file)
       if (uploadRes.code !== API_CODE.SUCCESS || !uploadRes.data?.url) {
-        throw new Error(uploadRes.msg || '图片上传失败')
+        throw new Error(uploadRes.msg || '图片上传到服务器失败')
       }
       const newAvatarUrl = uploadRes.data.url
+      message.success('图片上传成功')
       const updateRes = await updateUserAvatarUrl({
-        _id: userInfo!._id,
+        id: userInfo!._id,
         avatar: newAvatarUrl,
       })
-      if (updateRes.code === API_CODE.SUCCESS) {
-        message.success('头像更新成功')
-        return newAvatarUrl
-      } else {
-        throw new Error(updateRes.msg || '更新用户信息失败')
+      if (updateRes.code !== API_CODE.SUCCESS) {
+        throw new Error(updateRes.msg || '同步用户信息失败')
       }
-    } catch (error: any) {
-      console.error('上传更新流程出错:', error)
-      message.error(error.message || '操作失败')
-      throw error
+      userStore.setState({ userInfo: { ...userInfo!, avator: newAvatarUrl } })
+      return newAvatarUrl 
+    } catch (e) {
+      console.error('流程中断:', e)
+      throw e
     }
   }
-  const customRequest: UploadProps['customRequest'] = async (options) => {
-    const { file, onSuccess, onError } = options
+  const customRequest: UploadProps['customRequest'] = async ({
+    file,
+    onSuccess,
+    onError,
+  }) => {
     try {
       const url = await handleAvatarProcess(file as File)
       onSuccess?.({ avatarUrl: url })
-    } catch (err) {
-      onError?.(err as Error)
+    } catch (err: any) {
+      onError?.(err)
     }
   }
-
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList)
+  const onChange: UploadProps['onChange'] = ({ file, fileList: newList }) => {
+    const latest = newList.slice(-1).map((item) => {
+      if (item.uid === file.uid) {
+        return { ...item, url: item.url || (item.response as any)?.avatarUrl }
+      }
+      return item
+    })
+    setFileList(latest)
   }
-
   const onPreview = async (file: UploadFile) => {
-    let src = file.url as string
-    if (!src) {
-      src =
-        file.response?.url ||
-        (await new Promise((resolve) => {
-          const reader = new FileReader()
-          reader.readAsDataURL(file.originFileObj as FileType)
-          reader.onload = () => resolve(reader.result as string)
-        }))
+    let src = file.url || (file.response as any)?.avatarUrl
+    if (!src && file.originFileObj) {
+      src = await new Promise<string>((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj as FileType)
+        reader.onload = () => resolve(reader.result as string)
+      })
     }
     const imgWindow = window.open(src)
-    imgWindow?.document.write(`<img src="${src}" style="max-width: 100%" />`)
+    imgWindow?.document.write(`<img src="${src}" style="max-width:100%" />`)
   }
-
   return (
-    <ImgCrop rotationSlider aspect={1 / 1} showReset>
+    <ImgCrop rotationSlider aspect={1} showReset>
       <Upload
         listType='picture-card'
         fileList={fileList}
@@ -87,10 +77,8 @@ const PictureUp: React.FC = () => {
         onPreview={onPreview}
         maxCount={1}
       >
-        {fileList.length < 1 && (
-          <div>
-            <div style={{ marginTop: 8 }}>+ 上传头像</div>
-          </div>
+        {fileList.length === 0 && (
+          <div style={{ marginTop: 8 }}>+ 上传头像</div>
         )}
       </Upload>
     </ImgCrop>
