@@ -60,7 +60,10 @@ export const getCaptchaCode = () => {
 export const getLogin = (params: LoginParams) => {
   return post<BaseResponse<LoginResponse>>('/login', params)
 }
-
+// 退出登录
+export const getLogout = () => {
+  return post<BaseResponse>('/user/logout')
+}
 // 用户信息
 export const getUserInfo = () => {
   return get<BaseResponse<UserListItem>>('/user/info')
