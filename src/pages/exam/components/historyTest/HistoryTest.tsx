@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Select, Space, theme, DatePicker } from 
 import { getClassifyList, getExaminerList, getClassList } from '@/services'
 import type { ClassifyItem, ClassItem, ExaminerItem } from '@/services/types'
 import style from './HistoryTest.module.scss'
-import TestTable from './testTable'
+import TestTable from './TestTable'
 
 const { RangePicker } = DatePicker
 
@@ -45,7 +45,7 @@ const AdvancedSearchForm:React.FC<AdvancedSearchFormProps> = ({ onSearch }) => {
     const loadOptions = async () => {
       try {
         const [classifyRes, examinerRes, classRes] = await Promise.all([
-          getClassifyList(),
+          getClassifyList({page: 1, pagesize: 100}),
           getExaminerList(),
           getClassList(),
         ])
@@ -81,9 +81,13 @@ const AdvancedSearchForm:React.FC<AdvancedSearchFormProps> = ({ onSearch }) => {
         label: '科目分类',
         component: (
           <Select
-            options={classifyOptions.map(item => ({
+            // options={classifyOptions.map(item => ({
+            //   label: item.name,
+            //   value: item._id,
+            // }))}
+            options={classOptions.map(item => ({
               label: item.name,
-              value: item._id,
+              value: item.grade,
             }))}
             placeholder="请选择"
           />
@@ -136,7 +140,8 @@ const AdvancedSearchForm:React.FC<AdvancedSearchFormProps> = ({ onSearch }) => {
           <Select
             options={classOptions.map(item => ({
               label: item.name,
-              value: item._id,
+              // value: item._id,
+              value: item.grade,
             }))}
             placeholder="请选择"
           />
