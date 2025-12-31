@@ -230,21 +230,20 @@ export const getExaminerList = () => {
 
 // 考试管理--获取考试班级
 // 查询班级
-// export const getClassList = (params?: ClassListParams) => {
-//   return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params })
-// }
-export const getClassList = (p0?: {
-  name?: string
-  teacher?: string
-  classify?: string
-  page?: number
-  pagesize?: number
-  // 
-  grade?: string
-  status?: number
-}) => {
-  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
+export const getClassList = (params?: ClassListParams) => {
+  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params })
 }
+// export const getClassList = (p0?: {
+//   name?: string
+//   teacher?: string
+//   classify?: string
+//   page?: number
+//   pagesize?: number
+//   grade?: string
+//   status?: number
+// }) => {
+//   return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
+// }
 
 //考试管理--配置试卷-- 查询试卷列表
 export const getExamList = (params: ExamListRes) => {

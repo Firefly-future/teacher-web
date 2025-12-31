@@ -478,13 +478,14 @@ export type ClassItem = {
   updatedAt: string
   name: string
   description: string
+  description?: string
   creator: string
   classify: teacherParams
   teacher: TeacherItem
   students: TeacherItem[]
-  students?: StudentsItem[]
+  // students?: StudentsItem[]
   createTime?: number
-  classify?: string
+  // classify?: string
   creator?: string
   // _id: string
   // name: string
@@ -493,8 +494,8 @@ export type ClassItem = {
   // classify?: string
   // creator?: string
   // teacher?: string
-  page?: number
-  pagesize?: number
+  // page?: number
+  // pagesize?: number
   // name?: string
   // teacher?: string
   // classify?: string
