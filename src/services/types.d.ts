@@ -24,7 +24,10 @@ export type CaptchaCode = {
 export type LoginResponse = {
   token: string
 }
-
+export type roleItem = {
+  _id: string
+  name: string
+}
 // 用户信息
 export type UserInfo = {
   _id: string
@@ -35,11 +38,6 @@ export type UserInfo = {
   age: number
   role: roleItem[]
   permission: PermissionItem[]
-}
-
-export type roleItem = {
-  _id: string
-  name: string
 }
 
 // 用户列表参数
@@ -304,14 +302,14 @@ export type UpdateAvatorResponse = {
 }
 // 创建试题参数
 export type questionCreateItem = {
-  question: string,
-  type: string,
-  classify: string,
-  answer: boolean | string,
-  options?: options[],
+  question: string
+  type: string
+  classify: string
+  answer: boolean | string
+  options?: options[]
   explanation: string
 }
- 
+
 export type options = {
   label: string
   value: string
