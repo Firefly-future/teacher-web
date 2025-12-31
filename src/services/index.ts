@@ -85,12 +85,14 @@ export const createUser = (params: CreateUserParams) => {
   return post<BaseResponse>('/user/create', params)
 }
 // 更新用户
-export const updateUser = (params: UpdateUserParams) => {
+export const updateUserAvatarUrl = (params: UpdateAvatorParams) => {
   return post<BaseResponse>('/user/update', params)
 }
 // 上传头像
-export const uploadAvator = (file: File) => {
-  return post<BaseResponse<UpdateAvatorResponse>>('/upload/image', file)
+export const uploadImageFile = (file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return post<BaseResponse<UpdateAvatorResponse>>('/upload/image', formData)
 }
 // 获取角色列表
 export const getRoleList = () => {

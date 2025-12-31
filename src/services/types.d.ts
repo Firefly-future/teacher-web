@@ -291,8 +291,8 @@ export type ClassifyListItem = {
 }
 // 更新用户头像参数
 export type UpdateAvatorParams = {
-  id?: string
-  avatar?: string
+  _id: string
+  avatar: string
 }
 // 更新用户头像返回值
 export type UpdateAvatorResponse = {
@@ -466,7 +466,13 @@ export type TeacherItem = {
   _id: string
   username: string
 }
-
+// 学生
+export type StudentItem = {
+  _id: string
+  username: string
+  studentId: string
+  email: string
+}
 // 考试班级
 export type ClassItem = {
   capacity: number
@@ -478,15 +484,13 @@ export type ClassItem = {
   updatedAt: string
   name: string
   description: string
-  description?: string
   creator: string
   classify: teacherParams
   teacher: TeacherItem
-  students: TeacherItem[]
+  students: StudentItem[]
   // students?: StudentsItem[]
-  createTime?: number
+  createTime: number
   // classify?: string
-  creator?: string
   // _id: string
   // name: string
   // students?: StudentsItem[]
