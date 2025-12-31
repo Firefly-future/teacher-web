@@ -30,8 +30,13 @@ const FormModal:React.FC<Props> = ({
   const roleOptions = useMemo(()=>{
     return roleRes?.data.list.map(item=>({
       label: item.name,
-      value: item.value
+      value: item._id,
+      key: item._id
     })) ?? []
+  },[roleRes])
+
+  useEffect(()=>{
+    console.log(roleRes)
   },[roleRes])
 
   useEffect(()=>{
@@ -40,7 +45,10 @@ const FormModal:React.FC<Props> = ({
       if (showModal && updateItem === null) {
         form.resetFields()
       }else{
-        form.setFieldsValue({...updateItem})
+        form.setFieldsValue({
+          ...updateItem,
+          role: updateItem!.role?.map(item => item._id) || []
+        })
       }
     }
   },[showModal, form, updateItem])
@@ -152,8 +160,7 @@ const FormModal:React.FC<Props> = ({
           label = "年龄"
           name = "age"
           rules = {[
-            { required: true, message: '请输入年龄!' },
-            { min: 1, max: 120, message: '年龄需在1-120之间' }
+            { required: true, message: '请输入年龄!' }
           ]}
         >
           <Input placeholder='年龄' type="number" />

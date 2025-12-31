@@ -258,6 +258,11 @@ export type ExamSearch = {
 export type ClassifyListResponse = {
   list: ClassifyListItem[]
 }
+
+export type ClassifyName = {
+  _id: string
+  name: string
+}
 // 科目列表项
 export type ClassifyListItem = {
   _id: string

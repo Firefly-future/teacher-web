@@ -223,6 +223,7 @@ const UserList = () => {
             page: 1
           })
         }}
+        onListRes = {listRes?.data.list}
       />
       <Button type="primary" className={style.btn} onClick={createModal}>创建用户</Button>
       <Table<UserListItem>

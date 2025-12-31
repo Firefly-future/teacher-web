@@ -1,44 +1,80 @@
 import React,{useState, useEffect} from 'react'
-import { Button, Select, Form, Input,Space } from 'antd'
+import { Button, Select, Form, Input, Space, DatePicker } from 'antd'
+import type { DatePickerProps, GetProps } from 'antd'
 import style from './Search.module.scss'
 import type { FormProps } from 'antd'
-import type {UserListItem} from '@/services/types'
-
+import type {UserListItem, roleItem} from '@/services/types'
+import dayjs, { Dayjs } from 'dayjs'
+ 
 type FieldType = {
   username?: string | undefined
   status?: 0 | 1 | undefined
-  role?: string[] | []
+  role?: string | undefined
   age?: number | undefined
   sex?: 0 | 1 | undefined
   email?: string | undefined
-  lastOnlineTime?: number | undefined
+  lastOnlineTimeFrom: string | undefined,
+  lastOnlineTimeTo: string | undefined
 }
+
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
 
 interface Props{
-  onFilterList:(obj:Partial<UserListItem>)=>void
+  onFilterList:(obj:Partial<FieldType>)=>void
+  onListRes: UserListItem[] | undefined
 }
 
-const Search:React.FC<Props> = ({onFilterList}) => {
+const Search:React.FC<Props> = ({
+  onFilterList,
+  onListRes
+}) => {
   const [form] = Form.useForm<FieldType>()
   const [filterForm, setFilterForm] = useState<FieldType>({
     username: undefined,
     status: undefined,
-    role: [],
+    role: undefined,
     age: undefined,
     sex: undefined,
     email: undefined,
-    lastOnlineTime: undefined
+    lastOnlineTimeFrom: undefined,
+    lastOnlineTimeTo: undefined
   })
+  const [list, setList] = useState<roleItem[] | undefined>([])
+  const { RangePicker } = DatePicker
+  const [timeHorizon, setTimeHorizon] = useState<Dayjs[]>([])
+
+  useEffect(()=>{
+    const listRes = onListRes?.map(v=>v.role[0])
+    console.log(listRes)
+    setList(listRes)
+  },[onListRes])
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values)
-    setFilterForm(prev=>{
-      const filteredValues = Object.fromEntries(
-        Object.entries(values).filter(([key, val]) => val !== undefined)
-      )
-      return {
-        ...filteredValues
+    if(values.role){
+      values = {
+        ...values,
+        role: list?.filter(v=>v.name === values.role)[0]._id
       }
+    }
+    if(timeHorizon.length > 0){
+      values = {
+        ...values,
+        lastOnlineTimeFrom: timeHorizon[0].format('YYYY-MM-DD HH:mm'),
+        lastOnlineTimeTo: timeHorizon[1].format('YYYY-MM-DD HH:mm'),
+      }
+    }else {
+      values = {
+        ...values,
+        lastOnlineTimeFrom: undefined,
+        lastOnlineTimeTo: undefined
+      }
+    }
+    console.log(values)
+    setFilterForm(prev => {
+      return Object.fromEntries(
+        Object.entries(values).filter(([_, val]) => val !== undefined)
+      ) as FieldType
     })
   }
 
@@ -48,14 +84,16 @@ const Search:React.FC<Props> = ({onFilterList}) => {
 
   const reset = ()=> {
     form.resetFields()
+    setTimeHorizon([])
     setFilterForm({
       username: undefined,
       status: undefined,
-      role: [],
+      role: undefined,
       age: undefined,
       sex: undefined,
       email: undefined,
-      lastOnlineTime: undefined
+      lastOnlineTimeFrom: undefined,
+      lastOnlineTimeTo: undefined
     })
   }
 
@@ -115,11 +153,21 @@ const Search:React.FC<Props> = ({onFilterList}) => {
             <Input />
           </Form.Item>
 
-          <Form.Item 
-            label="登陆时间" 
-            name="lastOnlineTime"
+          <Form.Item
+            label='时间范围'
           >
-            <Input />
+            <RangePicker
+              value={timeHorizon.length === 2 ? [timeHorizon[0], timeHorizon[1]] : undefined}
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              onChange={(value) => {
+                if (value && value.length === 2) {
+                  setTimeHorizon([value[0]!, value[1]!])
+                } else {
+                  setTimeHorizon([])
+                }
+              }}
+            />
           </Form.Item>
         </div>
 
