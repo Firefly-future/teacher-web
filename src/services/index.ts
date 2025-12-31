@@ -301,3 +301,7 @@ export const getExamRecordList = (params: any) => {
 export const deleteExam = (id:string) => {
   return post<BaseResponse>('/examination/remove',{id})
 }
+//创建试题
+export const createQuestion = () =>{
+  return post<BaseResponse>('/question/create')
+}
