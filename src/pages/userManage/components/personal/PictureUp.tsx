@@ -11,7 +11,11 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const PictureUp: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const userInfo = userStore((state) => state.userInfo)
-
+  useEffect(() => {
+    if (userInfo?.avator) {
+      setFileList([{ uid: '-1', url: userInfo!.avator || '', name: userInfo.username, status: 'done' }])
+    }
+  }, [userInfo?._id])
   const handleAvatarProcess = async (file: File) => {
     try {
       const uploadRes = await uploadImageFile(file)
@@ -28,7 +32,7 @@ const PictureUp: React.FC = () => {
         throw new Error(updateRes.msg || '同步用户信息失败')
       }
       userStore.setState({ userInfo: { ...userInfo!, avator: newAvatarUrl } })
-      return newAvatarUrl 
+      return newAvatarUrl
     } catch (e) {
       console.error('流程中断:', e)
       throw e
