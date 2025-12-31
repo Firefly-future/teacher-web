@@ -54,7 +54,6 @@ const CreateExercise = () => {
   })
 
   const stepsFormRef = useRef<FormInstance>(null)
-  // 修复1: 使用 _id 作为 value 而不是 name
   const subOptions = options.map((item) => ({ label: item.name, value: item._id }))
   const defaultPage = { page: 1, pagesize: 100 }
 
@@ -161,7 +160,6 @@ const CreateExercise = () => {
 
   /* ----------------  信息展示  ---------------- */
   const PaperInfoDisplay = () => {
-    // 修复2: 使用 _id 查找而不是 name
     const classifyName = subOptions.find((i) => i.value === allValues.classify)?.label || '未选择'
     const questionList = allValues.choiceQuestions || []
     return (
@@ -199,7 +197,6 @@ const CreateExercise = () => {
                       alignItems: 'flex-start',
                     }}
                   >
-                    {/* 修复3: 确保渲染的是字符串而不是对象 */}
                     <span style={{ marginRight: 8, flexShrink: 0 }}>
                       科目：{typeof q.classify === 'object' ? q.classify.name || '---' : q.classify || '---'}
                     </span>|
@@ -217,7 +214,6 @@ const CreateExercise = () => {
     )
   }
 
-  /* ----------------  渲染  ---------------- */
   return (
     <ProCard>
       <StepsForm<{
@@ -234,7 +230,7 @@ const CreateExercise = () => {
           const res = await createPaper({
             name: values.name,
             classify: values.classify,
-            questions: parseQuestionIds(values.choice), // 转换为数组
+            questions: parseQuestionIds(values.choice), 
           })
           if (res.code === API_CODE.SUCCESS) {
             message.success('创建试卷成功')
@@ -292,7 +288,6 @@ const CreateExercise = () => {
             placeholder="请选择科目"
             rules={[{ required: true }]}
             options={subOptions}
-            // 修复4: 更新 onChange 事件处理
             onChange={async (v: string) => {
               const target = options.find((item) => item._id === v)
               if (target) {

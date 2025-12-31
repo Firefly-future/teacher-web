@@ -55,7 +55,6 @@ export type UserListItem = Partial<UserInfo> &
   Omit<UserInfo, 'permission'> & {
     lastOnlineTime: number
     creator: string
-    password: string
     status: 0 | 1
     password?: string
     createdAt: string
@@ -355,6 +354,7 @@ export type ClassifyItemList = {
   value: string
   creator: string
   createTime: number
+  description: string
 }
 // 科目列表
 export type ClassifyItem = {
@@ -409,13 +409,15 @@ export type QuestionTypeItem = {
 // 创建科目参数
 export type createClassifyParams = {
   name: string
-  value: string
+  description?: string
+  value?: string
 }
 // 更新科目参数
 export type updateClassifyParams = {
   id: string
   name: string
-  value: string
+  description?: string
+  value?: string
 }
 // 科目列（表格数据）
 export type ClassifyTableItem = {

@@ -12,7 +12,6 @@ const UserInfo = () => {
   const [editing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [userInfoAvator, setUserInfoAvator] = useState(userInfo!.avator)
-  // 进入编辑时，把远端数据一次性灌进表单
   useEffect(() => {
     if (editing) {
       form.setFieldsValue({
@@ -39,6 +38,7 @@ const UserInfo = () => {
         setEditing(false)
       } else {
         message.error(res.msg)
+        setEditing(false)
       }
     } catch (e) {
       console.log(e)
@@ -46,8 +46,6 @@ const UserInfo = () => {
       setLoading(false)
     }
   }
-
-  // 纯文本展示
   const renderText = (val: any) => (
     <span style={{ lineHeight: '32px' }}>{val ?? ''}</span>
   )
@@ -74,7 +72,7 @@ const UserInfo = () => {
           </Form.Item>
           <Form.Item label='密码' style={{ flex: 1 }}>
             {editing ? (
-              <Form.Item name='password' noStyle tooltip='密码为6-20位'>
+              <Form.Item name='password' noStyle tooltip='密码为6-20位' rules={[{ min: 6, max: 20 }]}>
                 <Input.Password />
               </Form.Item>
             ) : (
@@ -86,6 +84,7 @@ const UserInfo = () => {
             {editing ? (
               <Form.Item name='sex' noStyle>
                 <Select
+                  placeholder='请选择性别'
                   options={[
                     { label: '男', value: 1 },
                     { label: '女', value: 0 },
@@ -107,11 +106,9 @@ const UserInfo = () => {
             )}
           </Form.Item>
         </Flex>
-
-        {/* 邮箱 */}
         <Form.Item label='邮箱地址' style={{ width: 300 }}>
           {editing ? (
-            <Form.Item name='email' noStyle>
+            <Form.Item name='email' noStyle rules={[{ type: 'email' }]}>
               <Input />
             </Form.Item>
           ) : (
@@ -119,7 +116,6 @@ const UserInfo = () => {
           )}
         </Form.Item>
 
-        {/* 操作按钮 */}
         <Form.Item>
           {!editing ? (
             <Button type='primary' onClick={() => setEditing(true)}>
