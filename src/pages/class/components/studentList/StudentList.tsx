@@ -86,7 +86,7 @@ const StudentList = () => {
           options: classList.map((c) => ({ label: c.name, value: c._id })),
         },
         render: (_, r) =>
-          classList.find((c) => c._id === r.classId)?.name || '-',
+          classList.find((c) => c._id === r.classId?._id)?.name || '-',
       },
       {
         title: '创建时间',

@@ -494,6 +494,7 @@ export type ClassItem = {
   name: string
   description: string
   creator: string
+  classId: teacherParams
   classify: teacherParams
   teacher: TeacherItem
   students: StudentItem[]
@@ -517,12 +518,12 @@ export type ClassItem = {
   // createTime?: number
   // classify?: string
   // creator?: string
-  _id: string
+  // _id: string
   // name: string
   // students?: StudentsItem[]
-  createTime?: number
+  // createTime?: number
   // classify?: string
-  creator?: string
+  // creator?: string
   // teacher?: string
   // page?: number
   // pagesize?: number
@@ -591,7 +592,7 @@ export type StudentsItem = {
 export type ClassListParams = {
   name?: string
   teacher?: string
-  classify?: string
+  classify?: teacherParams
   page?: number
   pagesize?: number
   grade?: string
@@ -676,7 +677,7 @@ export type StudentListItem = {
   username: string
   createdAt: string
   updatedAt: string
-  classId: string
+  classId: teacherParams
 }
 // 查询学生列表返回值
 export type StudentListRes = {
