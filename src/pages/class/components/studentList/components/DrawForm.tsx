@@ -95,11 +95,11 @@ const DrawerForm: React.FC<DrawerFormProps> = ({
                 options={[
                   {
                     label: '男',
-                    value: '男',
+                    value: 1,
                   },
                   {
                     label: '女',
-                    value: '女',
+                    value: 0,
                   },
                 ]}
               />

@@ -9,8 +9,6 @@ const buildRoutes = (list: MenuListItem[]) => {
       path: item.path,
       name: item.name,
     }
-
-    // 图标
     if (item.icon && IconEnum[item.icon as IconEnumKeys]) {
       const IconComponent = IconEnum[item.icon as keyof typeof IconEnum]
       route.icon = <IconComponent />
@@ -18,7 +16,6 @@ const buildRoutes = (list: MenuListItem[]) => {
     if (item.children && item.children.length) {
       route.routes = buildRoutes(item.children)
     }
-
     return route
   })
 }

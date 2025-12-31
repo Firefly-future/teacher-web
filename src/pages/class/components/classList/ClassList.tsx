@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo, Children } from 'react'
+/* ClassList/index.tsx */
+import React, { useEffect, useState, useMemo } from 'react'
 import {
   getClassifyList,
   getUserList,
@@ -21,73 +22,73 @@ import { Button, ConfigProvider, message, type DrawerProps } from 'antd'
 import { useRef } from 'react'
 import { API_CODE } from '@/constants/Constants'
 import DrawerForm from './components/DrawerForm'
+import dayjs from 'dayjs'
 
 const ClassList = () => {
   const [classifyList, setClassifyList] = useState<ClassifyListRes['list']>([])
   const [teacherList, setTeacherList] = useState<UserListResponse['list']>([])
 
+  /* 1. 拉取下拉所需基础数据 */
   useEffect(() => {
     getClassifyList().then((res) => setClassifyList(res.data.list))
-    getUserList({ page: 1, pagesize: 1000 }).then((res) =>
+    getUserList({ page: 1, pagesize: 100 }).then((res) =>
       setTeacherList(res.data.list)
     )
   }, [])
 
+  /* 2. 下拉选项（memo 避免重复计算） */
+  const teacherOptions = useMemo(
+    () => teacherList.map((t) => ({ label: t.username, value: t._id })),
+    [teacherList]
+  )
+  const classifyOptions = useMemo(
+    () => classifyList.map((c) => ({ label: c.name, value: c._id })),
+    [classifyList]
+  )
+
+  /* 3. ProTable 请求函数 */
   const getClass: ProTableProps<
     ClassListRes['list'][0],
     any
-  >['request'] = async (params, sort, filter) => {
+  >['request'] = async (params) => {
+    console.log('ProTable 查询参数', params)
     const res = await getClassList({
-      name: params?.name,
-      teacher: params?.teacher,
-      classify: params?.classify,
+      name: params.name,
+      teacher: params.teacherId, 
+      classify: params.classifyId, 
       page: 1,
-      pagesize: 1000,
+      pagesize: 100,
     })
-    console.log('ProTable 收集到的查询参数', params)
     return {
       data: res.data.list,
       success: true,
-      total: res.data.list.length,
+      total: res.data.list?.length,
     }
   }
-
   const columns = useMemo<ProColumns<ClassListRes['list'][0]>[]>(() => {
-    const teacherEnum = teacherList.reduce((prev, cur) => {
-      prev[cur._id] = cur.username
-      return prev
-    }, {} as Record<string, string>)
-
-    const classifyEnum = classifyList.reduce((prev, cur) => {
-      prev[cur._id] = cur.name
-      return prev
-    }, {} as Record<string, string>)
-
     return [
       { title: '排序', valueType: 'indexBorder', editable: false, width: 48 },
       { title: '班级名称', dataIndex: 'name', search: true },
       {
         title: '老师',
-        dataIndex: 'teacher',
+        dataIndex: 'teacherId',
         search: true,
-        valueEnum: teacherEnum,
-        render: (_, record) => teacherEnum[record.teacher!] ?? record.teacher,
+        valueType: 'select',
+        fieldProps: { options: teacherOptions },
+        render: (_, record) => record?.teacher?.username ?? '-',
       },
       {
         title: '科目类别',
-        dataIndex: 'classify',
+        dataIndex: 'classifyId', 
         search: true,
-        valueEnum: classifyEnum,
-        render: (_, record) =>
-          classifyEnum[record.classify!] ?? record.classify,
+        valueType: 'select',
+        fieldProps: { options: classifyOptions },
+        render: (_, record) => record?.classify?.name ?? '-',
       },
       {
         title: '创建时间',
-        dataIndex: 'createTime',
-        render: (_, record) =>
-          record.createTime
-            ? new Date(record.createTime).toLocaleString()
-            : '-',
+        dataIndex: 'createdAt',
+        render: (_, record) => dayjs(record.createdAt).format('YYYY-MM-DD'),
         search: false,
       },
       {
@@ -103,8 +104,9 @@ const ClassList = () => {
         ],
       },
     ]
-  }, [teacherList, classifyList])
+  }, [teacherOptions, classifyOptions])
 
+  /* 5. 行编辑保存 / 删除 */
   const actionRef = useRef<any>(null)
 
   const saveClass: ProTableProps['editable']['onSave'] = async (
@@ -112,14 +114,12 @@ const ClassList = () => {
     row,
     oriRow
   ) => {
-    // row   -> 只包含被修改的字段
-    // oriRow -> 原始整行数据
     const payload: UpdateClassParams = {
       id: oriRow._id,
       name: row.name ?? oriRow.name,
-      teacher: row.teacher ?? oriRow.teacher,
-      classify: row.classify ?? oriRow.classify,
-      students: row.students ?? oriRow.students,
+      teacher: row.teacherId ?? oriRow.teacher._id, // 用 teacherId
+      classify: row.classifyId ?? oriRow.classify._id, // 用 classifyId
+      students: row.students?.map((s: any) => s._id) ?? oriRow.students.map((s: any) => s._id),
     }
 
     try {
@@ -130,11 +130,10 @@ const ClassList = () => {
       }
     } catch (e) {
       message.error('更新失败')
-      console.error(e)
-      throw e // 一定要抛出去，ProTable 才知道保存失败
+      throw e
     }
   }
-  // 删除班级
+
   const delClass = async (id: string) => {
     try {
       const res = await deleteClass(id)
@@ -148,16 +147,16 @@ const ClassList = () => {
     }
   }
 
+  /* 6. 新建抽屉 */
   const [open, setOpen] = useState(false)
   const [size, setSize] = useState<DrawerProps['size']>()
   const showLargeDrawer = () => {
     setSize('large')
     setOpen(true)
   }
+  const onClose = () => setOpen(false)
 
-  const onClose = () => {
-    setOpen(false)
-  }
+  /* 7. 渲染 */
   return (
     <ConfigProvider>
       <ProTable<ClassListRes['list'][0]>

@@ -33,7 +33,7 @@ const columns: TableColumnsType<DataType> = [
 
 const ModalQuestion: React.FC<ModalQuestionProps> = ({
   showModal,
-  onConfirm, // 接收选中题目后的回调
+  onConfirm, 
   handleCancel,
   setIsModalOpen,
   isOpen,
@@ -41,18 +41,13 @@ const ModalQuestion: React.FC<ModalQuestionProps> = ({
   selectedRowKeys,
   setSelectedRowKeys,
 }) => {
-  // Modal 确认按钮逻辑
   const handleModalOk = () => {
-    // 根据选中的 rowKeys 筛选对应的题目数据
     const selectedQuestions = list.filter(item => 
       selectedRowKeys.includes(item._id!)
     )
     console.log(selectedQuestions)
-    // 调用回调，把选中的题目传给主组件
     onConfirm(selectedQuestions)
-    // 关闭 Modal
     setIsModalOpen(false)
-    // 清空选中状态（可选）
     setSelectedRowKeys([])
   }
 
@@ -60,7 +55,7 @@ const ModalQuestion: React.FC<ModalQuestionProps> = ({
   const dataSource = list.map((item) => ({
     key: item._id,
     question: item.question,
-    name: Type.find((type) => type.type === item.type)!.name,
+    name: Type.find((type) => type.type === item.type)?.name || '',
     answer: item.answer,
   }))
   
@@ -85,7 +80,6 @@ const ModalQuestion: React.FC<ModalQuestionProps> = ({
     <Modal
       title='试题列表'
       open={isOpen}
-      // 修改：使用自定义的确认逻辑
       onOk={handleModalOk}
       onCancel={handleCancel}
     >

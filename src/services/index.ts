@@ -44,8 +44,11 @@ import type {
   CreateStudentParams,
   UpdateStudentParams,
   UpMenuParams,
+  ClassListParams,
+  ClassDetailRes,
   ExamRecordListRes,
   SubmitExamRes,
+  DeleteExamParams,
 } from './types'
 
 // 获取图形验证码
@@ -57,7 +60,10 @@ export const getCaptchaCode = () => {
 export const getLogin = (params: LoginParams) => {
   return post<BaseResponse<LoginResponse>>('/login', params)
 }
-
+// 退出登录
+export const getLogout = () => {
+  return post<BaseResponse>('/user/logout')
+}
 // 用户信息
 export const getUserInfo = () => {
   return get<BaseResponse<UserListItem>>('/user/info')
@@ -112,7 +118,7 @@ export const createMenu = (params: CreateMenuParams) => {
 export const deleteMenu = (id: string) => {
   return post<BaseResponse>('/permission/remove', { id })
 }
-// 更新菜单
+// 更新菜单权限
 export const updateMenu = (params: UpMenuParams) => {
   return post<BaseResponse>('/permission/update', params)
 }
@@ -179,12 +185,12 @@ export const createPaper = (params: CreatePaperParams) => {
 //   return get<BaseResponse<ClassifyItem>>('/classify/list', {params})
 // }
 // 查询题目列表
-export const getQuestionList = (params: QuestionListParams) => {
-  return get<BaseResponse<QuestionItem>>('question/list', { params })
-}
-// export const getQuestionList = (params: QuestionListParams) =>{
-//   return get<BaseResponse<QuestionItem>>('/question/list', {params})
+// export const getQuestionList = (params: QuestionListParams) => {
+//   return get<BaseResponse<QuestionItem>>('question/list', { params })
 // }
+export const getQuestionList = (params: QuestionListParams) =>{
+  return get<BaseResponse<QuestionItem>>('/question/list', {params})
+}
 // 查询题目类型列表
 export const getQuestionTypeList = () => {
   return get<BaseResponse<QuestionTypeItem[]>>('/question/type/list')
@@ -211,8 +217,11 @@ export const createExam = (params: CreateExamParams) => {
   return post<BaseResponse>('/examination/create', params)
 }
 // 考试管理--获取科目分类
-export const getClassifyList = (params?: ClassifyListParams) => {
-  return get<BaseResponse<ClassifyListRes>>('/classify/list')
+// export const getClassifyList = (params?: ClassifyListParams) => {
+//   return get<BaseResponse<ClassifyListRes>>('/classify/list', { params })
+// }
+export const getClassifyList = (params: ClassifyListParams) => {
+  return get<BaseResponse<ClassifyListRes>>('/classify/list', {params})
 }
 // 考试管理--获取监考人
 export const getExaminerList = () => {
@@ -221,29 +230,44 @@ export const getExaminerList = () => {
 
 // 考试管理--获取考试班级
 // 查询班级
-export const getClassList = (p0?: {
-  name?: string
-  teacher?: string
-  classify?: string
-  page?: number
-  pagesize?: number
-}) => {
-  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
+export const getClassList = (params?: ClassListParams) => {
+  return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params })
 }
+// export const getClassList = (p0?: {
+//   name?: string
+//   teacher?: string
+//   classify?: string
+//   page?: number
+//   pagesize?: number
+//   examiner?: string
+//   // 
+//   grade?: string
+//   status?: number
+// }) => {
+//   return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
+// }
 
 //考试管理--配置试卷-- 查询试卷列表
-export const getExamList = () => {
-  return get<BaseResponse<ExamListRes>>('/exam/list?page=1&pagesize=10')
+export const getExamList = (params: ExamListRes) => {
+  return get<BaseResponse<ExamListRes>>('/exam/list', {params})  ///exam/list?page=1&pagesize=10
 }
 
 // 考试管理--发布考试--提交考试
-export const submitExam = () => {
-  return post<BaseResponse<SubmitExamParams>>('/student/exam/submit')
+// export const submitExam = () => {
+//   return post<BaseResponse<SubmitExamParams>>('/student/exam/submit')
+// }
+
+export const submitExam = (params: SubmitExamParams) => {
+  return post<BaseResponse<SubmitExamRes>>('/student/exam/submit', params)
 }
 
 // 新建班级
 export const createClass = (params: CreateClassParams) => {
   return post<BaseResponse>('/studentGroup/create', params)
+}
+// 班级详情
+export const getClassDetail = (id: string) => {
+  return get<BaseResponse<ClassDetailRes>>(`/studentGroup/detail?id=${id}`)
 }
 
 // 编辑班级
@@ -272,11 +296,18 @@ export const updateStudent = ( params: UpdateStudentParams) => {
 export const deleteStudent = (id: string) => {
   return post<BaseResponse>('/student/remove', { id })
 }
-// export const submitExam = (params: SubmitExamParams) => {
-//   return post<BaseResponse<SubmitExamRes>>('/student/exam/submit', params)
-// }
+
 
 // 考试记录--查询考试列表
 export const getExamRecordList = (params: any) => {
   return get<BaseResponse<ExamRecordListRes>>('/examination/list', {params})
+}
+
+// 考试记录 -- 删除考试记录
+export const deleteExam = (id:string) => {
+  return post<BaseResponse>('/examination/remove',{id})
+}
+//创建试题
+export const createQuestion = () =>{
+  return post<BaseResponse>('/question/create')
 }

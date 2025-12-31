@@ -1,22 +1,22 @@
 const questionTypeLi = [
   {
-    type: '1',
+    type: 'single',
     name: '单选题',
   },
   {
-    type: '2',
+    type: 'multiple',
     name: '多选题',
   },
   {
-    type: '3',
+    type: 'judge',
     name: '判断题',
   },
   {
-    type: '4',
+    type: 'fill',
     name: '填空题',
   },
   {
-    type: '5',
+    type: 'essay',
     name: '简答题',
   },
 ]

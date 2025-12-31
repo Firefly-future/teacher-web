@@ -1,29 +1,72 @@
 import React from 'react'
 
-import { Drawer, Form, Input, Select, Space, Button, Flex, Tooltip, type FormProps, type DrawerProps } from 'antd'
+import {
+  Drawer,
+  Form,
+  Input,
+  Select,
+  Space,
+  Button,
+  Flex,
+  Tooltip,
+  type FormProps,
+  type DrawerProps,
+} from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
 interface DrawProps {
   open: boolean
   onClose: () => void
-  onFinish: FormProps<any>['onFinish']  // 表单提交回调
-  size: DrawerProps['size']             // 抽屉尺寸
-  options: { label: string; value: string }[]  // 菜单等级选项
-  form: any        // Form 实例
-  path: string                               // 路径输入值
-  setPath: (value: string) => void           // 更新路径的方法
+  onFinish: FormProps<any>['onFinish'] // 表单提交回调
+  size: DrawerProps['size'] // 抽屉尺寸
+  options: { label: string; value: string }[] // 菜单等级选项
+  form: any // Form 实例
+  path: string // 路径输入值
+  setPath: (value: string) => void // 更新路径的方法
 }
 
 // // 校验函数
 const checkPath = (_: any, value: string) => {
   if (!value) return Promise.reject(new Error('请输入路径'))
-  if (!/^(\/[A-Za-z]+)+$/.test(value)) {
-    return Promise.reject(new Error('路径必须以 / 开头，且只能包含英文字母'))
+
+  // 检查是否以 / 开头
+  if (!value.startsWith('/')) {
+    return Promise.reject(new Error('路径必须以 / 开头'))
+  }
+  if (/(\/\/|--)/.test(value)) {
+    return Promise.reject(new Error('路径中不能连续出现 / 或 -'))
+  }
+  if (!/^\/[a-zA-Z]+(?:[/-][a-zA-Z]+)*$/.test(value)) {
+    return Promise.reject(
+      new Error(
+        '路径格式不正确：必须以/开头，后面可包含字母、/、-，但不能连续出现/或-'
+      )
+    )
   }
   return Promise.resolve()
 }
 
-const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: DrawProps) => {  
+const Draw = ({
+  open,
+  onClose,
+  onFinish,
+  size,
+  options,
+  form,
+  path,
+  setPath,
+}: DrawProps) => {
+  const handleLevelChange = (value: string) => {
+    const selectedOption = options.find((option) => option.value === value)
+    if (selectedOption && selectedOption.value !== '__new_level__') {
+      setPath(selectedOption.value)
+      form.setFieldsValue({ path: `${selectedOption.value}/` })
+    } else {
+      setPath('')
+      form.setFieldsValue({ path: '' })
+    }
+  }
+
   return (
     <Drawer
       title={'添加菜单'}
@@ -45,7 +88,7 @@ const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: D
         <Flex vertical>
           <Form.Item
             label='选择菜单等级'
-            name='level'
+            name='pid'
             rules={[{ required: true }]}
             labelCol={{ span: 20 }}
           >
@@ -53,6 +96,7 @@ const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: D
               placeholder='请选择'
               style={{ width: 260 }}
               options={options}
+              onChange={handleLevelChange} // 添加变化处理
             />
           </Form.Item>
           <Flex>
@@ -117,7 +161,7 @@ const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: D
           </Flex>
           <Form.Item
             label={
-              <Tooltip title='路径格式：/path'>
+              <Tooltip title='路径格式：/path 或 /parent/path'>
                 <span>
                   路径 <QuestionCircleOutlined />
                 </span>
@@ -130,9 +174,7 @@ const Draw = ({ open, onClose, onFinish, size, options, form, path, setPath }: D
             <Input
               placeholder='请输入路径'
               onChange={(e) => {
-                if (path) {
-                  checkPath(null, e.target.value)
-                }
+                setPath(e.target.value)
               }}
             />
           </Form.Item>

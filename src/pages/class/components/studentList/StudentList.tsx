@@ -38,9 +38,9 @@ const StudentList = () => {
   const actionRef = useRef<any>(null)
   const fetchStudents = async (params: StudentListParams) => {
     const res = await getStudentList({
-      page: 1,
-      pagesize: 10000,
-      className: classList.find((c) => c._id === params.classId)?.name,
+      page: params.page || 1,
+      pagesize: params.pagesize || 100,
+      classId: params.classId,
       username: params.username,
       sex: params.sex,
       age: params.age,
@@ -63,27 +63,37 @@ const StudentList = () => {
       {
         title: '性别',
         dataIndex: 'sex',
+        valueType: 'select',
         valueEnum: {
-          男: '男',
-          女: '女',
+          1: '男',
+          0: '女',
         },
+        search: true,
+        render: (_, r) => (r.sex == 1 ? '男' : r.sex == 0 ? '女' : '-'),
       },
-      { title: '年龄', dataIndex: 'age' },
+      {
+        title: '年龄',
+        dataIndex: 'age',
+        search: true,
+        valueType: 'number',
+      },
       {
         title: '班级',
         dataIndex: 'classId',
         valueType: 'select',
+        search: true,
         fieldProps: {
           options: classList.map((c) => ({ label: c.name, value: c._id })),
         },
-        render: (_, r) => r.className || '-',
+        render: (_, r) =>
+          classList.find((c) => c._id === r.classId)?.name || '-',
       },
       {
         title: '创建时间',
-        dataIndex: 'createTime',
+        dataIndex: 'createdAt',
         search: false,
         render: (_, r) =>
-          r.createTime ? dayjs(r.createTime).format('YYYY-MM-DD') : '-',
+          r.createdAt ? dayjs(r.createdAt).format('YYYY-MM-DD') : '-',
       },
       {
         title: '操作',
@@ -116,7 +126,7 @@ const StudentList = () => {
         username: row.username ?? originRow.username,
         sex: row.sex ?? originRow.sex,
         age: row.age ?? originRow.age,
-        className: row.className ?? originRow.className,
+        classId: row.classId ?? originRow.classId,
       }
 
       try {

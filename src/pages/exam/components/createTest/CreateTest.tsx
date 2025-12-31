@@ -31,8 +31,9 @@ const formItemLayout = {
 interface ExamValues {
   name: string
   classify: string
-  group: string
-  examiner: string
+  group: string[]
+  examiner: string[]
+  // examiner?: string
   examTime?: Date[]
   // 配置试卷
   // examItem: string
@@ -63,7 +64,7 @@ const CreateTest: React.FC = () => {
     const hasExamData = async () => {
       try {
         const [classifyRes, examinerRes, classRes] = await Promise.all([
-          getClassifyList(),
+          getClassifyList({ page: 1, pagesize: 100 }),
           getExaminerList(),
           getClassList(),
         ])
@@ -218,24 +219,30 @@ const CreateTest: React.FC = () => {
         endTime = new Date(formValues.examTime[1]).getTime()
         console.log('时间戳:', { startTime, endTime })
 
-        // 验证时间戳是否有效
-        // if (isNaN(startTime) || isNaN(endTime)) {
-        //   message.error('考试时间格式无效，请重新选择')
-        //   return
-        // }
+        // 将毫秒级时间戳转换为秒级时间戳
+        // startTime = Math.floor(new Date(formValues.examTime[0]).getTime() / 1000)
+        // endTime = Math.floor(new Date(formValues.examTime[1]).getTime() / 1000)
+        // console.log('时间戳:', { startTime, endTime })
 
-        // // 验证结束时间是否晚于开始时间
-        // if (endTime <= startTime) {
-        //   message.error('考试结束时间必须晚于开始时间')
-        //   return
-        // }
+        // 验证时间戳是否有效
+        if (isNaN(startTime) || isNaN(endTime)) {
+          message.error('考试时间格式无效，请重新选择')
+          return
+        }
+
+        // 验证结束时间是否晚于开始时间
+        if (endTime <= startTime) {
+          message.error('考试结束时间必须晚于开始时间')
+          return
+        }
       }
 
       const examParams: CreateExamParams = {
         name: formValues.name,
         classify: formValues.classify,
         examId: formValues.examId,
-        group: formValues.group,
+        // group: formValues.group,
+        group: Array.isArray(formValues.group) ? formValues.group : [formValues.group],
         examiner: formValues.examiner,
         startTime,
         endTime
@@ -285,7 +292,7 @@ const CreateTest: React.FC = () => {
         className={style.form}
         {...formItemLayout}
         form={form}
-        // onFinish={handleSubmit}
+      // onFinish={handleSubmit}
       >
         <Form.Item
           name="examId"
@@ -334,6 +341,7 @@ const CreateTest: React.FC = () => {
               rules={[{ required: true, message: '请选择监考人' }]}
             >
               <Select
+                mode="multiple"
                 options={examinerOptions.map(item => ({
                   label: item.username,
                   value: item._id,
@@ -347,9 +355,12 @@ const CreateTest: React.FC = () => {
               rules={[{ required: true, message: '请选择考试班级' }]}
             >
               <TreeSelect
+                treeCheckable
+                // mode="multiple"
                 treeData={classOptions.map(item => ({
                   title: item.name,
                   value: item._id,
+                  // value: item.grade,
                 }))}
                 placeholder='请选择'
                 treeDefaultExpandAll
@@ -385,13 +396,25 @@ const CreateTest: React.FC = () => {
             </Form.Item>
             <Form.Item label="监考人">
               <span>
-                {examinerOptions.find(item => item._id === form.getFieldValue('examiner'))?.username}
+                {/* {examinerOptions.find(item => item._id === form.getFieldValue('examiner'))?.username} */}
+                {/* 监考人多选 */}
+                {Array.isArray(form.getFieldValue('examiner'))
+                  ? form.getFieldValue('examiner').map((id: string) => examinerOptions.find(item => item._id === id)?.username).filter(Boolean).join(', ')
+                  : examinerOptions.find(item => item._id === form.getFieldValue('examiner'))?.username
+                }
               </span>
             </Form.Item>
 
             <Form.Item label="考试班级">
               <span>
-                {classOptions.find(item => item._id === form.getFieldValue('group'))?.name}
+                {/* {classOptions.find(item => item._id === form.getFieldValue('group'))?.name} */}
+                {/* {classOptions.find(item => item.grade === form.getFieldValue('group'))?.name} */}
+               
+                {/* 班级多选 */}
+                {Array.isArray(form.getFieldValue('group'))
+                  ? form.getFieldValue('group').map((id: string) => classOptions.find(item => item._id === id)?.name).filter(Boolean).join(', ')
+                  : classOptions.find(item => item._id === form.getFieldValue('group'))?.name
+                }
               </span>
             </Form.Item>
 
@@ -406,13 +429,13 @@ const CreateTest: React.FC = () => {
 
         <Form.Item label={null}>
           {current > 0 && (
-            <Button style={{ marginRight: 10 }} onClick={handleBack}>
+            <Button  style={{ marginRight: 10 }} onClick={handleBack}>
               上一步
             </Button>
           )}
 
           {current < 2 ? (
-            <Button type="primary" onClick={handleNext} loading={loading}>
+            <Button  type="primary" onClick={handleNext} loading={loading}>
               下一步
             </Button>
           ) : (

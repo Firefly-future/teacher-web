@@ -27,9 +27,8 @@ const CreateCourse: React.FC = () => {
 
   const formRef = useRef<ProFormInstance<any>>(null)
   const editorFormRef = useRef<EditableFormInstance<ClassifyItemList>>(null)
-  const [defaultPage] = useState<ClassifyListParams>({ page: 1, pagesize: 2 })
+  const [defaultPage] = useState<ClassifyListParams>({ page: 1, pagesize: 100 })
 
-  /* 获取分类数据 */
   const getClassify = async (params: ClassifyListParams) => {
     try {
       const res = await getClassifyList(params)
@@ -47,9 +46,9 @@ const CreateCourse: React.FC = () => {
   ): Promise<any> => {
     try {
       if (row._id && !String(row._id).startsWith('new_')) {
-        await updateClassify({ id: row._id, name: row.name, value: row.value })
+        await updateClassify({ id: row._id, name: row.name, description: row.description })
       } else {
-        await createClassify({ name: row.name, value: row.value })
+        await createClassify({ name: row.name, description: row.description })
       }
       message.success('编辑成功')
       getClassify(defaultPage)
@@ -95,7 +94,7 @@ const CreateCourse: React.FC = () => {
     },
     {
       title: '科目内容',
-      dataIndex: 'value',
+      dataIndex: 'description',
       formItemProps: {
         rules: [{ required: true, message: '请输入科目内容' }],
       },
@@ -118,6 +117,7 @@ const CreateCourse: React.FC = () => {
     value: '',
     creator: '',
     createTime: Date.now(),
+    description: '',
   })
 
   return (

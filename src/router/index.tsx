@@ -75,46 +75,36 @@ const router = [
       {
         path: '/userManage',
         element: <System />,
-        children: [
-          { path: '/userManage/system', element: <RoleList /> },
-          { path: '/userManage/userOptions', element: <UserList /> },
-          { path: '/userManage/personal', element: <UserInfo /> },
-          { path: '/userManage/menuManage', element: <Permission /> },
-        ],
       },
+      { path: '/userManage/system', element: <RoleList /> },
+      { path: '/userManage/userOptions', element: <UserList /> },
+      { path: '/userManage/personal', element: <UserInfo /> },
+      { path: '/userManage/menuManage', element: <Permission /> },
       {
         path: '/paper',
         element: <Exercise />,
-        children: [
-          { path: '/paper/paper-bank', element: <ExerciseBank /> },
-          { path: '/paper/create-paper', element: <CreateExercise /> },
-        ],
       },
+      { path: '/paper/paper-bank', element: <ExerciseBank /> },
+      { path: '/paper/create-paper', element: <CreateExercise /> },
       {
         path: '/exam',
         element: <Test />,
-        children: [
-          { path: '/exam/create', element: <CreateTest /> },
-          { path: '/exam/record', element: <HistoryTest /> },
-        ],
       },
+      { path: '/exam/create', element: <CreateTest /> },
+      { path: '/exam/record', element: <HistoryTest /> },
       {
         path: '/question',
         element: <Question />,
-        children: [
-          { path: '/question/create-item', element: <AddQuestion /> },
-          { path: '/question/item-bank', element: <BankQuestion /> },
-          { path: '/question/create-subject', element: <CreateCourse /> },
-        ],
       },
+      { path: '/question/create-item', element: <AddQuestion /> },
+      { path: '/question/item-bank', element: <BankQuestion /> },
+      { path: '/question/create-subject', element: <CreateCourse /> },
       {
-        path: '/manage-group',
+        path: '/mange-group',
         element: <Class />,
-        children: [
-          { path: '/manage-group/group-list', element: <ClassList /> },
-          { path: '/manage-group/group-students', element: <StudentList /> },
-        ],
       },
+      { path: '/manage-group/group-list', element: <ClassList /> },
+      { path: '/manage-group/group-students', element: <StudentList /> },
     ],
   },
   {
