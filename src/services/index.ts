@@ -46,6 +46,7 @@ import type {
   UpMenuParams,
   ExamRecordListRes,
   SubmitExamRes,
+  DeleteExamParams,
 } from './types'
 
 // 获取图形验证码
@@ -211,8 +212,8 @@ export const createExam = (params: CreateExamParams) => {
   return post<BaseResponse>('/examination/create', params)
 }
 // 考试管理--获取科目分类
-export const getClassifyList = (params?: ClassifyListParams) => {
-  return get<BaseResponse<ClassifyListRes>>('/classify/list')
+export const getClassifyList = (params: ClassifyListParams) => {
+  return get<BaseResponse<ClassifyListRes>>('/classify/list', {params})
 }
 // 考试管理--获取监考人
 export const getExaminerList = () => {
@@ -227,13 +228,16 @@ export const getClassList = (p0?: {
   classify?: string
   page?: number
   pagesize?: number
+  // 
+  grade?: string
+  status?: number
 }) => {
   return get<BaseResponse<ClassListRes>>('/studentGroup/list', { params: p0 })
 }
 
 //考试管理--配置试卷-- 查询试卷列表
-export const getExamList = () => {
-  return get<BaseResponse<ExamListRes>>('/exam/list?page=1&pagesize=10')
+export const getExamList = (params: ExamListRes) => {
+  return get<BaseResponse<ExamListRes>>('/exam/list', {params})  ///exam/list?page=1&pagesize=10
 }
 
 // 考试管理--发布考试--提交考试
@@ -279,4 +283,9 @@ export const deleteStudent = (id: string) => {
 // 考试记录--查询考试列表
 export const getExamRecordList = (params: any) => {
   return get<BaseResponse<ExamRecordListRes>>('/examination/list', {params})
+}
+
+// 考试记录 -- 删除考试记录
+export const deleteExam = (id:string) => {
+  return post<BaseResponse>('/examination/remove',{id})
 }

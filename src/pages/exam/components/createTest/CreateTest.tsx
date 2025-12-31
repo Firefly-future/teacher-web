@@ -31,8 +31,8 @@ const formItemLayout = {
 interface ExamValues {
   name: string
   classify: string
-  group: string
-  examiner: string
+  group: string[]
+  examiner: string[]
   examTime?: Date[]
   // 配置试卷
   // examItem: string
@@ -63,7 +63,7 @@ const CreateTest: React.FC = () => {
     const hasExamData = async () => {
       try {
         const [classifyRes, examinerRes, classRes] = await Promise.all([
-          getClassifyList(),
+          getClassifyList({ page: 1, pagesize: 100 }),
           getExaminerList(),
           getClassList(),
         ])
@@ -214,8 +214,13 @@ const CreateTest: React.FC = () => {
       let startTime = 0
       let endTime = 0
       if (formValues.examTime && formValues.examTime.length === 2) {
-        startTime = new Date(formValues.examTime[0]).getTime()
-        endTime = new Date(formValues.examTime[1]).getTime()
+        // startTime = new Date(formValues.examTime[0]).getTime()
+        // endTime = new Date(formValues.examTime[1]).getTime()
+        // console.log('时间戳:', { startTime, endTime })
+
+        // 将毫秒级时间戳转换为秒级时间戳
+        startTime = Math.floor(new Date(formValues.examTime[0]).getTime() / 1000)
+        endTime = Math.floor(new Date(formValues.examTime[1]).getTime() / 1000)
         console.log('时间戳:', { startTime, endTime })
 
         // 验证时间戳是否有效
@@ -224,18 +229,19 @@ const CreateTest: React.FC = () => {
         //   return
         // }
 
-        // // 验证结束时间是否晚于开始时间
-        // if (endTime <= startTime) {
-        //   message.error('考试结束时间必须晚于开始时间')
-        //   return
-        // }
+        // 验证结束时间是否晚于开始时间
+        if (endTime <= startTime) {
+          message.error('考试结束时间必须晚于开始时间')
+          return
+        }
       }
 
       const examParams: CreateExamParams = {
         name: formValues.name,
         classify: formValues.classify,
         examId: formValues.examId,
-        group: formValues.group,
+        // group: formValues.group,
+        group: Array.isArray(formValues.group) ? formValues.group : [formValues.group],
         examiner: formValues.examiner,
         startTime,
         endTime
@@ -285,7 +291,7 @@ const CreateTest: React.FC = () => {
         className={style.form}
         {...formItemLayout}
         form={form}
-        // onFinish={handleSubmit}
+      // onFinish={handleSubmit}
       >
         <Form.Item
           name="examId"
@@ -334,6 +340,7 @@ const CreateTest: React.FC = () => {
               rules={[{ required: true, message: '请选择监考人' }]}
             >
               <Select
+                mode="multiple"
                 options={examinerOptions.map(item => ({
                   label: item.username,
                   value: item._id,
@@ -347,9 +354,11 @@ const CreateTest: React.FC = () => {
               rules={[{ required: true, message: '请选择考试班级' }]}
             >
               <TreeSelect
+                // mode="multiple"
                 treeData={classOptions.map(item => ({
                   title: item.name,
-                  value: item._id,
+                  // value: item._id,
+                  value: item.grade,
                 }))}
                 placeholder='请选择'
                 treeDefaultExpandAll
@@ -391,7 +400,8 @@ const CreateTest: React.FC = () => {
 
             <Form.Item label="考试班级">
               <span>
-                {classOptions.find(item => item._id === form.getFieldValue('group'))?.name}
+                {/* {classOptions.find(item => item._id === form.getFieldValue('group'))?.name} */}
+                {classOptions.find(item => item.grade === form.getFieldValue('group'))?.name}
               </span>
             </Form.Item>
 

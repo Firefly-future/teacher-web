@@ -3,7 +3,7 @@ import style from './login.module.scss'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import type { LoginParams } from '@/services/types'
+import type { LoginParams, CaptchaCode } from '@/services/types'
 import { API_CODE } from '@/constants/Constants'
 import { setToken } from '@/utils'
 import { getCaptchaCode, getLogin } from '@/services'
@@ -12,14 +12,14 @@ const Login = () => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [captcha, setCaptcha] = useState('')
+  const [captcha, setCaptcha] = useState<CaptchaCode>()
   const getUserInfo = userStore((state) => state.getUserInfo)
   const getCaptcha = async () => {
     try {
       const res = await getCaptchaCode()
       console.log(res)
       if (res.code === API_CODE.SUCCESS) {
-        setCaptcha(res.data.code)
+        setCaptcha(res.data)
       } else {
         message.error(res.msg)
       }
@@ -30,9 +30,10 @@ const Login = () => {
 
   const onFinish = async (values: LoginParams) => {
     console.log(values)
+    const {username,password,code} = values
     try {
       setLoading(true)
-      const res = await getLogin(values)
+      const res = await getLogin({username,password,code,sessionId: captcha?.sessionId || ''})
       console.log(res.data)
       if (res.code === API_CODE.SUCCESS) {
         message.success('登录成功')
@@ -90,7 +91,7 @@ const Login = () => {
           <Flex>
             <Input placeholder="验证码" />
             <img
-              src={captcha || undefined}
+              src={captcha?.code || undefined}
               onClick={getCaptcha}
               style={{
                 width: 100,
