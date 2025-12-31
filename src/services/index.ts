@@ -115,7 +115,10 @@ export const createRole = (params: UpdateRoleParams) => {
 export const getPermissionList = () => {
   return get<BaseResponse<PermissionListRes>>('/permission/list')
 }
-
+// 更新用户
+export const updateUser = (params: UpdateUserParams) => {
+  return post<BaseResponse>('/user/update', params)
+}
 // 创建菜单
 export const createMenu = (params: CreateMenuParams) => {
   return post<BaseResponse>('/permission/create', params)
