@@ -1,18 +1,21 @@
 import React, { useState, useMemo } from 'react'
 import style from './BankQuestion.module.scss'
 import { QuestionCircleOutlined, ExclamationCircleOutlined, DownloadOutlined } from '@ant-design/icons'
-import { getQuestionList, getQuestionTypeList, getQuestionClassifyList, getQuestionDetail } from '@/services'
+import { getQuestionList, getQuestionTypeList, getQuestionClassifyList, getQuestionDetail, createQuestion } from '@/services'
 import { useRequest } from 'ahooks'
 import { Button, Flex, Col, Form, Input, Row, Select, theme, Space, type TableProps, Table, Popconfirm, message, Drawer, Descriptions } from 'antd'
-import type { MenuListItem, RoleItem } from '@/services/types'
+import type { MenuListItem} from '@/services/types'
 import type {
   AdvancedSearchFormProps,
   TypeItem,
   ClassifyItem,
   ApiResponse,
-  QuestionListResponse
+  QuestionListResponse,
+  QuestionRecord
 } from './types'
 import { useBankQuestionEditLogic } from './BankQuestionEditLogic'
+import { Link } from 'react-router-dom'
+
 const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({ typeOptions = [], classifyOptions = [], onSearch }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
@@ -83,11 +86,11 @@ const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({ typeOptions = [
 const BankQuestion = () => {
   const [searchParams, setSearchParams] = useState<Record<string, any>>({})
 
-  // 接口请求（保持原有逻辑，无改动，仅移除分号）
+  // 接口请求（保持原有逻辑，无改动）
   const { data: listRes, loading, run: refreshQuestionList } = useRequest<QuestionListResponse, any>(getQuestionList)
   const { data: _typeRes } = useRequest<ApiResponse<TypeItem>, any>(getQuestionTypeList)
   const { data: _classifyRes } = useRequest<ApiResponse<ClassifyItem>, any>(getQuestionClassifyList)
-  
+  const { data: _createRes } = useRequest<ApiResponse<QuestionRecord>, any>(createQuestion)
   // 导入拆分后的编辑/删除逻辑
   const {
     currentEditId,
@@ -103,8 +106,6 @@ const BankQuestion = () => {
     handleDelete,
     handleViewDetail
   } = useBankQuestionEditLogic({ refreshQuestionList })
-
-  // 试题详情请求（保持原有逻辑，无改动，仅移除分号）
   const { data: detailRes, loading: getDetailLoading } = useRequest<ApiResponse<MenuListItem>, any>(
     () => {
       if (!currentDetailId) return Promise.reject(new Error('试题ID不存在'))
@@ -115,8 +116,19 @@ const BankQuestion = () => {
       refreshDeps: [currentDetailId],
     }
   )
-
-  // 格式化选项（保持原有逻辑，无改动，仅移除分号）
+  const classifyTimeMap = useMemo(() => {
+    if (!_classifyRes || _classifyRes.code !== 200 || !_classifyRes.data?.list) {
+      return new Map()
+    }
+    const timeMap = new Map<string, string | number>()
+    _classifyRes.data.list.forEach(classifyItem => {
+      const classifyTime = classifyItem.createdAt ?? classifyItem.createTime
+      timeMap.set(classifyItem._id, classifyTime)
+      timeMap.set(String(classifyItem.value).toLowerCase(), classifyTime)
+      timeMap.set(classifyItem.name.toLowerCase(), classifyTime)
+    })
+    return timeMap
+  }, [_classifyRes])
   const typeOptions = React.useMemo(() => {
     if (!_classifyRes || _classifyRes.code !== 200 || !_classifyRes.data?.list) {
       return []
@@ -138,14 +150,22 @@ const BankQuestion = () => {
       key: item._id || item.id || String(item.value)
     }))
   }, [_typeRes])
-
-  const filteredDataSource = useMemo(() => {
+  const filteredDataSource = useMemo<QuestionRecord[]>(() => {
     if (!listRes || !listRes.data || !Array.isArray(listRes.data.list)) {
       return []
     }
     const originalList = listRes.data.list
     const { QuestionSearch = '', Classify = '', Type = '' } = searchParams
-    return originalList.filter(item => {
+    return originalList.map(item => {
+      const questionClassifyStr = String(item.classify).toLowerCase()
+      const targetClassifyTime = classifyTimeMap.get(item.classify) || 
+                                 classifyTimeMap.get(questionClassifyStr) ||
+                                 classifyTimeMap.get(String(item.classify))
+      return {
+        ...item,
+        createdAt: item.createdAt || item.createTime || targetClassifyTime
+      }
+    }).filter(item => {
       const questionMatch = QuestionSearch
         ? item.question?.toLowerCase().includes(QuestionSearch.toLowerCase())
         : true
@@ -157,9 +177,8 @@ const BankQuestion = () => {
         : true
       return questionMatch && classifyMatch && typeMatch
     })
-  }, [listRes, searchParams])
+  }, [listRes, searchParams, classifyTimeMap])
 
-  // 原有业务逻辑（保持不变，仅移除分号）
   const handleSearch = (values: Record<string, any>) => {
     setSearchParams(values)
   }
@@ -185,17 +204,15 @@ const BankQuestion = () => {
     '4': '填空题'
   }
 
-  const formatCreateTime = (time?: string): string => {
-    if (!time) return '无数据'
+  const formatCreatedAt = (createdAt?: number | string): string => {
+    if (!createdAt) return '无数据'
     try {
-      return new Date(time).toLocaleString()
+      return new Date(createdAt).toLocaleString()
     } catch (e) {
       return '无效时间'
     }
   }
-
-  // 表格列配置（已优化输入框 onChange 为函数式更新，确保输入响应）
-  const columns: TableProps<RoleItem>['columns'] = [
+  const columns: TableProps<QuestionRecord>['columns'] = [
     {
       title: <span className={style.tableHeaderCommon}>试题列表</span>,
       dataIndex: 'question',
@@ -210,7 +227,6 @@ const BankQuestion = () => {
               <Input
                 value={editFormData.question ?? ''}
                 onChange={(e) => {
-                  // 函数式更新：获取最新状态 prev，解决状态更新不及时问题
                   setEditFormData((prev: any) => ({ ...prev, question: e.target.value }))
                 }}
                 className={style.editInput}
@@ -249,7 +265,6 @@ const BankQuestion = () => {
               <Input
                 value={editFormData.formatTypeText ?? ''}
                 onChange={(e) => {
-                  // 函数式更新
                   setEditFormData((prev: any) => ({
                     ...prev,
                     type: record.type,
@@ -284,7 +299,6 @@ const BankQuestion = () => {
               <Input
                 value={editFormData.classify ?? ''}
                 onChange={(e) => {
-                  // 函数式更新
                   setEditFormData((prev: any) => ({ ...prev, classify: e.target.value }))
                 }}
                 className={style.editInput}
@@ -309,7 +323,7 @@ const BankQuestion = () => {
       align: 'center',
       width: 200,
       render: (_, record) => {
-        const formatTimeText = formatCreateTime(record.createdAt)
+        const formatTimeText = formatCreatedAt(record.createdAt)
 
         if (currentEditId === record._id) {
           return (
@@ -317,7 +331,6 @@ const BankQuestion = () => {
               <Input
                 value={editFormData.formatTimeText ?? ''}
                 onChange={(e) => {
-                  // 函数式更新
                   setEditFormData((prev: any) => ({
                     ...prev,
                     createdAt: record.createdAt,
@@ -374,7 +387,7 @@ const BankQuestion = () => {
               onClick={() => {
                 const typeStr = String(record.type)
                 const formatTypeText = typeMap[typeStr] || `未知题型(${typeStr})`
-                const formatTimeText = formatCreateTime(record.createdAt)
+                const formatTimeText = formatCreatedAt(record.createdAt)
                 setCurrentEditId(record._id)
                 setEditFormData({
                   ...record,
@@ -412,13 +425,13 @@ const BankQuestion = () => {
 
   return (
     <div>
-      <Button type="primary" className={style.title}>添加试题</Button>
+      <Link to="/question/create-item"><Button type="primary" className={style.title}>添加试题</Button></Link>  
       <AdvancedSearchForm
         typeOptions={typeOptions}
         classifyOptions={classifyOptions}
         onSearch={handleSearch}
       />
-      <Table<MenuListItem>
+      <Table<QuestionRecord>
         loading={loading}
         columns={columns}
         dataSource={filteredDataSource}
@@ -463,7 +476,6 @@ const BankQuestion = () => {
             </Descriptions.Item>
             <Descriptions.Item label="试题分类">{detailData.classify || '-'}</Descriptions.Item>
             <Descriptions.Item label="创建时间">
-              {formatCreateTime(detailData.createdAt)}
             </Descriptions.Item>
             <Descriptions.Item label="试题ID">{detailData._id || detailData.id || '-'}</Descriptions.Item>
           </Descriptions>

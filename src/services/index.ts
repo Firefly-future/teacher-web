@@ -108,3 +108,7 @@ export const deleteQuestion = (id: string) =>{
 export const getQuestionDetail = (id: string) =>{
   return get<BaseResponse>('/exam/detail', {params: {id} })
 }
+//创建试题
+export const createQuestion = () =>{
+  return post<BaseResponse>('/question/create')
+}
