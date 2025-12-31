@@ -60,7 +60,10 @@ export const getCaptchaCode = () => {
 export const getLogin = (params: LoginParams) => {
   return post<BaseResponse<LoginResponse>>('/login', params)
 }
-
+// 退出登录
+export const getLogout = () => {
+  return post<BaseResponse>('/user/logout')
+}
 // 用户信息
 export const getUserInfo = () => {
   return get<BaseResponse<UserListItem>>('/user/info')
@@ -303,4 +306,8 @@ export const getExamRecordList = (params: any) => {
 // 考试记录 -- 删除考试记录
 export const deleteExam = (id:string) => {
   return post<BaseResponse>('/examination/remove',{id})
+}
+//创建试题
+export const createQuestion = () =>{
+  return post<BaseResponse>('/question/create')
 }

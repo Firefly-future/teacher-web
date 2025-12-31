@@ -48,6 +48,9 @@ const Login = () => {
       } else if (res.code === API_CODE.EXPIRED_CAPTCHA) {
         message.error(res.msg)
         getCaptcha()
+      } else {
+        message.error(res.msg)
+        getCaptcha()
       }
     } catch (e) {
       console.log(e)

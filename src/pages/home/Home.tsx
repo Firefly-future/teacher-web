@@ -8,12 +8,30 @@ import {
   QuestionCircleOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Dropdown, Space, Spin } from 'antd'
+import { Dropdown, message, Space, Spin } from 'antd'
 import userStore from '@/store/userStore'
 import style from './Home.module.scss'
 import { useEffect, useState } from 'react'
 import { removeToken } from '@/utils'
+import { getLogout } from '@/services'
+import { API_CODE } from '@/constants/Constants.ts'
+
 const Home = () => {
+  const goout = async () => {
+    try {
+      const res = await getLogout()
+      if (res.code === API_CODE.SUCCESS) {
+        message.success('退出登录成功')
+        removeToken()
+        navigate('/login')
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+      message.error('退出登录失败')
+    }
+  }
   const settings: ProSettings | undefined = {
     fixSiderbar: true,
     layout: 'mix',
@@ -27,7 +45,7 @@ const Home = () => {
         <a
           type='link'
           onClick={() => {
-            console.log('帮助')
+            message.info('点击了帮助文档')
           }}
         >
           <QuestionCircleOutlined style={{ marginRight: 10 }} />
@@ -41,8 +59,7 @@ const Home = () => {
         <a
           type='link'
           onClick={() => {
-            navigate('/login')
-            removeToken()
+            goout()
           }}
         >
           <span style={{ color: 'red' }}>

@@ -54,8 +54,8 @@ const ClassList = () => {
     console.log('ProTable 查询参数', params)
     const res = await getClassList({
       name: params.name,
-      teacher: params.teacherId, // 一级字段
-      classify: params.classifyId, // 一级字段
+      teacher: params.teacherId, 
+      classify: params.classifyId, 
       page: 1,
       pagesize: 100,
     })
