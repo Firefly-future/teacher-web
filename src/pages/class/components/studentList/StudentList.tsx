@@ -8,7 +8,7 @@ import {
   getClassList,
 } from '@/services'
 import type {
-  StudentListItem, // 统一泛型
+  StudentListItem,
   StudentListRes,
   UpdateStudentParams,
   ClassListRes,
@@ -26,7 +26,6 @@ import dayjs from 'dayjs'
 const StudentList = () => {
   const [classList, setClassList] = useState<ClassListRes['list']>([])
 
-  /* 1. 获取班级列表 */
   useEffect(() => {
     getClassList()
       .then((res) => {
@@ -47,7 +46,10 @@ const StudentList = () => {
     })
     if (res.code === API_CODE.SUCCESS) {
       return {
-        data: res.data.list,
+        data: res.data.list.map((item) => ({
+          ...item,
+          classId: item.classId?._id || item.classId,
+        })),
         total: res.data.total ?? res.data.list.length,
         success: true,
       }
@@ -55,7 +57,6 @@ const StudentList = () => {
     return { data: [], total: 0, success: false }
   }
 
-  /* 3. 表格列（依赖 classList） */
   const columns = useMemo<ProColumns<StudentListItem>[]>(() => {
     return [
       { title: '序号', valueType: 'indexBorder', editable: false, width: 50 },
@@ -85,8 +86,11 @@ const StudentList = () => {
         fieldProps: {
           options: classList.map((c) => ({ label: c.name, value: c._id })),
         },
-        render: (_, r) =>
-          classList.find((c) => c._id === r.classId?._id)?.name || '-',
+        render: (_, r) => {
+          // 兼容两种数据格式：字符串 ID 或对象 { _id, name }
+          const classId = r.classId?._id || r.classId
+          return classList.find((c) => c._id === classId)?.name || '-'
+        },
       },
       {
         title: '创建时间',
@@ -112,15 +116,8 @@ const StudentList = () => {
     ]
   }, [classList])
 
-  /* 4. 行编辑保存 / 删除 */
-  /* 行编辑保存 */
   const saveStudent: ProTableProps<StudentListItem>['editable']['onSave'] =
-    async (
-      _key,
-      row, // 仅包含被修改的字段
-      originRow // 原始整行数据
-    ) => {
-      // 合并出完整参数
+    async (_key, row, originRow) => {
       const payload: UpdateStudentParams = {
         id: originRow._id,
         username: row.username ?? originRow.username,
@@ -136,11 +133,11 @@ const StudentList = () => {
           actionRef.current?.reload()
         } else {
           message.error('更新失败')
-          throw new Error(res.msg ?? '更新失败') // 让 ProTable 知道失败了
+          throw new Error(res.msg ?? '更新失败')
         }
       } catch (e) {
         message.error('更新失败')
-        throw e // 必须继续抛出去
+        throw e
       }
     }
 
@@ -154,7 +151,6 @@ const StudentList = () => {
     }
   }
 
-  /* 5. 新建抽屉 */
   const [open, setOpen] = useState(false)
   const [size, setSize] = useState<DrawerProps['size']>()
   const showLargeDrawer = () => {

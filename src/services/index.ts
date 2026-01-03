@@ -229,7 +229,7 @@ export const createExam = (params: CreateExamParams) => {
 // export const getClassifyList = (params?: ClassifyListParams) => {
 //   return get<BaseResponse<ClassifyListRes>>('/classify/list', { params })
 // }
-export const getClassifyList = (params: ClassifyListParams) => {
+export const getClassifyList = (params?: ClassifyListParams) => {
   return get<BaseResponse<ClassifyListRes>>('/classify/list', {params})
 }
 // 考试管理--获取监考人

@@ -28,7 +28,6 @@ const ClassList = () => {
   const [classifyList, setClassifyList] = useState<ClassifyListRes['list']>([])
   const [teacherList, setTeacherList] = useState<UserListResponse['list']>([])
 
-  /* 1. 拉取下拉所需基础数据 */
   useEffect(() => {
     getClassifyList().then((res) => setClassifyList(res.data.list))
     getUserList({ page: 1, pagesize: 100 }).then((res) =>
@@ -36,7 +35,6 @@ const ClassList = () => {
     )
   }, [])
 
-  /* 2. 下拉选项（memo 避免重复计算） */
   const teacherOptions = useMemo(
     () => teacherList.map((t) => ({ label: t.username, value: t._id })),
     [teacherList]
@@ -46,7 +44,6 @@ const ClassList = () => {
     [classifyList]
   )
 
-  /* 3. ProTable 请求函数 */
   const getClass: ProTableProps<
     ClassListRes['list'][0],
     any
@@ -54,13 +51,19 @@ const ClassList = () => {
     console.log('ProTable 查询参数', params)
     const res = await getClassList({
       name: params.name,
-      teacher: params.teacherId, 
-      classify: params.classifyId, 
+      teacher: params.teacherId,
+      classify: params.classifyId,
       page: 1,
       pagesize: 100,
     })
+    const formattedData = res.data.list.map((item) => ({
+      ...item,
+      teacherId: item.teacher?._id,
+      classifyId: item.classify?._id,
+    }))
+
     return {
-      data: res.data.list,
+      data: formattedData,
       success: true,
       total: res.data.list?.length,
     }
@@ -75,15 +78,25 @@ const ClassList = () => {
         search: true,
         valueType: 'select',
         fieldProps: { options: teacherOptions },
-        render: (_, record) => record?.teacher?.username ?? '-',
+        render: (_, record) => {
+          const teacher = teacherOptions.find(
+            (t) => t.value === record.teacher._id
+          )
+          return teacher!.label
+        },
       },
       {
         title: '科目类别',
-        dataIndex: 'classifyId', 
+        dataIndex: 'classifyId',
         search: true,
         valueType: 'select',
         fieldProps: { options: classifyOptions },
-        render: (_, record) => record?.classify?.name ?? '-',
+        render: (_, record) => {
+          const classify = classifyOptions.find(
+            (c) => c.value === record.classify._id
+          )
+          return classify!.label
+        },
       },
       {
         title: '创建时间',
@@ -106,7 +119,6 @@ const ClassList = () => {
     ]
   }, [teacherOptions, classifyOptions])
 
-  /* 5. 行编辑保存 / 删除 */
   const actionRef = useRef<any>(null)
 
   const saveClass: ProTableProps['editable']['onSave'] = async (
@@ -117,9 +129,8 @@ const ClassList = () => {
     const payload: UpdateClassParams = {
       id: oriRow._id,
       name: row.name ?? oriRow.name,
-      teacher: row.teacherId ?? oriRow.teacher._id, // 用 teacherId
-      classify: row.classifyId ?? oriRow.classify._id, // 用 classifyId
-      students: row.students?.map((s: any) => s._id) ?? oriRow.students.map((s: any) => s._id),
+      teacher: row.teacherId ?? oriRow.teacher._id,
+      classify: row.classifyId ?? oriRow.classify._id,
     }
 
     try {
@@ -147,7 +158,6 @@ const ClassList = () => {
     }
   }
 
-  /* 6. 新建抽屉 */
   const [open, setOpen] = useState(false)
   const [size, setSize] = useState<DrawerProps['size']>()
   const showLargeDrawer = () => {
@@ -156,7 +166,6 @@ const ClassList = () => {
   }
   const onClose = () => setOpen(false)
 
-  /* 7. 渲染 */
   return (
     <ConfigProvider>
       <ProTable<ClassListRes['list'][0]>

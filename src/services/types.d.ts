@@ -498,7 +498,7 @@ export type ClassItem = {
   classify: teacherParams
   teacher: TeacherItem
   students: StudentItem[]
-  // students?: StudentsItem[]
+  studentCount: number
   createTime: number
   // classify?: string
   // capacity: number
